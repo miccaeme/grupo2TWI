@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+<footer  th:fragment="footer_fragment" class="bg-black text-secondary pt-5 pb-4 border-top border-dark mt-auto">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4 col-md-6">
+        <a class="d-flex align-items-center fw-bold text-uppercase text-decoration-none mb-3" href="index.html">
+                    <span class="bg-success text-black px-2 py-1 rounded me-2 d-inline-block">
+                        <i class="fas fa-shield-alt"></i>
+                    </span>
+          <span class="text-white">Torneos</span><span class="text-success">Pro</span>
+        </a>
+        <p class="small text-muted mb-4" style="line-height: 1.6;">
+          La plataforma definitiva para la organizaciony seguimiento de torneos deportivos. Organiza fixtures, gestiona inscripciones y sigue estadísticas en tiempo real.
+        </p>
+        <div class="d-flex gap-2">
+          <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center hover-bg-success" style="width: 36px; height: 36px;"><i class="fab fa-facebook-f text-white"></i></a>
+          <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center hover-bg-success" style="width: 36px; height: 36px;"><i class="fab fa-twitter text-white"></i></a>
+          <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center hover-bg-success" style="width: 36px; height: 36px;"><i class="fab fa-instagram text-white"></i></a>
+          <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center hover-bg-success" style="width: 36px; height: 36px;"><i class="fab fa-discord text-white"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6 ms-lg-auto">
+        <h6 class="text-white text-uppercase fw-bold mb-3 border-start border-success ps-2" style="font-size: 0.9rem;">Competencias</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="torneos.html?tipo=futbol" class="text-muted text-decoration-none small hover-link-success">Futbol 5 / 11</a></li>
+          <li class="mb-2"><a href="torneos.html?tipo=basketball" class="text-muted text-decoration-none small hover-link-success">Basquet</a></li>
+          <li class="mb-2"><a href="torneos.html?tipo=esports" class="text-muted text-decoration-none small hover-link-success">Volley</a></li>
+          <li class="mb-2"><a href="torneos.html?tipo=paddle" class="text-muted text-decoration-none small hover-link-success">Padel</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <h6 class="text-white text-uppercase fw-bold mb-3 border-start border-success ps-2" style="font-size: 0.9rem;">Soporte</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="crear-torneo.html" class="text-muted text-decoration-none small hover-link-success">Crear Torneo</a></li>
+          <li class="mb-2"><a href="ayuda.html" class="text-muted text-decoration-none small hover-link-success">Centro de Ayuda</a></li>
+          <li class="mb-2"><a href="contacto.html" class="text-muted text-decoration-none small hover-link-success">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h6 class="text-white text-uppercase fw-bold mb-3 border-start border-success ps-2" style="font-size: 0.9rem;">Novedades</h6>
+        <p class="small text-muted mb-3">Recibi alertas de inscripciones abiertas.</p>
+        <form action="#" method="POST" class="input-group input-group-sm">
+          <input type="email" class="form-control bg-dark border-secondary text-white placeholder-muted" placeholder="Tu email..." required>
+          <button class="btn btn-success text-black px-3" type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+
+    <hr class="my-4 border-secondary opacity-25">
+
+    <div class="row align-items-center" style="font-size: 0.85rem;">
+      <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+        <p class="small text-muted mb-0">&copy; 2026 TorneosPro. Todos los derechos reservados.</p>
+      </div>
+      <div class="col-md-6 text-center text-md-end">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item me-3"><a href="#" class="text-muted text-decoration-none hover-link-success">Privacidad</a></li>
+          <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none hover-link-success">Terminos</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .hover-bg-success:hover { background-color: #198754 !important; border-color: #198754 !important; }
+  .hover-link-success:hover { color: #198754 !important; text-decoration: underline !important; }
+  .placeholder-muted::placeholder { color: #6c757d; }
+</style></body>
+</html>
