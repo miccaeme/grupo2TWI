@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TorneosPro - Torneos Registrados</title>
+
+    <!-- Bootstrap 5.2.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- FontAwesome para iconos
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" th:href="@{/css/verTorneosCreadosStyle.css}" />
+
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+<!-- Header Reutilizable -->
+<div th:replace="~{fragments/header :: header_fragment}"></div>
+
+
+<main role="main" class="container flex-shrink-0 my-5 py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+                <div>
+                    <h2 class="fw-bold text-white mb-1">
+                        <i class="fas fa-list-ul text-success me-2"></i>Torneos Registrados
+                    </h2>
+                    <p class="text-muted mb-0 small">Listado oficial de competencias y sedes activas.</p>
+                </div>
+
+                <a th:href="@{crear-torneo}" class="btn btn-success text-black fw-bold btn-sm px-3 rounded-pill">
+                    <i class="fas fa-plus me-1"></i> Nuevo Torneo
+                </a>
+            </div>
+
+
+            <div th:if="${torneos.isEmpty()}" class="alert alert-dark border-secondary text-center py-5 shadow-sm" style="background-color: #1a1a1a;">
+                <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
+                <h4 class="text-white">No se encontraron torneos</h4>
+                <p class="text-muted small">Aun no cargaste ningun torneo en el sistema.</p>
+                <a th:href="@{crear-torneo}" class="btn btn-outline-success btn-sm mt-2">Crear el primero</a>
+            </div>
+
+
+            <div th:unless="${torneos.isEmpty()}" class="table-responsive shadow-lg rounded-3">
+                <table class="table table-dark table-dark-custom mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="ps-4 py-3" style="width: 50%;">Nombre del Torneo</th>
+                        <th scope="col" class="py-3" style="width: 35%;">Ubicacion / Sede</th>
+                        <th scope="col" class="text-center py-3" style="width: 15%;">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--  for-each que recorre la lista -->
+                    <tr th:each="unTorneo : ${torneos}" class="tr-hover">
+
+
+                        <td class="ps-4 py-3 fw-semibold text-white">
+                            <i class="fas fa-shield-alt text-success me-2"></i>
+                            <span th:text="${unTorneo.nombre}">Copa de Ejemplo</span>
+                        </td>
+
+
+                        <td class="py-3 text-secondary">
+                            <i class="fas fa-map-marker-alt text-danger me-2 opacity-75"></i>
+                            <span th:text="${unTorneo.lugar}">Predio Deportivo S/N</span>
+                        </td>
+
+
+                        <td class="text-center py-3">
+                            <a href="#" class="btn btn-sm btn-outline-light px-3">
+                                Ver Detalle
+                            </a>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<!-- Footer Reutilizable -->
+<div th:replace="~{fragments/footer :: footer_fragment}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+</html>
