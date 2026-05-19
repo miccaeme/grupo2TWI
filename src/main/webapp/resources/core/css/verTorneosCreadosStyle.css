@@ -1,0 +1,21 @@
+body {
+    background-color: #121212; /* Fondo Negro */
+    color: #f8f9fa; /* Texto Blanco */
+}
+.table-dark-custom {
+    background-color: #1a1a1a !important;
+    border: 1px solid #2d2d2d;
+}
+.table-dark-custom th {
+    background-color: #000000 !important;
+    color: #198754 !important; /* Encabezados en Verde */
+    border-bottom: 2px solid #198754 !important;
+}
+.table-dark-custom td {
+    border-color: #2d2d2d !important;
+    vertical-align: middle;
+}
+.tr-hover:hover {
+    background-color: #222222 !important;
+    transition: background-color 0.2s ease;
+}
