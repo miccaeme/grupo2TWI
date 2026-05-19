@@ -1,0 +1,61 @@
+body{
+    background-color: #0f1113;
+    color: white;
+}
+
+.navbar-custom{
+    background-color: #212529;
+    border-bottom: 1px solid #3a3f44;
+}
+
+.logo{
+    font-weight: bold;
+    color: white;
+}
+
+.logo-verde{
+    color: #15945f;
+}
+
+.card-custom{
+    background-color: #1b1f23;
+}
+
+.titulo-verde{
+    color: #15945f;
+    font-weight: bold;
+}
+
+.boton-verde{
+    background-color: #15945f;
+    color: white;
+    border: none;
+}
+
+.boton-verde:hover{
+    background-color: #12774d;
+}
+
+.form-label{
+    color: white;
+}
+
+.form-control,
+.form-select {
+    background-color: #2b3035;
+    border: 1px solid #495057;
+    color: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #2b3035;
+    color: white;
+    border-color: #15945f;
+    box-shadow: 0 0 0 0.2rem rgba(21, 148, 95, 0.25);
+}
+
+.form-control:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #2b3035 inset;
+    -webkit-text-fill-color: white;
+}
