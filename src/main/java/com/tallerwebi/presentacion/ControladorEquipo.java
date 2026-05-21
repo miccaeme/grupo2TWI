@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Equipo;
-
 import com.tallerwebi.dominio.ServicioEquipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpSession;  // ← import agregado
 
 @Controller
 public class ControladorEquipo {
@@ -25,7 +25,10 @@ public class ControladorEquipo {
     }
 
     @RequestMapping(path = "/equipo/crear", method = RequestMethod.POST)
-    public ModelAndView crearEquipo(@ModelAttribute("equipo") Equipo equipo) {
+    public ModelAndView crearEquipo(@ModelAttribute("equipo") Equipo equipo, HttpSession session) {  // ← HttpSession agregado
+        Long usuarioId = (Long) session.getAttribute("usuarioId");  // ← línea agregada
+        equipo.setCapitanId(usuarioId);  // ← línea agregada
+
         servicioEquipo.crearEquipo(equipo);
 
         ModelMap modelo = new ModelMap();
