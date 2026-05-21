@@ -2,14 +2,12 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioCrearTorneo;
 import com.tallerwebi.dominio.Torneo;
-import com.tallerwebi.dominio.excepcion.RepositorioTorneo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -24,7 +22,8 @@ public class ControladorCrearTorneo {
     return "crear-torneo";
   }
 
-  @PostMapping("/guardarTorneoCreado")
+  /* @PostMapping("/guardarTorneoCreado") */
+  @RequestMapping(value = "/guardarTorneoCreado", method = RequestMethod.POST)
   @Transactional
   public String guardarTorneo(@ModelAttribute("torneo") Torneo torneo) {
     servicioCrearTorneo.guardar(torneo);

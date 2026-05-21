@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.RepositorioEquipo;
 import com.tallerwebi.dominio.Torneo;
-import com.tallerwebi.dominio.excepcion.RepositorioTorneo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class RepositorioTorneoImpl implements RepositorioTorneo {
+public class RepositorioTorneoImpl implements RepositorioEquipo.RepositorioTorneo {
     private SessionFactory sessionFactory;
 
     @Autowired
