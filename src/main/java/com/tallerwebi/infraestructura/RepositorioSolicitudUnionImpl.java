@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Enums.EstadoSolicitud;
-import com.tallerwebi.dominio.RepositorioSolicitudUnion;
+import com.tallerwebi.dominio.contratos.RepositorioSolicitudUnion;
 import com.tallerwebi.dominio.SolicitudUnion;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -13,20 +13,19 @@ import java.util.List;
 @Repository
 public class RepositorioSolicitudUnionImpl implements RepositorioSolicitudUnion {
 
-    private final SessionFactory sessionFactory;
-
     @Autowired
-    public RepositorioSolicitudUnionImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private SessionFactory sessionFactory;
+
 
     @Override
     public void guardar(SolicitudUnion solicitud) {
+
         sessionFactory.getCurrentSession().save(solicitud);
     }
 
     @Override
     public void actualizar(SolicitudUnion solicitud) {
+
         sessionFactory.getCurrentSession().update(solicitud);
     }
 

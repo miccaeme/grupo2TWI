@@ -3,7 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.Jugador;
-import com.tallerwebi.dominio.Servicios.ServicioJugador;
+import com.tallerwebi.dominio.servicios.ServicioJugador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,7 +19,7 @@ public class ControladorJugador {
   private ServicioJugador servicioJugador;
 
   @RequestMapping(path = "/jugador/crear", method = RequestMethod.GET)
-  public ModelAndView irACrearJugador() {
+  public ModelAndView mostrarFormCrearJugador() {
     ModelMap modelo = new ModelMap();
     modelo.put("jugador", new Jugador());
     modelo.put("posiciones", Posicion.values());

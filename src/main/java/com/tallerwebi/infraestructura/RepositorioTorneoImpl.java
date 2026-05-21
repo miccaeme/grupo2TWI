@@ -1,7 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioEquipo;
+import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.Torneo;
+import com.tallerwebi.dominio.contratos.RepositorioTorneo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +11,26 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class RepositorioTorneoImpl implements RepositorioEquipo.RepositorioTorneo {
-    private SessionFactory sessionFactory;
+public class RepositorioTorneoImpl implements RepositorioTorneo {
 
     @Autowired
-    public RepositorioTorneoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    private SessionFactory sessionFactory;
+
+    @Override
+    public void guardar(Torneo torneo) {
+
+        sessionFactory.getCurrentSession().save(torneo);
     }
 
-    @Override   public void guardar(Torneo torneo){
-        final Session session = sessionFactory.getCurrentSession();
-        session.save(torneo);
-    }
     @Override
-    public List<Torneo> buscarTodos(){
-        final Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Torneo").list();
+    public List<Torneo> buscarTodos() {
+
+        return sessionFactory.getCurrentSession().createQuery("from Torneo", Torneo.class).list();
+    }
+
+    @Override
+    public Torneo buscarPorId(Long id) {
+
+        return sessionFactory.getCurrentSession().get(Torneo.class, id);
     }
 }

@@ -10,28 +10,29 @@ import java.time.LocalDate;
 
 @Entity
 public class Torneo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String deporte;
     private String lugar;
     private Integer cantidadEquipos;
-    private String Formato;
-    @DateTimeFormat (pattern = "yyyy-MM-dd")
+    private String formato;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaDeInicio;
 
     private String tipoTorneo;
     private Double precio;
     private String descripcion;
-    public Torneo() {}
+
+    public Torneo() {
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -67,11 +68,11 @@ public class Torneo {
     }
 
     public String getFormato() {
-        return Formato;
+        return formato;
     }
 
     public void setFormato(String formato) {
-        Formato = formato;
+        this.formato = formato;
     }
 
     public LocalDate getFechaDeInicio() {
@@ -82,7 +83,13 @@ public class Torneo {
         this.fechaDeInicio = fechaDeInicio;
     }
 
+    public String getTipoTorneo() {
+        return tipoTorneo;
+    }
 
+    public void setTipoTorneo(String tipoTorneo) {
+        this.tipoTorneo = tipoTorneo;
+    }
 
     public Double getPrecio() {
         return precio;
@@ -98,13 +105,5 @@ public class Torneo {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getTipoTorneo() {
-        return tipoTorneo;
-    }
-
-    public void setTipoTorneo(String tipoTorneo) {
-        this.tipoTorneo = tipoTorneo;
     }
 }

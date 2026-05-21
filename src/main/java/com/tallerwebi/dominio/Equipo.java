@@ -1,9 +1,7 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Equipo {
@@ -13,18 +11,12 @@ public class Equipo {
     private Long id;
 
     private String nombre;
-    private String deporte;
-    private String ciudad;
-    private Integer cantidadJugadores;
 
-    public Equipo() {}
+    @OneToMany(mappedBy = "equipo")
+    private List<EquipoJugador> jugadores;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -35,27 +27,11 @@ public class Equipo {
         this.nombre = nombre;
     }
 
-    public String getDeporte() {
-        return deporte;
+    public List<EquipoJugador> getJugadores() {
+        return jugadores;
     }
 
-    public void setDeporte(String deporte) {
-        this.deporte = deporte;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public Integer getCantidadJugadores() {
-        return cantidadJugadores;
-    }
-
-    public void setCantidadJugadores(Integer cantidadJugadores) {
-        this.cantidadJugadores = cantidadJugadores;
+    public void setJugadores(List<EquipoJugador> jugadores) {
+        this.jugadores = jugadores;
     }
 }

@@ -1,7 +1,10 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Enums.EstadoSolicitud;
-import com.tallerwebi.dominio.Servicios.ServicioSolicitudUnion;
+import com.tallerwebi.dominio.contratos.RepositorioEquipo;
+import com.tallerwebi.dominio.contratos.RepositorioJugador;
+import com.tallerwebi.dominio.contratos.RepositorioSolicitudUnion;
+import com.tallerwebi.dominio.servicios.ServicioSolicitudUnion;
 import com.tallerwebi.dominio.excepcion.SolicitudDuplicadaException;
 import com.tallerwebi.dominio.excepcion.SolicitudNoValidaException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +31,30 @@ public class ServicioSolicitudUnionImpl implements ServicioSolicitudUnion {
         if (repositorioSolicitudUnion.existeSolicitudPendiente(jugadorId, equipoId)) {
             throw new SolicitudDuplicadaException("Ya existe una solicitud pendiente para este equipo.");
         }
+
         Jugador jugador = repositorioJugador.buscarPorId(jugadorId);
         Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
-        repositorioSolicitudUnion.guardar(new SolicitudUnion(jugador, equipo));
+
+        SolicitudUnion solicitudUnion = new SolicitudUnion(jugador, equipo);
+
+        repositorioSolicitudUnion.guardar(solicitudUnion);
     }
 
     @Override
     public void aceptarSolicitud(Long solicitudId, Long capitanId) {
-        SolicitudUnion solicitud = validarSolicitudYPermiso(solicitudId, capitanId);
+        SolicitudUnion solicitud = validarSolicitud(solicitudId);
+
         solicitud.setEstado(EstadoSolicitud.ACEPTADA);
+
         repositorioSolicitudUnion.actualizar(solicitud);
     }
 
     @Override
     public void rechazarSolicitud(Long solicitudId, Long capitanId) {
-        SolicitudUnion solicitud = validarSolicitudYPermiso(solicitudId, capitanId);
+        SolicitudUnion solicitud = validarSolicitud(solicitudId);
+
         solicitud.setEstado(EstadoSolicitud.RECHAZADA);
+
         repositorioSolicitudUnion.actualizar(solicitud);
     }
 
@@ -57,15 +68,17 @@ public class ServicioSolicitudUnionImpl implements ServicioSolicitudUnion {
         return repositorioSolicitudUnion.buscarPorJugador(jugadorId);
     }
 
-    /** Valida que la solicitud exista, esté PENDIENTE y que quien actúa sea el capitán del equipo. */
-    private SolicitudUnion validarSolicitudYPermiso(Long solicitudId, Long capitanId) {
+    private SolicitudUnion validarSolicitud(Long solicitudId) {
         SolicitudUnion solicitud = repositorioSolicitudUnion.buscarPorId(solicitudId);
-        if (solicitud == null || !EstadoSolicitud.PENDIENTE.equals(solicitud.getEstado())) {
-            throw new SolicitudNoValidaException("La solicitud no existe o ya fue procesada.");
+
+        if (solicitud == null) {
+            throw new SolicitudNoValidaException("La solicitud no existe.");
         }
-        if (!capitanId.equals(solicitud.getEquipo().getCapitanId())) {
-            throw new SolicitudNoValidaException("Solo el capitán del equipo puede gestionar solicitudes.");
+
+        if (!EstadoSolicitud.PENDIENTE.equals(solicitud.getEstado())) {
+            throw new SolicitudNoValidaException("La solicitud ya fue procesada.");
         }
+
         return solicitud;
     }
 }

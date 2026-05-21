@@ -1,4 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.contratos;
+
+import com.tallerwebi.dominio.SolicitudUnion;
 
 import java.util.List;
 

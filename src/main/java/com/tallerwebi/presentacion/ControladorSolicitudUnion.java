@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Servicios.ServicioSolicitudUnion;
+import com.tallerwebi.dominio.servicios.ServicioSolicitudUnion;
 import com.tallerwebi.dominio.SolicitudUnion;
 import com.tallerwebi.dominio.excepcion.SolicitudDuplicadaException;
 import com.tallerwebi.dominio.excepcion.SolicitudNoValidaException;

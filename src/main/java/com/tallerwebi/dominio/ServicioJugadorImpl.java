@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.Servicios.ServicioJugador;
+import com.tallerwebi.dominio.contratos.RepositorioJugador;
+import com.tallerwebi.dominio.servicios.ServicioJugador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.contratos.RepositorioEquipo;
+import com.tallerwebi.dominio.contratos.RepositorioTorneo;
+import com.tallerwebi.dominio.servicios.ServicioTorneo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,26 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-
-public class ServicioCrearTorneoImpl implements ServicioCrearTorneo {
-    private RepositorioEquipo.RepositorioTorneo repositorioTorneo;
+@Transactional
+public class ServicioTorneoImpl implements ServicioTorneo {
 
     @Autowired
-    public ServicioCrearTorneoImpl( RepositorioEquipo.RepositorioTorneo repositorioTorneo) {
-        this.repositorioTorneo = repositorioTorneo;
-    }
+    private RepositorioTorneo repositorioTorneo;
 
     @Override
-    @Transactional
     public void guardar(Torneo torneo) {
-
         repositorioTorneo.guardar(torneo);
     }
+
     @Override
-    @Transactional
-    public List<Torneo> buscarTodos(){
+    public List<Torneo> buscarTodos() {
         return repositorioTorneo.buscarTodos();
     }
-
-
 }
