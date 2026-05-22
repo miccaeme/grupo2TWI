@@ -17,4 +17,9 @@ public class ServicioJugadorImpl implements ServicioJugador {
   public void crearJugador(Jugador jugador) {
     repositorioJugador.save(jugador);
   }
+
+  @Override
+  public Jugador buscarPorId(Long id) {
+    return repositorioJugador.buscarPorId(id);
+  }
 }

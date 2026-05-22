@@ -20,6 +20,7 @@ public class RepositorioJugadorImpl implements RepositorioJugador {
 
   @Override
   public Jugador buscarPorId(Long id) {
+
     return sessionFactory.getCurrentSession().get(Jugador.class,id);
   }
 }
