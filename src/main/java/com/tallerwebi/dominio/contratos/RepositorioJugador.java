@@ -4,5 +4,6 @@ import com.tallerwebi.dominio.Jugador;
 
 public interface RepositorioJugador {
   void save(Jugador jugador);
+
   Jugador buscarPorId(Long id);
 }

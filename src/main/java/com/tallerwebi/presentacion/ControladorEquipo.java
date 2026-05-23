@@ -33,7 +33,7 @@ public class ControladorEquipo {
     public ModelAndView crearEquipo(
             @ModelAttribute("equipo") Equipo equipo,
             @RequestParam("jugadorId") Long jugadorId,//como el profe dijo que el login va a lo ultimo , despues lo cambiamos  (Long) session.getAttribute
-            @RequestParam("posiciones") Posicion posicion) {
+            @RequestParam("posicion") Posicion posicion) {
 
         servicioEquipo.crearEquipo(equipo, jugadorId, posicion);
 

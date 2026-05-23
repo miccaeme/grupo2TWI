@@ -20,6 +20,7 @@ public class ServicioJugadorImpl implements ServicioJugador {
 
   @Override
   public Jugador buscarPorId(Long id) {
+
     return repositorioJugador.buscarPorId(id);
   }
 }
