@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import javax.servlet.http.HttpSession;  // ← import agregado
+
 
 @Controller
 public class ControladorEquipo {
@@ -25,6 +26,7 @@ public class ControladorEquipo {
 
         modelo.put("equipo", new Equipo());
         modelo.put("posiciones", Posicion.values());
+        modelo.put("deportes", Deporte.values());
 
         return new ModelAndView("crear-equipo", modelo);
     }
@@ -41,6 +43,7 @@ public class ControladorEquipo {
         modelo.put("mensaje", "Equipo creado correctamente");
         modelo.put("equipo", new Equipo());
         modelo.put("posiciones", Posicion.values());
+        modelo.put("deportes", Deporte.values());
 
         return new ModelAndView("crear-equipo", modelo);
 

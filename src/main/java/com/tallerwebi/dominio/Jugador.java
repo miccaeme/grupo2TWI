@@ -17,15 +17,6 @@ public class Jugador {
   @Column(unique = true, nullable = false)
   private Integer dni;
 
-  @Column(unique = true, nullable = false)
-  private String email;
-
-  @Enumerated(EnumType.STRING)
-  private Posicion posicion;
-
-  @Enumerated(EnumType.STRING)
-  private Deporte deporte;
-
   public Long getId() {
     return id;
   }
@@ -46,13 +37,6 @@ public class Jugador {
     this.apellido = apellido;
   }
 
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
 
   public Integer getDni() {
     return dni;
@@ -62,19 +46,4 @@ public class Jugador {
     this.dni = dni;
   }
 
-  public Posicion getPosicion() {
-    return posicion;
-  }
-
-  public void setPosicion(Posicion posicion) {
-    this.posicion = posicion;
-  }
-
-  public Deporte getDeporte() {
-    return deporte;
-  }
-
-  public void setDeporte(Deporte deporte) {
-    this.deporte = deporte;
-  }
 }

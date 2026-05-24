@@ -10,18 +10,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-custom">
-
-    <div class="container">
-
-        <a class="navbar-brand logo" href="#">
-            TORNEOS
-            <span class="logo-verde">PRO</span>
-        </a>
-
-    </div>
-
-</nav>
+<div th:replace="fragments/header :: header_fragment"></div>
 
 <main class="container py-5">
 
@@ -41,55 +30,68 @@
                         Creá tu equipo y convertite automáticamente en capitán.
                     </p>
 
-                    <div
-                            th:if="${mensaje}"
-                            class="alert alert-success"
-                            th:text="${mensaje}">
+                    <div th:if="${mensaje}"
+                         class="alert alert-success"
+                         th:text="${mensaje}">
                     </div>
 
-                    <form
-                            th:action="@{/equipo/crear}"
-                            th:object="${equipo}"
-                            method="post">
+                    <form th:action="@{/equipo/crear}"
+                          th:object="${equipo}"
+                          method="post">
 
                         <div class="mb-3">
-
                             <label class="form-label">
                                 Nombre del equipo
                             </label>
 
-                            <input
-                                    type="text"
-                                    th:field="*{nombre}"
-                                    class="form-control"
-                                    placeholder="Ej: Los Titanes"
-                                    required>
-
+                            <input type="text"
+                                   th:field="*{nombre}"
+                                   class="form-control"
+                                   placeholder="Ej: Los Titanes"
+                                   required>
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">
+                                Deporte del equipo
+                            </label>
 
+                            <select th:field="*{deporte}"
+                                    id="deporte"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">
+                                    Seleccione un deporte
+                                </option>
+
+                                <option th:each="deporte : ${deportes}"
+                                        th:value="${deporte}"
+                                        th:text="${deporte}">
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">
                                 ID del jugador capitán
                             </label>
 
-                            <input
-                                    type="number"
-                                    name="jugadorId"
-                                    class="form-control"
-                                    placeholder="Ej: 1"
-                                    required>
-
+                            <input type="number"
+                                   name="jugadorId"
+                                   class="form-control"
+                                   placeholder="Ej: 1"
+                                   required>
                         </div>
 
                         <div class="mb-4">
-
                             <label class="form-label">
-                                Tu posición en el equipo
+                                Tu posición en este equipo
                             </label>
 
-                            <select
-                                    name="posicion"
+                            <select name="posicion"
+                                    id="posicion"
                                     class="form-select"
                                     required>
 
@@ -97,22 +99,17 @@
                                     Seleccione una posición
                                 </option>
 
-                                <option
-                                        th:each="posicion : ${posiciones}"
+                                <option th:each="posicion : ${posiciones}"
                                         th:value="${posicion}"
                                         th:text="${posicion}">
                                 </option>
 
                             </select>
-
                         </div>
 
-                        <button
-                                type="submit"
+                        <button type="submit"
                                 class="btn w-100 fw-bold rounded-pill boton-verde">
-
                             Crear equipo
-
                         </button>
 
                     </form>
@@ -126,7 +123,6 @@
     </div>
 
 </main>
-
+<script th:src="@{/js/equipo.js}"></script>
 </body>
-
 </html>
