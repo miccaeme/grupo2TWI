@@ -10,8 +10,10 @@ import java.util.List;
 public interface ServicioEquipo {
 
     void crearEquipo(Equipo equipo, Long jugadorId, Posicion posicion);
+    void asignarJugadorAlEquipo(Long idEquipo, Long idJugador, Posicion posicion);
 
     List<Equipo> buscarEquiposPorNombre(String nombre);
     Equipo buscarEquiposPorId(Long id);
     List<Equipo> listarTodos();
+    List<Equipo> buscarEquiposDelCapitan(Long idJugador);
 }
