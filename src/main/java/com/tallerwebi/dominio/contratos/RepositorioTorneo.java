@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RepositorioTorneo {
     void guardar(Torneo torneo);
-
+    void actualizar(Torneo torneo);
     List<Torneo> buscarTodos();
 
     Torneo buscarPorId(Long id);
