@@ -81,30 +81,40 @@
           <div class="row g-3 mb-4">
 
             <div class="col-md-4">
-              <label for="cantidadEquipos" class="form-label text-light small fw-medium">Cantidad de Equipos *</label>
-              <select class="form-select" id="cantidadEquipos" name="cantidadEquipos" th:field="*{cantidadEquipos}"required>
-                <option value="8">8 Equipos</option>
-                <option value="12">12 Equipos</option>
-                <option value="16" selected>16 Equipos</option>
-                <option value="32">32 Equipos</option>
-              </select>
-            </div>
-
-
-            <div class="col-md-4">
               <label for="formato" class="form-label text-light small fw-medium">Formato del Torneo *</label>
-              <select class="form-select" id="formato" name="formato" th:field="*{formato}" required>
+              <select class="form-select" th:field="*{formato}" id="formato" name="formato"  required>
+                <option value="" disabled selected> Selecciona un formato... </option>
                 <option value="eliminacion_directa">Eliminacion Directa (Playoffs)</option>
                 <option value="liga">Liga (Todos contra todos)</option>
                 <option value="grupos_playoffs">Fase de Grupos + Eliminatorias</option>
               </select>
+
+
             </div>
 
 
             <div class="col-md-4">
+              <label for="cantidadEquipos" class="form-label text-light small fw-medium">Cantidad de Equipos *</label>
+              <select class="form-select" th:field="*{cantidadEquipos}" id="cantidadEquipos" name="cantidadEquipos" required>
+                <option value="">Primero elegi un formato...</option>
+
+              </select>
+            </div>
+
+
+
+            <div class="col-md-4">
+
               <label for="fechaInicio" class="form-label text-light small fw-medium">Fecha estimada de Inicio *</label>
               <input type="date" th:field="*{fechaDeInicio}" class="form-control" id="fechaInicio" name="fechaInicio" required>
+
+              <div th:if="${errorFecha !=null}" class="alert alert-danger" role="alert">
+                <p th:text="${errorFecha}"> </p>
+              </div>
+
             </div>
+
+
           </div>
 
           <div class="row g-3 mb-4">
@@ -167,6 +177,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
+
+<script th:src="@{/js/torneoDinamico.js}"></script>
 
 </body>
 </html>

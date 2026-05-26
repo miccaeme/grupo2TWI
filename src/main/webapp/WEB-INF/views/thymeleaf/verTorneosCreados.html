@@ -59,7 +59,7 @@
                     </thead>
                     <tbody>
                     <!--  for-each que recorre la lista -->
-                    <tr th:each="unTorneo : ${torneos}" class="tr-hover">
+                    <tr th:each="unTorneo: ${torneos}" class="tr-hover">
 
 
                         <td class="ps-4 py-3 fw-semibold text-white">
@@ -75,9 +75,10 @@
 
 
                         <td class="text-center py-3">
-                            <a href="#" class="btn btn-sm btn-outline-light px-3">
-                                Ver Detalle
+                            <a th:href="@{/asignarEquipos(id=${unTorneo.id})}" class="btn btn-sm btn-outline-light px-3">
+                                Asignar Equipos
                             </a>
+                            <a class="btn btn-sm btn-outline-light px-3"> Ver Detalles </a>
                         </td>
 
                     </tr>

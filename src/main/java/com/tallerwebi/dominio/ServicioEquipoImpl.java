@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class ServicioEquipoImpl implements ServicioEquipo {
@@ -41,4 +44,17 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         repositorioEquipoJugador.guardar(equipoJugador);
     }
 
+    @Override
+    public List<Equipo> buscarEquiposPorNombre(String nombre) {
+        return repositorioEquipo.buscarPorNombre(nombre);
+    }
+
+    @Override
+    public Equipo buscarEquiposPorId(Long id) {
+        return repositorioEquipo.buscarPorId(id);
+    }
+    @Transactional(readOnly = true)
+    public List<Equipo> listarTodos() {
+        return repositorioEquipo.findAll();
+    }
 }

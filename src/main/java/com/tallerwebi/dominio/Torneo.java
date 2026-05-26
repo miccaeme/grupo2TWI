@@ -2,11 +2,10 @@ package com.tallerwebi.dominio;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Torneo {
@@ -20,14 +19,21 @@ public class Torneo {
     private String lugar;
     private Integer cantidadEquipos;
     private String formato;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaDeInicio;
-
     private String tipoTorneo;
     private Double precio;
     private String descripcion;
 
+    @ManyToMany
+    @JoinTable(
+            name= "torneo_equipo",
+            joinColumns = @JoinColumn(name= "torneo_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipo_id")
+    )
+    private List<Equipo> equipos = new ArrayList<>();
+
+    
     public Torneo() {
     }
 
@@ -105,5 +111,18 @@ public class Torneo {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public List<Equipo> getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(List<Equipo> equipos) {
+        this.equipos = equipos;
     }
 }
