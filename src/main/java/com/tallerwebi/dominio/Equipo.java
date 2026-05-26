@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Enums.Deporte;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,6 +12,10 @@ public class Equipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+
+    @Enumerated(EnumType.STRING)
+    private Deporte deporte;
+
     @OneToMany(mappedBy = "equipo")
     private List<EquipoJugador> jugadores;
 
@@ -26,6 +32,14 @@ public class Equipo {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Deporte getDeporte() {
+        return deporte;
+    }
+
+    public void setDeporte(Deporte deporte) {
+        this.deporte = deporte;
     }
 
     public List<EquipoJugador> getJugadores() {

@@ -12,23 +12,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-custom">
-
-  <div class="container">
-
-    <a class="navbar-brand logo" href="#">
-
-      <span class="logo-verde"></span>
-
-      TORNEOS
-
-      <span class="logo-verde">PRO</span>
-
-    </a>
-
-  </div>
-
-</nav>
+<div th:replace="fragments/header :: header_fragment"></div>
 
 <main class="container py-5">
 
@@ -45,128 +29,48 @@
           </h1>
 
           <p class="text-center text-secondary mb-4">
-            Registrá un jugador para participar en torneos deportivos.
+            Completá tus datos personales para participar en torneos deportivos.
           </p>
 
-          <div
-                  th:if="${mensaje}"
-                  class="alert alert-success"
-                  th:text="${mensaje}">
+          <div th:if="${mensaje}"
+               class="alert alert-success"
+               th:text="${mensaje}">
           </div>
 
-          <form
-                  th:action="@{/jugador/crear}"
-                  th:object="${jugador}"
-                  method="post">
+          <form th:action="@{/jugador/crear}"
+                th:object="${jugador}"
+                method="post">
 
             <div class="mb-3">
+              <label class="form-label">Nombre</label>
 
-              <label class="form-label">
-                Nombre
-              </label>
-
-              <input
-                      type="text"
-                      th:field="*{nombre}"
-                      class="form-control"
-                      required>
-
+              <input type="text"
+                     th:field="*{nombre}"
+                     class="form-control"
+                     required>
             </div>
 
             <div class="mb-3">
+              <label class="form-label">Apellido</label>
 
-              <label class="form-label">
-                Apellido
-              </label>
-
-              <input
-                      type="text"
-                      th:field="*{apellido}"
-                      class="form-control"
-                      required>
-
-            </div>
-
-            <div class="mb-3">
-
-              <label class="form-label">
-                Email
-              </label>
-
-              <input
-                      type="email"
-                      th:field="*{email}"
-                      class="form-control"
-                      required>
-
-            </div>
-
-            <div class="mb-3">
-
-              <label class="form-label">
-                DNI
-              </label>
-
-              <input
-                      type="number"
-                      th:field="*{dni}"
-                      class="form-control"
-                      required>
-
-            </div>
-
-            <div class="mb-3">
-
-              <label class="form-label">
-                Deporte
-              </label>
-
-              <select
-                      th:field="*{deporte}"
-                      id="deporte"
-                      class="form-select"
-                      required>
-
-                <option value="">
-                  Seleccione un deporte
-                </option>
-
-                <option
-                        th:each="deporte : ${deportes}"
-                        th:value="${deporte}"
-                        th:text="${deporte}">
-                </option>
-
-              </select>
-
+              <input type="text"
+                     th:field="*{apellido}"
+                     class="form-control"
+                     required>
             </div>
 
             <div class="mb-4">
+              <label class="form-label">DNI</label>
 
-              <label class="form-label">
-                Posición
-              </label>
-
-              <select
-                      th:field="*{posicion}"
-                      id="posicion"
-                      class="form-select"
-                      required>
-
-                <option value="">
-                  Seleccione una posición
-                </option>
-
-              </select>
-
+              <input type="number"
+                     th:field="*{dni}"
+                     class="form-control"
+                     required>
             </div>
 
-            <button
-                    type="submit"
+            <button type="submit"
                     class="btn w-100 fw-bold rounded-pill boton-verde">
-
               Crear jugador
-
             </button>
 
           </form>
@@ -181,6 +85,5 @@
 
 </main>
 
-<script th:src="@{/js/jugador.js}"></script>
-
 </body>
+</html>

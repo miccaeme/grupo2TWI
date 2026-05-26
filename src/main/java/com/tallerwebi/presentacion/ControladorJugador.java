@@ -22,8 +22,6 @@ public class ControladorJugador {
   public ModelAndView mostrarFormCrearJugador() {
     ModelMap modelo = new ModelMap();
     modelo.put("jugador", new Jugador());
-    modelo.put("posiciones", Posicion.values());
-    modelo.put("deportes", Deporte.values());
     return new ModelAndView("crear-jugador", modelo);
   }
 
@@ -34,8 +32,6 @@ public class ControladorJugador {
     ModelMap modelo = new ModelMap();
     modelo.put("mensaje", "Jugador creado correctamente");
     modelo.put("jugador", new Jugador());
-    modelo.put("posiciones", Posicion.values());
-    modelo.put("deportes", Deporte.values());
     return new ModelAndView("crear-jugador", modelo);
   }
 }
