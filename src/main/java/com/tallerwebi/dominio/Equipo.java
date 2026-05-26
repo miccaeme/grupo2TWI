@@ -9,11 +9,12 @@ public class Equipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
-
     @OneToMany(mappedBy = "equipo")
     private List<EquipoJugador> jugadores;
+
+
+
 
     public Long getId() {
         return id;
@@ -33,5 +34,9 @@ public class Equipo {
 
     public void setJugadores(List<EquipoJugador> jugadores) {
         this.jugadores = jugadores;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -23,8 +23,13 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
     }
 
     @Override
-    public List<Torneo> buscarTodos() {
+    public void actualizar(Torneo torneo) {
+        this.sessionFactory.getCurrentSession().update(torneo);
 
+    }
+
+    @Override
+    public List<Torneo> buscarTodos() {
         return sessionFactory.getCurrentSession().createQuery("from Torneo", Torneo.class).list();
     }
 

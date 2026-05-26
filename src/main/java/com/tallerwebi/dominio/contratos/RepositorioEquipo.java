@@ -10,8 +10,7 @@ public interface RepositorioEquipo {
 
     Equipo buscarPorId(Long id);
 
-    interface RepositorioTorneo {
-        void guardar(Torneo torneo);
-        List<Torneo> buscarTodos();
-    }
+    List<Equipo> findAll();
+
+    List<Equipo> buscarPorNombre(String nombre);
 }
