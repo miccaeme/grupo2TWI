@@ -13,29 +13,242 @@
 </head>
 
 
-<body class="d-flex flex-column h-100">
-
+<body class="d-flex flex-column h-100 bg-dark text-light">
 
 <div th:replace="~{fragments/header :: header_fragment}"></div>
 
+<main role="main" class="flex-shrink-0">
 
-<main role="main" class="container flex-shrink-0 my-auto py-5">
-  <div class="container text-center"> <!-- Añadí text-center opcional para que se vea más ordenado -->
-    <h1 class="display-4 fw-bold text-success">Bienvenidos a Taller Web 1</h1>
-    <p class="text-muted">Plataforma de organizacion de torneos deportivos.</p>
-    <p class="text-muted">Alumnos:<br>Carrazco Leandro <br>Chaparro Micaela<br>Sosa Ramiro </p>
+  <!-- HERO -->
+  <section class="container py-5">
 
-    <a href="login.html" class="btn btn-lg btn-outline-light px-4 mt-3">Volver</a>
-  </div>
+    <div class="row align-items-center min-vh-75">
+
+      <div class="col-lg-6">
+
+                <span class="badge bg-success mb-3 px-3 py-2">
+                    Plataforma deportiva
+                </span>
+
+        <h1 class="display-2 fw-bold mb-4">
+          Organizá torneos
+          <span class="text-success">
+                        como un profesional
+                    </span>
+        </h1>
+
+        <p class="lead text-secondary mb-4">
+          Creá equipos, administrá jugadores, generá fixtures y
+          organizá competiciones de fútbol, básquet, volley y pádel
+          desde un solo lugar.
+        </p>
+
+        <div class="d-flex gap-3 flex-wrap">
+
+          <a
+                  th:href="@{/verTorneosCreados}"
+                  class="btn btn-success btn-lg rounded-pill px-4 fw-bold">
+
+            Ver torneos
+
+          </a>
+
+          <a
+                  th:href="@{/equipo/crear}"
+                  class="btn btn-outline-light btn-lg rounded-pill px-4">
+
+            Crear equipo
+
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="col-lg-6 mt-5 mt-lg-0">
+
+        <div class="card bg-dark border border-secondary shadow-lg rounded-4 p-4">
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h4 class="fw-bold text-success mb-0">
+              Temporada 2026
+            </h4>
+
+            <span class="badge bg-success">
+                            Activa
+                        </span>
+
+          </div>
+
+          <div class="row g-3">
+
+            <div class="col-6">
+
+              <div class="p-4 rounded-4 bg-black border border-secondary text-center">
+
+                <h2 class="fw-bold text-success">
+                  +24
+                </h2>
+
+                <p class="text-secondary mb-0">
+                  Torneos
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="col-6">
+
+              <div class="p-4 rounded-4 bg-black border border-secondary text-center">
+
+                <h2 class="fw-bold text-success">
+                  +120
+                </h2>
+
+                <p class="text-secondary mb-0">
+                  Equipos
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="col-6">
+
+              <div class="p-4 rounded-4 bg-black border border-secondary text-center">
+
+                <h2 class="fw-bold text-success">
+                  +950
+                </h2>
+
+                <p class="text-secondary mb-0">
+                  Jugadores
+                </p>
+
+              </div>
+
+            </div>
+
+            <div class="col-6">
+
+              <div class="p-4 rounded-4 bg-black border border-secondary text-center">
+
+                <h2 class="fw-bold text-success">
+                  4
+                </h2>
+
+                <p class="text-secondary mb-0">
+                  Deportes
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SECCION FUNCIONALIDADES -->
+  <section class="container py-5">
+
+    <div class="text-center mb-5">
+
+      <h2 class="fw-bold display-5">
+        Todo lo que necesitás para tu torneo
+      </h2>
+
+      <p class="text-secondary">
+        Gestioná toda la competencia desde una sola plataforma.
+      </p>
+
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-4">
+
+        <div class="card h-100 bg-dark border border-secondary rounded-4 shadow-sm">
+
+          <div class="card-body p-4">
+
+            <h3 class="text-success fw-bold mb-3">
+              Equipos
+            </h3>
+
+            <p class="text-secondary">
+              Creá equipos, agregá jugadores y asigná posiciones
+              automáticamente según el deporte.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-4">
+
+        <div class="card h-100 bg-dark border border-secondary rounded-4 shadow-sm">
+
+          <div class="card-body p-4">
+
+            <h3 class="text-success fw-bold mb-3">
+              Torneos
+            </h3>
+
+            <p class="text-secondary">
+              Organizá competiciones, administrá participantes y
+              controlá cada torneo fácilmente.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-4">
+
+        <div class="card h-100 bg-dark border border-secondary rounded-4 shadow-sm">
+
+          <div class="card-body p-4">
+
+            <h3 class="text-success fw-bold mb-3">
+              Fixtures
+            </h3>
+
+            <p class="text-secondary">
+              Generá cruces, fechas y seguí el avance de los
+              partidos en tiempo real.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
 </main>
-
 
 <div th:replace="~{fragments/footer :: footer_fragment}"></div>
 
-<!-- Bootstrap core js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous">
+</script>
 
 </body>
 </html>

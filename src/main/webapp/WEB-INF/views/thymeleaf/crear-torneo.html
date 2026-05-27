@@ -82,11 +82,26 @@
 
             <div class="col-md-4">
               <label for="formato" class="form-label text-light small fw-medium">Formato del Torneo *</label>
-              <select class="form-select" th:field="*{formato}" id="formato" name="formato"  required>
-                <option value="" disabled selected> Selecciona un formato... </option>
-                <option value="eliminacion_directa">Eliminacion Directa (Playoffs)</option>
-                <option value="liga">Liga (Todos contra todos)</option>
-                <option value="grupos_playoffs">Fase de Grupos + Eliminatorias</option>
+              <select class="form-select"
+                      th:field="*{formato}"
+                      id="formato"
+                      name="formato"
+                      required>
+
+                <option value="">Selecciona un formato...</option>
+
+                <option value="eliminacion_directa">
+                  Eliminacion Directa (Playoffs)
+                </option>
+
+                <option value="liga">
+                  Liga (Todos contra todos)
+                </option>
+
+                <option value="grupos_playoffs">
+                  Fase de Grupos + Eliminatorias
+                </option>
+
               </select>
 
 

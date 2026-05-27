@@ -11,6 +11,8 @@ public class Equipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String nombre;
 
     @Enumerated(EnumType.STRING)

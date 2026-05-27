@@ -17,12 +17,16 @@ import java.util.List;
 @Transactional
 public class ServicioEquipoImpl implements ServicioEquipo {
 
-    @Autowired
     private RepositorioEquipo repositorioEquipo;
-    @Autowired
     private RepositorioJugador repositorioJugador;
-    @Autowired
     private RepositorioEquipoJugador repositorioEquipoJugador;
+
+    @Autowired
+    public ServicioEquipoImpl(RepositorioEquipo repositorioEquipo, RepositorioJugador repositorioJugador, RepositorioEquipoJugador repositorioEquipoJugador) {
+        this.repositorioEquipo = repositorioEquipo;
+        this.repositorioJugador = repositorioJugador;
+        this.repositorioEquipoJugador = repositorioEquipoJugador;
+    }
 
 
     @Override
@@ -45,16 +49,41 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     }
 
     @Override
+    public void asignarJugadorAlEquipo(Long idEquipo, Long idJugador, Posicion posicion) {
+        Equipo equipo = repositorioEquipo.buscarPorId(idEquipo);
+
+        Jugador jugador = repositorioJugador.buscarPorId(idJugador);
+
+
+        EquipoJugador relacionNueva = new EquipoJugador();
+        relacionNueva.setEquipo(equipo);
+        relacionNueva.setJugador(jugador);
+        relacionNueva.setPosicion(posicion);
+
+        relacionNueva.setCapitan(false);
+
+
+        repositorioEquipoJugador.guardar(relacionNueva);
+    }
+
+    @Override
     public List<Equipo> buscarEquiposPorNombre(String nombre) {
         return repositorioEquipo.buscarPorNombre(nombre);
     }
 
     @Override
     public Equipo buscarEquiposPorId(Long id) {
+
         return repositorioEquipo.buscarPorId(id);
     }
     @Transactional(readOnly = true)
     public List<Equipo> listarTodos() {
+
         return repositorioEquipo.findAll();
+    }
+
+    @Override
+    public List<Equipo> buscarEquiposDelCapitan(Long idJugador) {
+        return repositorioEquipoJugador.buscarEquiposPorJugadorYCapitan(idJugador, true);
     }
 }

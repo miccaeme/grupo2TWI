@@ -15,8 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControladorJugador {
 
-  @Autowired
   private ServicioJugador servicioJugador;
+
+  @Autowired
+  public ControladorJugador(ServicioJugador servicioJugador) {
+    this.servicioJugador = servicioJugador;
+  }
 
   @RequestMapping(path = "/jugador/crear", method = RequestMethod.GET)
   public ModelAndView mostrarFormCrearJugador() {
