@@ -35,6 +35,10 @@ public class ServicioTorneoImpl implements ServicioTorneo {
 
         repositorioTorneo.guardar(torneo);
     }
+    public ServicioTorneoImpl(RepositorioTorneo repositorioTorneo, RepositorioEquipo repositorioEquipo) {
+        this.repositorioTorneo = repositorioTorneo;
+        this.repositorioEquipo = repositorioEquipo;
+    }
 
     @Override
     public List<Torneo> buscarTodos() {
@@ -49,7 +53,7 @@ public class ServicioTorneoImpl implements ServicioTorneo {
 
             for(Long equipoId : equiposIds){
                 Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
-                if(equipo != null){
+                if(equipo != null && !equiposAAsignar.contains(equipo)){
                     equiposAAsignar.add(equipo);
                 }
             }
