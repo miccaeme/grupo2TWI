@@ -52,12 +52,13 @@ public class ServicioTorneoImpl implements ServicioTorneo {
             List<Equipo> equiposAAsignar= new ArrayList<>();
 
             for(Long equipoId : equiposIds){
-                Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
-                if(equipo != null && !equiposAAsignar.contains(equipo)){
-                    equiposAAsignar.add(equipo);
+                if(equipoId != null){
+                    Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
+                    if(equipo != null && !equiposAAsignar.contains(equipo)){
+                        equiposAAsignar.add(equipo);
+                    }
                 }
             }
-
             torneo.setEquipos(equiposAAsignar);
 
             repositorioTorneo.actualizar(torneo);

@@ -92,7 +92,7 @@ public class ControladorTorneo {
     }
    servicioTorneo.asignarEquipos(id,equiposIds);
 
-   String urlRedireccion = "redirect:/verTorneosCreados";
+   String urlRedireccion = "redirect:/asignarEquipos?id=" + id;
    return new ModelAndView(urlRedireccion, model);
  }
 

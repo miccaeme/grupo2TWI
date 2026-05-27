@@ -25,7 +25,7 @@ public class Torneo {
     private Double precio;
     private String descripcion;
 
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
             name= "torneo_equipo",
             joinColumns = @JoinColumn(name= "torneo_id"),
