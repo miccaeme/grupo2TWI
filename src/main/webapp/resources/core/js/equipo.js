@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const posicionesPorDeporte = {
     FUTBOL: ["ARQUERO", "DEFENSOR", "MEDIOCAMPISTA", "DELANTERO"],
     BASQUET: ["BASE", "ESCOLTA", "ALERO", "ALA_PIVOT", "PIVOT"],
-    VOLLEY: ["ARMADOR", "CENTRAL", "PUNTA", "OPUESTO", "LIBERO"],
+    VOLEY: ["ARMADOR", "CENTRAL", "PUNTA", "OPUESTO", "LIBERO"],
     PADEL: ["DRIVE", "REVES"]
   };
 

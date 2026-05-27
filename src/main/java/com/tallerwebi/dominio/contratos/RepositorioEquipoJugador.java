@@ -9,4 +9,6 @@ public interface RepositorioEquipoJugador {
     void guardar(EquipoJugador equipoJugador);
 
     List<Equipo> buscarEquiposPorJugadorYCapitan(Long idJugador, boolean esCapitan);
+
+    List<EquipoJugador> buscarJugadoresPorEquipo(Long idEquipo);
 }

@@ -32,4 +32,14 @@ public class RepositorioEquipoJugadorImpl implements RepositorioEquipoJugador {
                 .setParameter("esCapitan", esCapitan)
                 .getResultList();
     }
+
+    @Override
+    public List<EquipoJugador> buscarJugadoresPorEquipo(Long idEquipo) {
+        String hql = "FROM EquipoJugador ej WHERE ej.equipo.id = :idEquipo";
+
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, EquipoJugador.class)
+                .setParameter("idEquipo", idEquipo)
+                .getResultList();
+    }
 }

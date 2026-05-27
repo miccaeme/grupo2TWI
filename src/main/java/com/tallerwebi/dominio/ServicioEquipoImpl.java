@@ -86,4 +86,9 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     public List<Equipo> buscarEquiposDelCapitan(Long idJugador) {
         return repositorioEquipoJugador.buscarEquiposPorJugadorYCapitan(idJugador, true);
     }
+
+    @Override
+    public List<EquipoJugador> obtenerJugadoresDelEquipo(Long idEquipo) {
+        return repositorioEquipoJugador.buscarJugadoresPorEquipo(idEquipo);
+    }
 }
