@@ -61,27 +61,34 @@
                 <form th:action="@{/guardarEquiposAsignados}" method="POST">
                     <input type="hidden" name="id" th:value="${torneo.id}" />
 
-                    <h5 class="text-success small fw-bold mb-3 text-uppercase">Asignar Equipos a los Slots</h5>
+                    <h5 class="text-success small fw-bold mb-3 text-uppercase">Slots de Inscripción del Torneo</h5>
 
                     <div class="row g-3 mb-4">
-                        <div class="col-md-6" th:each="i : ${#numbers.sequence(1, torneo.cantidadEquipos)}">
+                        <div class="col-md-6" th:each="i, stat : ${#numbers.sequence(1, torneo.cantidadEquipos)}">
                             <div class="p-3 border border-secondary rounded bg-secondary bg-opacity-10">
-                                <label th:for="'slot-' + ${i}" class="text-muted d-block small mb-2" th:text="'Slot #' + ${i}">Slot #1</label>
+                                <label class="text-muted d-block small mb-2" th:text="'Slot #' + ${i}">Slot #1</label>
 
-                                <select class="form-select bg-dark text-white border-secondary btn-sm"
-                                        name="equiposIds"
-                                        th:id="'slot-' + ${i}">
-                                    <option value="" selected>-- Seleccionar Equipo --</option>
-                                    <option th:each="equipo : ${todosLosEquipos}"
-                                            th:value="${equipo.id}"
-                                            th:text="${equipo.nombre}">Nombre del Equipo</option>
-                                </select>
+                                <div th:if="${torneo.equipos != null and stat.index < torneo.equipos.size()}">
+                                    <span class="fw-bold text-success" th:text="${torneo.equipos[stat.index].nombre}">Equipo Confirmado</span>
+                                    <span class="text-muted small d-block mt-1"><i class="fas fa-lock me-1"></i> Inscripcion Confirmada</span>
+
+                                    <input type="hidden" name="equiposIds" th:value="${torneo.equipos[stat.index].id}" />
+                                </div>
+
+                                <div th:unless="${torneo.equipos != null and stat.index < torneo.equipos.size()}">
+                                    <select class="form-select bg-dark text-white border-secondary btn-sm" name="equiposIds">
+                                        <option value="" selected>-- Seleccionar Equipo --</option>
+                                        <option th:each="equipo : ${todosLosEquipos}"
+                                                th:value="${equipo.id}"
+                                                th:text="${equipo.nombre}">Nombre del Equipo</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 border-top border-secondary pt-3 mt-4">
-                        <a th:href="@{/verTorneosCreados}" class="btn btn-outline-secondary text-white border-secondary btn-sm">Cancelar</a>
+                        <a th:href="@{/verTorneosCreados}" class="btn btn-outline-secondary text-white border-secondary btn-sm">Volver</a>
                         <button type="submit" class="btn btn-success btn-sm text-black fw-bold px-4">
                             <i class="fas fa-check-circle me-1"></i> Confirmar Inscripciones
                         </button>
