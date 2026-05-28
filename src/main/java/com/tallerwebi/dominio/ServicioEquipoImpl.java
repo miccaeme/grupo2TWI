@@ -34,24 +34,17 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         repositorioEquipo.guardar(equipo);
 
         Jugador jugador = repositorioJugador.buscarPorId(jugadorId);
-
         EquipoJugador equipoJugador = new EquipoJugador();
-
         equipoJugador.setEquipo(equipo);
-
         equipoJugador.setJugador(jugador);
-
         equipoJugador.setCapitan(true);
-
         equipoJugador.setPosicion(posicion);
-
         repositorioEquipoJugador.guardar(equipoJugador);
     }
 
     @Override
     public void asignarJugadorAlEquipo(Long idEquipo, Long idJugador, Posicion posicion) {
         Equipo equipo = repositorioEquipo.buscarPorId(idEquipo);
-
         Jugador jugador = repositorioJugador.buscarPorId(idJugador);
 
 

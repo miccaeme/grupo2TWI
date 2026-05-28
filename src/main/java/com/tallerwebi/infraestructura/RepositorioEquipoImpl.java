@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +12,12 @@ import java.util.List;
 @Repository
 public class RepositorioEquipoImpl implements RepositorioEquipo {
 
-    @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    public RepositorioEquipoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void guardar(Equipo equipo) {
@@ -27,18 +32,19 @@ public class RepositorioEquipoImpl implements RepositorioEquipo {
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "unchecked"})
     public List<Equipo> findAll() {
         return sessionFactory.getCurrentSession()
-                .createQuery("FROM Equipo", Equipo.class)
-                        .getResultList();
+                .createCriteria(Equipo.class).list();
+
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "unchecked"})
     public List<Equipo> buscarPorNombre(String nombre) {
-        String hql = "FROM Equipo WHERE nombre LIKE :nombre";
-        return sessionFactory.getCurrentSession()
-                .createQuery(hql, Equipo.class)
-                .setParameter("nombre","%"+nombre + "%")
-                .getResultList();
+        return sessionFactory.getCurrentSession().
+                createCriteria(Equipo.class)
+                .add(Restrictions.ilike("nombre",
+                        "%" + nombre + "%")).list();
     }
 }
