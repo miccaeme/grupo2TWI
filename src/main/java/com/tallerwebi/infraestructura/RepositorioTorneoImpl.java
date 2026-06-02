@@ -24,7 +24,7 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
 
     @Override
     public void actualizar(Torneo torneo) {
-        this.sessionFactory.getCurrentSession().update(torneo);
+        this.sessionFactory.getCurrentSession().merge(torneo);
 
     }
 
