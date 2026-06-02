@@ -25,13 +25,10 @@ public class Torneo {
     private Double precio;
     private String descripcion;
 
-    @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable(
-            name= "torneo_equipo",
-            joinColumns = @JoinColumn(name= "torneo_id"),
-            inverseJoinColumns = @JoinColumn(name = "equipo_id")
-    )
-    private List<Equipo> equipos = new ArrayList<>();
+    @OneToMany (mappedBy = "torneo",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List <TorneoEquipo> equipos = new ArrayList<>();
+
+
 
     
     public Torneo() {
@@ -117,12 +114,19 @@ public class Torneo {
         this.id = id;
     }
 
+    public List<TorneoEquipo> getEquipos() {
+        return equipos;
+    }
 
+    public void setEquipos(List<TorneoEquipo> equipos) {
+        this.equipos = equipos;
+    }
+/*
     public List<Equipo> getEquipos() {
         return equipos;
     }
 
     public void setEquipos(List<Equipo> equipos) {
         this.equipos = equipos;
-    }
+    } */
 }

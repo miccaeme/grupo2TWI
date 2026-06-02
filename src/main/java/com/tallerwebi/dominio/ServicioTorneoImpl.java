@@ -46,29 +46,42 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     }
 
     @Override
-    public void asignarEquipos(Long id, List<Long> equiposIds) {
-        Torneo torneo = repositorioTorneo.buscarPorId(id);
-        if(torneo != null){
-            List<Equipo> equiposAAsignar= new ArrayList<>();
-
-            for(Long equipoId : equiposIds){
-                if(equipoId != null){
-                    Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
-                    if(equipo != null && !equiposAAsignar.contains(equipo)){
-                        equiposAAsignar.add(equipo);
-                    }
-                }
-            }
-            torneo.setEquipos(equiposAAsignar);
-
-            repositorioTorneo.actualizar(torneo);
-        }
-
-    }
-
-
-    @Override
     public Torneo buscarPorId(Long id) {
         return sessionFactory.getCurrentSession().get(Torneo.class, id);
     }
+
+    @Override
+    public void asignarEquipos(Long id, List<Long> equiposIds){
+        Torneo torneo = repositorioTorneo.buscarPorId(id);
+        if(torneo!=null){
+
+            for(Long equiposId : equiposIds){
+                if(equiposId!=null){
+
+                    boolean yaEstaAsignado = false;
+                    for(TorneoEquipo relacionExistente : torneo.getEquipos()){
+                        if(relacionExistente.getEquipo().getId().equals(equiposId)){
+                            yaEstaAsignado = true;
+                            break;
+                        }
+                    }
+                    if(!yaEstaAsignado){
+                        Equipo equipo = repositorioEquipo.buscarPorId(equiposId);
+                        if(equipo!=null){
+                            TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo);
+                            torneo.getEquipos().add(nuevaAsignacion);
+
+                            sessionFactory.getCurrentSession().persist(nuevaAsignacion);
+                        }
+                    }
+                }
+            }
+            //forzar a sql a guardar
+            sessionFactory.getCurrentSession().flush();
+        }
+    }
+
+
+
+
 }
