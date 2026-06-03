@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" class="h-100"> <!-- 1. Agregamos class="h-100" aquí -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TorneosPro - Panel Base</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/css/verTorneosCreadosStyle.css}" />
+
+
+</head>
+
+
+<body class="d-flex flex-column h-100">
+
+
+<div th:replace="~{fragments/header :: header_fragment}"></div>
+
+<main role="main" class="container flex-shrink-0 my-5 py-3" >
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary">
+                <div>
+                    <h2 class="fw-bold text-white mb-1">
+                        <i class="fas fa-trophy text-success me-2"></i>Detalle del Torneo
+                    </h2>
+                    <p class="text-muted mb-0 small">Ficha de informacion tecnica y equipos confirmados.</p>
+                </div>
+
+                <a th:href="@{/verTorneosCreados}" class="btn btn-outline-secondary text-white border-secondary btn-sm px-3 rounded-pill">
+                    <i class="fas fa-arrow-left me-1"></i> Volver al Listado
+                </a>
+            </div>
+
+            <div class="p-4 border border-secondary rounded-3 mb-4 shadow-lg" >
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="text-success fw-bold mb-0" th:text="${torneo.nombre}">Copa de Ejemplo</h3>
+                    <span class="badge bg-success text-black fw-bold px-3 py-2 rounded-pill small" th:text="${torneo.tipoTorneo}">Relámpago</span>
+                </div>
+
+                <div class="row g-3 pt-2">
+                    <div class="col-md-4">
+                        <p class="mb-1 text-muted small text-uppercase fw-semibold">Deporte</p>
+                        <p class="text-white mb-0"><i class="fas fa-running text-success me-2"></i><span th:text="${torneo.deporte}">Fútbol</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="mb-1 text-muted small text-uppercase fw-semibold">Fecha de Inicio</p>
+                        <p class="text-white mb-0"><i class="far fa-calendar-alt text-success me-2"></i><span th:text="${torneo.fechaDeInicio}">01/01/2026</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="mb-1 text-muted small text-uppercase fw-semibold">Ubicacion / Sede</p>
+                        <p class="text-white mb-0"><i class="fas fa-map-marker-alt text-danger me-2 opacity-75"></i><span th:text="${torneo.lugar}">Predio Deportivo S/N</span></p>
+                    </div>
+                    <div th:if="${torneo.descripcion != null and !torneo.descripcion.isEmpty()}" class="mt-4 pt-3 border-top border-secondary border-opacity-50">
+                        <p class="mb-1 text-muted small text-uppercase fw-semibold">Reglas y criterios</p>
+                        <p class="text-white mb-0 lh-base opacity-90" style="font-size: 0.95rem;" th:text="${torneo.descripcion}">
+                            Aqui se mostrara la descripcion detallada del torneo ingresada por el usuario.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                <h5 class="text-success small fw-bold text-uppercase mb-0 tracking-wider">
+                    <i class="fas fa-users me-2"></i>Slots de Equipos Confirmados
+                </h5>
+                <a th:href="@{/asignarEquipos(id=${torneo.id})}" class="btn btn-success text-black fw-bold btn-sm px-3 rounded-pill" style="font-size: 0.8rem;">
+                    <i class="fas fa-edit me-1"></i> Administrar Slots
+                </a>
+            </div>
+
+            <div th:if="${torneo.equipos == null or torneo.equipos.isEmpty()}" class="alert alert-dark border-secondary text-center py-5 shadow-sm" >
+                <i class="fas fa-user-plus fa-2x text-muted mb-3"></i>
+                <h5 class="text-white">No hay equipos inscriptos</h5>
+                <p class="text-muted small">Aun no se asignaron equipos a los slots de este torneo.</p>
+                <a th:href="@{/asignarEquipos(id=${torneo.id})}" class="btn btn-outline-success btn-sm mt-1">Asignar ahora</a>
+            </div>
+
+            <div th:unless="${torneo.equipos == null or torneo.equipos.isEmpty()}" class="row g-3 mb-4">
+                <div class="col-md-6" th:each="relacion, stat : ${torneo.equipos}">
+                    <div class="p-3 border border-secondary rounded-3 d-flex align-items-center justify-content-between shadow-sm tr-hover" >
+                        <div>
+                            <span class="text-muted small d-block" style="font-size: 0.75rem;" th:text="'Slot #' + ${stat.count}">Slot #1</span>
+                            <span class="fw-semibold text-white d-block mt-1">
+                                <i class="fas fa-shield-alt text-success me-2"></i>
+                                <span th:text="${relacion.equipo.nombre}">Nombre del Equipo</span>
+                            </span>
+                        </div>
+                        <span class="text-muted small"><i class="fas fa-check-circle text-success opacity-75"></i></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/footer :: footer_fragment}"></div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
