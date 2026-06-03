@@ -9,7 +9,7 @@
   <div class="container">
     <div class="row gy-4">
       <div class="col-lg-4 col-md-6">
-        <a class="d-flex align-items-center fw-bold text-uppercase text-decoration-none mb-3" href="index.html">
+        <a class="d-flex align-items-center fw-bold text-uppercase text-decoration-none mb-3" th:href="@{home}">
                     <span class="bg-success text-black px-2 py-1 rounded me-2 d-inline-block">
                         <i class="fas fa-shield-alt"></i>
                     </span>
@@ -29,10 +29,10 @@
       <div class="col-lg-2 col-md-6 col-6 ms-lg-auto">
         <h6 class="text-white text-uppercase fw-bold mb-3 border-start border-success ps-2" style="font-size: 0.9rem;">Torneos</h6>
         <ul class="list-unstyled">
-          <li class="mb-2"><a href="torneos.html?tipo=futbol" class="text-muted text-decoration-none small hover-link-success">Futbol 5 / 11</a></li>
-          <li class="mb-2"><a href="torneos.html?tipo=basketball" class="text-muted text-decoration-none small hover-link-success">Basquet</a></li>
-          <li class="mb-2"><a href="torneos.html?tipo=esports" class="text-muted text-decoration-none small hover-link-success">Volley</a></li>
-          <li class="mb-2"><a href="torneos.html?tipo=paddle" class="text-muted text-decoration-none small hover-link-success">Padel</a></li>
+          <li class="mb-2"><a th:href="@{home}" class="text-muted text-decoration-none small hover-link-success">Futbol 5 / 11</a></li>
+          <li class="mb-2"><a th:href="@{home}" class="text-muted text-decoration-none small hover-link-success">Basquet</a></li>
+          <li class="mb-2"><a th:href="@{home}" class="text-muted text-decoration-none small hover-link-success">Volley</a></li>
+          <li class="mb-2"><a th:href="@{home}" class="text-muted text-decoration-none small hover-link-success">Padel</a></li>
         </ul>
       </div>
 
