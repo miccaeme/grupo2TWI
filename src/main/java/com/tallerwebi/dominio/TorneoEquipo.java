@@ -10,14 +10,13 @@ public class TorneoEquipo {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="torneo_id")
     private Torneo torneo;
 
     @ManyToOne
-    @JoinColumn(name="equipo_id")
     private Equipo equipo;
 
-
+// fixture idlocal , visitante, fecha , etc
+    //estadistica relacionada con fixture
 
     public TorneoEquipo() {
 

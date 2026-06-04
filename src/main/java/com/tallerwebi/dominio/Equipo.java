@@ -17,13 +17,13 @@ public class Equipo {
     private String nombre;
 
     @Enumerated(EnumType.STRING)
-    private Deporte deporte;
+    private Deporte deporte; //cambiar por torneo manyToOne
 
     @OneToMany(mappedBy = "equipo")
     private List<EquipoJugador> jugadores;
 
     @OneToMany(mappedBy = "equipo" ,cascade = CascadeType.PERSIST)
-    private List<TorneoEquipo> torneos = new ArrayList<>();
+    private List<TorneoEquipo> torneos = new ArrayList<>(); //fuera
 
     public Long getId() {
         return id;
