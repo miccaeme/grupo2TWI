@@ -22,8 +22,6 @@ public class Equipo {
     private List<EquipoJugador> jugadores;
 
 
-
-
     public Long getId() {
         return id;
     }
