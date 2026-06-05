@@ -17,13 +17,8 @@ public class Equipo {
     private String nombre;
 
     @Enumerated(EnumType.STRING)
-    private Deporte deporte; //cambiar por torneo manyToOne
+    private Deporte deporte; //cambiar por torneo manyToOne? pero cuando cree el equipo no me va a pedir de que deporte es , ni en que posicion va a jugar el capitan
 
-    @OneToMany(mappedBy = "equipo")
-    private List<EquipoJugador> jugadores;
-
-    @OneToMany(mappedBy = "equipo" ,cascade = CascadeType.PERSIST)
-    private List<TorneoEquipo> torneos = new ArrayList<>(); //fuera
 
     public Long getId() {
         return id;
@@ -45,23 +40,9 @@ public class Equipo {
         this.deporte = deporte;
     }
 
-    public List<EquipoJugador> getJugadores() {
-        return jugadores;
-    }
-
-    public void setJugadores(List<EquipoJugador> jugadores) {
-        this.jugadores = jugadores;
-    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public List<TorneoEquipo> getTorneos() {
-        return torneos;
-    }
-
-    public void setTorneos(List<TorneoEquipo> torneos) {
-        this.torneos = torneos;
-    }
 }
