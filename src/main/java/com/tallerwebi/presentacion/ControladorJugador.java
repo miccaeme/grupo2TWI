@@ -19,6 +19,7 @@ public class ControladorJugador {
 
   @Autowired
   public ControladorJugador(ServicioJugador servicioJugador) {
+
     this.servicioJugador = servicioJugador;
   }
 

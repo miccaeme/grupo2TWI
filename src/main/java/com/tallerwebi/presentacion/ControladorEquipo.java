@@ -27,6 +27,7 @@ public class ControladorEquipo {
 
     @Autowired
     public ControladorEquipo(ServicioEquipo servicioEquipo) {
+
         this.servicioEquipo = servicioEquipo;
     }
 
@@ -46,18 +47,16 @@ public class ControladorEquipo {
     @RequestMapping(path = "/equipo/crear", method = RequestMethod.POST)
     public ModelAndView crearEquipo(
             @ModelAttribute("equipo") Equipo equipo,
-            @RequestParam("jugadorId") Long jugadorId,
+            @RequestParam("jugadorId") Long jugadorId, // modificar cuando hagamos el login por httpSession
             @RequestParam("posicion") Posicion posicion,
-            RedirectAttributes redirectAttributes) { // 1. Inyectamos esta herramienta de Spring
+            RedirectAttributes redirectAttributes) {
 
-        // 2. Guardamos el equipo usando el servicio
         servicioEquipo.crearEquipo(equipo, jugadorId, posicion);
 
-        // 3. Guardamos el mensaje en "Flash". Spring lo guarda en la sesión
-        // temporalmente y lo borra apenas se muestra en la siguiente pantalla.
+        // para mostrar un mensaje temporal de exito y se borra solo
         redirectAttributes.addFlashAttribute("mensaje", "Equipo creado correctamente");
 
-        // 4. Redirigimos al GET de mis-equipos arrastrando el id de prueba
+        //Redirigimos a mis-equipos arrastrando el id de prueba hardcodeado
         return new ModelAndView("redirect:/equipo/mis-equipos?jugadorId=" + jugadorId);
     }
 
@@ -67,13 +66,12 @@ public class ControladorEquipo {
     public ModelAndView mostrarMisEquipos(@RequestParam(value = "jugadorId", required = false) Long jugadorId) {
         ModelMap modelo = new ModelMap();
 
-        // 1. Clonamos la lógica provisoria: si viene el id lo usamos, sino clavamos el 1 de prepo
+        //
         Long idParaBuscar = (jugadorId != null) ? jugadorId : 1L;
 
         // 2. Buscamos en el servicio los equipos de los cuales es Capitán usando ese id provisorio
         List<Equipo> misEquipos = servicioEquipo.buscarEquiposDelCapitan(idParaBuscar);
 
-        // 3. Pasamos la lista a la vista
         modelo.put("listaEquipos", misEquipos);
 
         return new ModelAndView("mis-equipos", modelo);

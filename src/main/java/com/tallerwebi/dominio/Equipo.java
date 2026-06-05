@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.Enums.Deporte;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,11 +17,13 @@ public class Equipo {
     private String nombre;
 
     @Enumerated(EnumType.STRING)
-    private Deporte deporte;
+    private Deporte deporte; //cambiar por torneo manyToOne
 
     @OneToMany(mappedBy = "equipo")
     private List<EquipoJugador> jugadores;
 
+    @OneToMany(mappedBy = "equipo" ,cascade = CascadeType.PERSIST)
+    private List<TorneoEquipo> torneos = new ArrayList<>(); //fuera
 
     public Long getId() {
         return id;
@@ -52,5 +55,13 @@ public class Equipo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<TorneoEquipo> getTorneos() {
+        return torneos;
+    }
+
+    public void setTorneos(List<TorneoEquipo> torneos) {
+        this.torneos = torneos;
     }
 }

@@ -11,7 +11,7 @@
 
 <body>
 
-<div th:replace="fragments/header :: header_fragment"></div>
+<div th:replace="~{fragments/header :: header_fragment}"></div>
 
 <main class="container py-5">
 
@@ -147,22 +147,11 @@
               <label class="form-label">
                 Posición
               </label>
-
-              <select name="posicion"
-                      class="form-select"
-                      required>
-
-                <option value="">
-                  Seleccione una posición
-                </option>
-
-                <option th:each="posicion : ${posiciones}"
-                        th:value="${posicion}"
-                        th:text="${posicion}">
-                </option>
-
-              </select>
-
+                <select name="posicion" id="posicion" th:attr="data-deporte=${equipo.deporte}" class="form-select" required>
+                  <option value="">
+                    Seleccione una posición
+                  </option>
+                </select>
             </div>
 
             <button type="submit"
@@ -183,6 +172,6 @@
   </div>
 
 </main>
-
+<script th:src="@{/js/gestionarEquipo.js}"></script>
 </body>
 </html>

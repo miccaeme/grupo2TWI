@@ -16,6 +16,7 @@ public class RepositorioEquipoImpl implements RepositorioEquipo {
 
     @Autowired
     public RepositorioEquipoImpl(SessionFactory sessionFactory) {
+
         this.sessionFactory = sessionFactory;
     }
 

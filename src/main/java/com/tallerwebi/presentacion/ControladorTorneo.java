@@ -5,7 +5,6 @@ import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import com.tallerwebi.dominio.servicios.ServicioTorneo;
 import com.tallerwebi.dominio.Torneo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +95,14 @@ public class ControladorTorneo {
    return new ModelAndView(urlRedireccion, model);
  }
 
+@RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)
+  public ModelAndView mostrarDetalleTorneo(@RequestParam("id") Long id) {
+    ModelMap model = new ModelMap();
+    Torneo torneo = servicioTorneo.buscarPorId(id);
+    model.addAttribute("torneo", torneo);
+    return new ModelAndView("verDetalleTorneo",model);
 
+  }
 
 
 

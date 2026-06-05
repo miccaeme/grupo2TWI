@@ -17,10 +17,10 @@ public class ControladorJugadorTest {
 
     @BeforeEach
     public void init() {
-        // 1. Inicializamos el mock del servicio
+
         this.servicioJugadorMock = mock(ServicioJugador.class);
 
-        // 2. Creamos el controlador inyectándole ese mock manualmente
+
         this.controladorJugador = new ControladorJugador(this.servicioJugadorMock);
 
     }
