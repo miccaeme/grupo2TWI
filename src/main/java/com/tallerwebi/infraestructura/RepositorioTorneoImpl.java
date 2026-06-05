@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.TorneoEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.Torneo;
 import com.tallerwebi.dominio.contratos.RepositorioTorneo;
@@ -18,24 +19,23 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
 
     @Override
     public void guardar(Torneo torneo) {
-
         sessionFactory.getCurrentSession().save(torneo);
     }
 
-    @Override
-    public void actualizar(Torneo torneo) {
-        this.sessionFactory.getCurrentSession().merge(torneo);
-
-    }
 
     @Override
     public List<Torneo> buscarTodos() {
         return sessionFactory.getCurrentSession().createQuery("from Torneo", Torneo.class).list();
     }
 
+
     @Override
     public Torneo buscarPorId(Long id) {
-
         return sessionFactory.getCurrentSession().get(Torneo.class, id);
+    }
+
+    @Override
+    public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
+        return List.of();
     }
 }

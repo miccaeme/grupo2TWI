@@ -54,14 +54,13 @@
 
 
             <div class="col-md-6">
-              <label for="deporte" class="form-label text-light small fw-medium">Tipo de Deporte / Disciplina *</label>
+              <label for="deporte" class="form-label text-light small fw-medium">Tipo de Deporte *</label>
               <select class="form-select" id="deporte" name="deporte" th:field="*{deporte}" required>
                 <option value="" disabled selected>Selecciona un deporte...</option>
-                <option value="futbol5">Futbol 5</option>
-                <option value="futbol11">Futbol 11</option>
-                <option value="basquet">Basquetbol</option>
-                <option value="padel">Padel (Dobles)</option>
-                <option value="esports">volley</option>
+                <option value="FUTBOL5">Futbol</option>
+                <option value=" BASQUET">Basquet</option>
+                <option value="PADEL">Padel (Dobles)</option>
+                <option value="VOLEY">Volley</option>
               </select>
             </div>
 
@@ -120,8 +119,8 @@
 
             <div class="col-md-4">
 
-              <label for="fechaInicio" class="form-label text-light small fw-medium">Fecha estimada de Inicio *</label>
-              <input type="date" th:field="*{fechaDeInicio}" class="form-control" id="fechaInicio" name="fechaInicio" required>
+              <label for="fechaDeInicio" class="form-label text-light small fw-medium">Fecha estimada de Inicio *</label>
+              <input type="date" th:field="*{fechaDeInicio}" class="form-control" id="fechaDeInicio" required>
 
               <div th:if="${errorFecha !=null}" class="alert alert-danger" role="alert">
                 <p th:text="${errorFecha}"> </p>

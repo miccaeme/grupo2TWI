@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Equipo;
+import com.tallerwebi.dominio.TorneoEquipo;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import com.tallerwebi.dominio.servicios.ServicioTorneo;
 import com.tallerwebi.dominio.Torneo;
@@ -70,13 +71,13 @@ public class ControladorTorneo {
   public ModelAndView mostrarFormularioAsignarEquipos(@RequestParam("id") Long id) {
     ModelMap model = new ModelMap();
     Torneo torneo = servicioTorneo.buscarPorId(id);
+    model.put("torneo", torneo);
+    List<TorneoEquipo> relaciones =servicioTorneo.buscarEquiposPorTorneoId(id);
+    model.put("relacionesExistentes", relaciones);
 
-    model.addAttribute("torneo", torneo);
+    List<Equipo> equiposDisponibles = servicioEquipo.listarTodos();
+    model.put("todosLosEquipos", equiposDisponibles);
 
-    List<Equipo> todosLosEquipos = servicioEquipo.listarTodos();
-
-
-    model.addAttribute("todosLosEquipos", todosLosEquipos);
     return new ModelAndView("asignarEquipos", model);
   }
 
@@ -84,15 +85,11 @@ public class ControladorTorneo {
  @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
  public ModelAndView guardarEquiposAsignados (@RequestParam("id") Long id,
                                                @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds){
-    ModelMap model = new ModelMap();
-
    if(equiposIds == null){
       equiposIds = new ArrayList<>();
     }
    servicioTorneo.asignarEquipos(id,equiposIds);
-
-   String urlRedireccion = "redirect:/asignarEquipos?id=" + id;
-   return new ModelAndView(urlRedireccion, model);
+   return new ModelAndView("redirect:/asignarEquipos?id=" + id);
  }
 
 @RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)

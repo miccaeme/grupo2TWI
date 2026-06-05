@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Enums.Deporte;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,7 +16,8 @@ public class Torneo {
     private Long id;
 
     private String nombre;
-    private String deporte;
+    @Enumerated(EnumType.STRING)
+    private Deporte deporte;
     private String lugar;
     private Integer cantidadEquipos;
     private String formato;
@@ -25,12 +27,10 @@ public class Torneo {
     private Double precio;
     private String descripcion;
 
-    @OneToMany (mappedBy = "torneo",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    /*  @OneToMany (mappedBy = "torneo",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List <TorneoEquipo> equipos = new ArrayList<>();
+    */
 
-
-
-    
     public Torneo() {
     }
 
@@ -46,11 +46,11 @@ public class Torneo {
         this.nombre = nombre;
     }
 
-    public String getDeporte() {
+    public Deporte getDeporte() {
         return deporte;
     }
 
-    public void setDeporte(String deporte) {
+    public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
     }
 
@@ -114,13 +114,13 @@ public class Torneo {
         this.id = id;
     }
 
-    public List<TorneoEquipo> getEquipos() {
+    /*public List<TorneoEquipo> getEquipos() {
         return equipos;
     }
 
     public void setEquipos(List<TorneoEquipo> equipos) {
         this.equipos = equipos;
-    }
+    } */
 /*
     public List<Equipo> getEquipos() {
         return equipos;

@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Enums.Deporte;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,16 +10,13 @@ public class TorneoEquipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Enumerated(EnumType.STRING)
+    private Deporte deporte;
     @ManyToOne
-    @JoinColumn(name="torneo_id")
     private Torneo torneo;
 
     @ManyToOne
-    @JoinColumn(name="equipo_id")
     private Equipo equipo;
-
-
 
     public TorneoEquipo() {
 
