@@ -18,12 +18,11 @@ public class TorneoEquipo {
     @ManyToOne
     private Equipo equipo;
 
-<<<<<<< HEAD
+
 // fixture idlocal , visitante, fecha , etc
     //estadistica relacionada con fixture
 
-=======
->>>>>>> f933b4b4243d4c7712ae2c98b01c901a6f36763e
+
     public TorneoEquipo() {
 
     }

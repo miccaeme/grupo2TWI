@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Enums.Deporte;
+import com.tallerwebi.dominio.Enums.TipoDeTorneo;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,7 +24,8 @@ public class Torneo {
     private String formato;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaDeInicio;
-    private String tipoTorneo;
+    @Enumerated(EnumType.STRING)
+    private TipoDeTorneo tipoDeTorneo;
     private Double precio;
     private String descripcion;
 
@@ -52,6 +54,14 @@ public class Torneo {
 
     public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
+    }
+
+    public TipoDeTorneo getTipoDeTorneo() {
+        return tipoDeTorneo;
+    }
+
+    public void setTipoDeTorneo(TipoDeTorneo tipoDeTorneo) {
+        this.tipoDeTorneo = tipoDeTorneo;
     }
 
     public String getLugar() {
@@ -84,14 +94,6 @@ public class Torneo {
 
     public void setFechaDeInicio(LocalDate fechaDeInicio) {
         this.fechaDeInicio = fechaDeInicio;
-    }
-
-    public String getTipoTorneo() {
-        return tipoTorneo;
-    }
-
-    public void setTipoTorneo(String tipoTorneo) {
-        this.tipoTorneo = tipoTorneo;
     }
 
     public Double getPrecio() {
