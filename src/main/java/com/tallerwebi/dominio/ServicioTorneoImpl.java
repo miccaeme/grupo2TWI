@@ -23,9 +23,15 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     private RepositorioTorneo repositorioTorneo;
     @Autowired
     private ServicioEquipo servicioEquipo;
-
     @Autowired
     private RepositorioEquipo repositorioEquipo;
+
+
+    public ServicioTorneoImpl(RepositorioTorneo repositorioTorneo, RepositorioEquipo repositorioEquipo, SessionFactory sessionFactory) {
+        this.repositorioTorneo = repositorioTorneo;
+        this.repositorioEquipo = repositorioEquipo;
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void guardar(Torneo torneo) {
@@ -35,10 +41,7 @@ public class ServicioTorneoImpl implements ServicioTorneo {
 
         repositorioTorneo.guardar(torneo);
     }
-    public ServicioTorneoImpl(RepositorioTorneo repositorioTorneo, RepositorioEquipo repositorioEquipo) {
-        this.repositorioTorneo = repositorioTorneo;
-        this.repositorioEquipo = repositorioEquipo;
-    }
+
 
     @Override
     public List<Torneo> buscarTodos() {
@@ -51,16 +54,22 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     }
 
     @Override
+    public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
+        return List.of();
+    }
+
+    @Override
     public void asignarEquipos(Long id, List<Long> equiposIds){
         Torneo torneo = repositorioTorneo.buscarPorId(id);
         if(torneo!=null){
 
+            List<TorneoEquipo> relacionesExistentes = repositorioTorneo.buscarEquiposPorTorneoId(id);
             for(Long equiposId : equiposIds){
                 if(equiposId!=null){
 
                     boolean yaEstaAsignado = false;
-                    for(TorneoEquipo relacionExistente : torneo.getEquipos()){
-                        if(relacionExistente.getEquipo().getId().equals(equiposId)){
+                    for(TorneoEquipo relacion : relacionesExistentes){
+                        if(relacion.getEquipo().getId().equals(equiposId)){
                             yaEstaAsignado = true;
                             break;
                         }
@@ -69,7 +78,6 @@ public class ServicioTorneoImpl implements ServicioTorneo {
                         Equipo equipo = repositorioEquipo.buscarPorId(equiposId);
                         if(equipo!=null){
                             TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo);
-                            torneo.getEquipos().add(nuevaAsignacion);
 
                             sessionFactory.getCurrentSession().persist(nuevaAsignacion);
                         }

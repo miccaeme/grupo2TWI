@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Enums.Deporte;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,16 +10,20 @@ public class TorneoEquipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Enumerated(EnumType.STRING)
+    private Deporte deporte;
     @ManyToOne
     private Torneo torneo;
 
     @ManyToOne
     private Equipo equipo;
 
+<<<<<<< HEAD
 // fixture idlocal , visitante, fecha , etc
     //estadistica relacionada con fixture
 
+=======
+>>>>>>> f933b4b4243d4c7712ae2c98b01c901a6f36763e
     public TorneoEquipo() {
 
     }
