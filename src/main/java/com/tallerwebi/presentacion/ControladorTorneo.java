@@ -40,8 +40,6 @@ public class ControladorTorneo {
     ModelMap model = new ModelMap();
     try{
       servicioTorneo.guardar(torneo);
-      // model.put("mensaje", "Torneo creado correctamente");
-      // return new ModelAndView("guardarTorneoCreado", model);
       String urlRedireccion = "redirect:/asignarEquipos?id=" + torneo.getId();
       return new ModelAndView(urlRedireccion, model);
 
