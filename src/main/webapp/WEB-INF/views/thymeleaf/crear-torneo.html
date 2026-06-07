@@ -133,11 +133,12 @@
 
           <div class="row g-3 mb-4">
 
+
             <div class="col-md-4">
               <label for="tipoDeTorneo" class="form-label text-light small fw-medium">Tipo de Torneo*</label>
-              <select th:field="*{tipoTorneo}" class="form-select" id="tipoDeTorneo" name="tipoDeTorneo" required>
-                <option value="Publico">Publico</option>
-                <option value="Privado">Privado</option>
+              <select  class="form-select" id="tipoDeTorneo" name="tipoDeTorneo"  th:field="*{tipoDeTorneo}"required>
+                <option value="PUBLICO">Publico</option>
+                <option value="PRIVADO">Privado</option>
 
               </select>
             </div>
