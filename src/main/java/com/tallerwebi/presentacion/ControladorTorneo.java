@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Enums.TipoDeTorneo;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.TorneoEquipo;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
@@ -29,7 +30,6 @@ public class ControladorTorneo {
     ModelMap model = new ModelMap();
 
     model.put("torneo", new Torneo());
-
     return new ModelAndView("crear-torneo", model);
   }
 

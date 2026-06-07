@@ -29,9 +29,7 @@ public class Torneo {
     private Double precio;
     private String descripcion;
 
-    /*  @OneToMany (mappedBy = "torneo",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List <TorneoEquipo> equipos = new ArrayList<>();
-    */
+
 
     public Torneo() {
     }
