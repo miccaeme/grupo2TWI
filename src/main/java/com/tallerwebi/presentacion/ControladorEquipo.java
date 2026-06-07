@@ -89,8 +89,6 @@ public class ControladorEquipo {
 
         modelo.put("posiciones", Posicion.values());
 
-
-
         return new ModelAndView("gestionar-equipo", modelo);
     }
 }
