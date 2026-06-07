@@ -22,10 +22,8 @@ public class Equipo {
     @OneToMany(mappedBy = "equipo")
     private List<EquipoJugador> jugadores;
 
-
-   /*
     @OneToMany(mappedBy = "equipo" ,cascade = CascadeType.PERSIST)
-    private List<TorneoEquipo> torneos = new ArrayList<>(); */
+    private List<TorneoEquipo> torneos = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -59,11 +57,11 @@ public class Equipo {
         this.id = id;
     }
 
-  /*  public List<TorneoEquipo> getTorneos() {
+    public List<TorneoEquipo> getTorneos() {
         return torneos;
     }
 
     public void setTorneos(List<TorneoEquipo> torneos) {
         this.torneos = torneos;
-    }*/
+    }
 }
