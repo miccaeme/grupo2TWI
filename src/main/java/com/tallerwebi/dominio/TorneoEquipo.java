@@ -27,9 +27,10 @@ public class TorneoEquipo {
 
     }
 
-    public TorneoEquipo(Torneo torneo, Equipo equipo) {
+    public TorneoEquipo(Torneo torneo, Equipo equipo, Deporte deporte) {
         this.torneo = torneo;
         this.equipo = equipo;
+        this.deporte = deporte;
     }
 
 

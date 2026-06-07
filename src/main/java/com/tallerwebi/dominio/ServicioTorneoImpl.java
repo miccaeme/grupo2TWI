@@ -77,7 +77,7 @@ public class ServicioTorneoImpl implements ServicioTorneo {
                     if(!yaEstaAsignado){
                         Equipo equipo = repositorioEquipo.buscarPorId(equiposId);
                         if(equipo!=null){
-                            TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo);
+                            TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo, torneo.getDeporte());
 
                             sessionFactory.getCurrentSession().persist(nuevaAsignacion);
                         }

@@ -114,19 +114,5 @@ public class Torneo {
         this.id = id;
     }
 
-    /*public List<TorneoEquipo> getEquipos() {
-        return equipos;
-    }
 
-    public void setEquipos(List<TorneoEquipo> equipos) {
-        this.equipos = equipos;
-    } */
-/*
-    public List<Equipo> getEquipos() {
-        return equipos;
-    }
-
-    public void setEquipos(List<Equipo> equipos) {
-        this.equipos = equipos;
-    } */
 }

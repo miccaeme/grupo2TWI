@@ -94,7 +94,10 @@ public class ControladorTorneo {
   public ModelAndView mostrarDetalleTorneo(@RequestParam("id") Long id) {
     ModelMap model = new ModelMap();
     Torneo torneo = servicioTorneo.buscarPorId(id);
+    List<TorneoEquipo>asignaciones = servicioTorneo.buscarEquiposPorTorneoId(id);
+
     model.addAttribute("torneo", torneo);
+    model.addAttribute("asignaciones", asignaciones);
     return new ModelAndView("verDetalleTorneo",model);
 
   }
