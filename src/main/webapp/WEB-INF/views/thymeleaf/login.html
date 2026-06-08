@@ -15,36 +15,91 @@
     <link rel="stylesheet" th:href="@{/css/main.css}" />
 
 </head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center fw-bold text-uppercase" th:href="@{/login}" style="letter-spacing: 1px;">
+                <span class="bg-success text-black px-2 py-1 rounded me-2 d-inline-block">
+                    <i class="fas fa-shield-alt"></i>
+                </span>
+            <span class="text-white">Torneos</span><span class="text-success">Pro</span>
+        </a>
 
-<body>
+        <button class="navbar-toggler border-secondary text-light" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">UNLAM</a>
-    </nav>
 
-    <main role="main" class="container">
+    </div>
+</nav>
+<body class="d-flex flex-column h-100 bg-dark text-light">
 
-        <div class="container">
-            <div id="loginbox" style="margin-top:50px;"
-                class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-                <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
-                    <h3 class="form-signin-heading">Taller Web I</h3>
-                    <hr class="colorgraph"><br>
 
-                    <input th:field="*{email}" id="email" type="email" class="form-control" required />
-                    <input th:field="*{password}" type="password" id="password" class="form-control" required />
 
-                    <button id="btn-login" class="btn btn-lg btn-primary btn-block" Type="Submit"
-                        disabled>Login</button>
+<main role="main" class="flex-shrink-0">
 
-                    <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-                    </p>
-                </form>
-                <a id="btn-register" href="nuevo-usuario">Registrarme</a>
+    <section class="container py-5">
+        <div class="row align-items-center min-vh-75">
+
+            <div class="col-lg-6">
+          <span class="badge bg-success mb-3 px-3 py-2">
+            Plataforma deportiva
+          </span>
+                <h1 class="display-3 fw-bold mb-4">
+                    ¡Bienvenido! <br>
+                    <span class="text-success">TORNEOS PRO</span>
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    Ingresá a la plataforma para gestionar tus torneos, armar fixtures como un profesional, administrar planteles y seguir los resultados de tus disciplinas favoritas desde un solo lugar.
+                </p>
             </div>
+
+            <div class="col-lg-6 mt-5 mt-lg-0">
+                <div class="card bg-dark border border-secondary shadow-lg rounded-4 p-4">
+
+                    <div class="mb-4">
+                        <h3 class="fw-bold text-success mb-1">Iniciar Sesión</h3>
+                        <p class="text-secondary small">Ingresá tus datos para continuar</p>
+                    </div>
+
+                    <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}" class="row g-3">
+
+                        <div class="col-12">
+                            <label for="email" class="form-label text-secondary small">Email</label>
+                            <input th:field="*{email}" type="email" id="email" class="form-control bg-black text-light border-secondary p-3 rounded-3" placeholder="nombre@ejemplo.com" required />
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            <label for="password" class="form-label text-secondary small">Contraseña</label>
+                            <input th:field="*{password}" type="password" id="password" class="form-control bg-black text-light border-secondary p-3 rounded-3" placeholder="••••••••" required />
+                        </div>
+
+                        <div class="col-12">
+                            <button id="btn-login" class="btn btn-success btn-lg rounded-pill w-100 fw-bold py-3" type="submit">
+                                Ingresar
+                            </button>
+                        </div>
+
+                        <div class="col-12 text-center mt-3">
+                            <a id="btn-register" th:href="@{/nuevo-usuario}" class="text-secondary text-decoration-none small hover-success">
+                                ¿No tenés cuenta? Registrate acá
+                            </a>
+                        </div>
+
+                        <div class="col-12" th:if="${error != null}">
+                            <div class="alert alert-danger bg-danger bg-opacity-10 text-danger border-danger mt-3 mb-0 rounded-3" role="alert">
+                                <strong>Error:</strong> <span th:text="${error}"></span>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
         </div>
-    </main>
-    <!-- /.container -->
+    </section>
+
+</main>
 
     <!-- Boostrap core js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
