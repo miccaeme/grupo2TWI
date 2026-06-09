@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -74,5 +75,19 @@ public class SpringWebConfig implements WebMvcConfigurer {
     viewResolver.setTemplateEngine(templateEngine());
     viewResolver.setCharacterEncoding("UTF-8");
     return viewResolver;
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(new LoginInterceptor())
+            .addPathPatterns("/**") // Protege absolutamente TODAS las URLs de la web
+            .excludePathPatterns(
+                    "/login",           // Excluye la pantalla de login para evitar bucles infinitos
+                    "/validar-login",   // Excluye el procesamiento del formulario de login
+                    "/nuevo-usuario",   // Excluye la pantalla de registro
+                    "/registrarme",     // Excluye el procesamiento del registro
+                    "/css/**",          // Excluye estilos para que el login se siga viendo bien
+                    "/js/**"            // Excluye scripts públicos
+            );
   }
 }
