@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Perfil </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+
+<body class="d-flex flex-column h-100 bg-dark text-light">
+
+<div th:replace="~{fragments/header :: header_fragment}"></div>
+
+<main role="main" class="flex-shrink-0 my-5">
+  <div class="container pt-4">
+
+    <div class="row mb-4">
+      <div class="col-12">
+        <span class="badge bg-success mb-2 px-3 py-2">Panel del Jugador</span>
+        <h2 class="fw-bold text-light">Bienvenido a tu Perfil, <span class="text-success" th:text="${#session.getAttribute('usuarioNick')}">Nick</span></h2>
+        <p class="text-secondary small">Gestioná tus datos, revisá tus equipos y hacé el seguimiento de tus competencias.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-4">
+        <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4 text-center h-100">
+          <div class="mx-auto mb-3 bg-dark border border-success d-flex align-items-center justify-content-center rounded-circle shadow" style="width: 100px; height: 100px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#198754" class="bi bi-person-fill" viewBox="0 0 16 16">
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+            </svg>
+          </div>
+
+          <h4 class="fw-bold text-light mb-1" th:text="${usuarioLogueado.nombre + ' ' + usuarioLogueado.apellido}">Juan Pérez</h4>
+          <p class="text-success small fw-semibold mb-4" th:text="'@' + ${usuarioLogueado.jugador.nick}">@User</p>
+
+          <hr class="border-secondary my-3">
+
+          <div class="text-start space-y-3">
+            <div class="mb-3">
+              <label class="text-secondary small d-block">Email </label>
+              <span class="text-light fw-medium" th:text="${usuarioLogueado.email}">juan@gmai.com</span>
+            </div>
+
+            <div class="mb-3">
+              <label class="text-secondary small d-block">Identificador único (ID)</label>
+              <span class="text-light font-monospace small" th:text="'#00' + ${usuarioLogueado.jugador.id}">#001</span>
+            </div>
+          </div>
+
+          <button class="btn btn-outline-secondary btn-sm rounded-pill w-100 mt-auto fw-bold py-2 text-light">
+            Editar Datos Personales
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="d-flex flex-column gap-4">
+
+          <div class="card bg-black border border-warning border-opacity-50 shadow-lg rounded-4 p-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-bell-fill text-warning fs-5"></i>
+              <h5 class="fw-bold text-warning mb-0">Acciones Pendientes</h5>
+            </div>
+            <div class="p-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 rounded-3 text-center">
+              <p class="text-secondary small mb-0">
+                <i class="bi bi-info-circle me-1"></i> No tenés acciones ni solicitudes pendientes de revisión por el momento.
+              </p>
+            </div>
+          </div>
+
+          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-trophy-fill text-success fs-5"></i>
+                <h5 class="fw-bold text-light mb-0">Mis Torneos Activos</h5>
+              </div>
+              <a th:href="@{/torneos}" class="btn btn-success btn-sm rounded-pill px-3 fw-semibold text-black">Ver todos</a>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle mb-0 text-secondary small">
+                <thead>
+                <tr class="text-light">
+                  <th>Torneo</th>
+                  <th>Deporte</th>
+                  <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td class="text-light fw-semibold">Copa UNLAM 2026</td>
+                  <td>Fútbol 11</td>
+                  <td><span class="badge bg-success bg-opacity-10 text-success border border-success">En Curso</span></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-shield-shaded text-success fs-5"></i>
+                <h5 class="fw-bold text-light mb-0">Mis Equipos</h5>
+              </div>
+              <a th:href="@{/equipo/buscar}" class="btn btn-outline-success btn-sm rounded-pill px-3 text-light">Buscar Equipo</a>
+            </div>
+
+            <div class="p-3 bg-dark bg-opacity-20 border border-secondary rounded-3 d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <div class="p-2 bg-success bg-opacity-10 rounded-2 text-success fw-bold">FC</div>
+                <div>
+                  <h6 class="mb-0 text-light fw-bold">Deportivo Laferrere</h6>
+                  <small class="text-secondary">Rol: Jugador (Nº 10)</small>
+                </div>
+              </div>
+              <span class="badge bg-secondary text-dark fw-bold">Miembro</span>
+            </div>
+          </div>
+
+          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-clock-history text-success fs-5"></i>
+              <h5 class="fw-bold text-light mb-0">Historial de Participaciones</h5>
+            </div>
+
+            <div class="position-relative border-start border-secondary ps-3 ms-2 small text-secondary">
+              <div class="mb-3 position-relative">
+                <div class="position-absolute bg-success rounded-circle" style="width: 10px; height: 10px; left: -21px; top: 6px;"></div>
+                <span class="text-light fw-semibold d-block">Subcampeón - Torneo Relámpago</span>
+                <small class="d-block text-muted">Noviembre 2025 • Equipo: Los de Sistemas</small>
+              </div>
+              <div class="position-relative">
+                <div class="position-absolute bg-secondary rounded-circle" style="width: 10px; height: 10px; left: -21px; top: 6px;"></div>
+                <span class="text-light fw-semibold d-block">Fase de Grupos - Interfacultades</span>
+                <small class="d-block text-muted">Mayo 2025 • Equipo: TWI FC</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer_fragment}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

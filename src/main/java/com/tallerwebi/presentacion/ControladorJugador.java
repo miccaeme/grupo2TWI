@@ -22,7 +22,7 @@ public class ControladorJugador {
 
     this.servicioJugador = servicioJugador;
   }
-
+/*
   @RequestMapping(path = "/jugador/crear", method = RequestMethod.GET)
   public ModelAndView mostrarFormCrearJugador() {
     ModelMap modelo = new ModelMap();
@@ -38,5 +38,5 @@ public class ControladorJugador {
     modelo.put("mensaje", "Jugador creado correctamente");
     modelo.put("jugador", new Jugador());
     return new ModelAndView("crear-jugador", modelo);
-  }
+  } */
 }

@@ -1,9 +1,6 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Usuario {
@@ -18,6 +15,9 @@ public class Usuario {
   private Boolean activo = false;
   private String nombre;
   private String apellido;
+
+  @OneToOne (cascade = CascadeType.ALL)
+  private Jugador jugador;
 
   public Long getId() {
     return id;
@@ -77,5 +77,13 @@ public class Usuario {
 
   public void setApellido(String apellido) {
     this.apellido = apellido;
+  }
+
+  public Jugador getJugador() {
+    return jugador;
+  }
+
+  public void setJugador(Jugador jugador) {
+    this.jugador = jugador;
   }
 }
