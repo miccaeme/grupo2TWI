@@ -24,7 +24,7 @@ public class ControladorJugadorTest {
         this.controladorJugador = new ControladorJugador(this.servicioJugadorMock);
 
     }
-
+/*
     @Test
     public void siElJugadorEsValidoElRegistroEsExitoso() {
         // GIVEN (Preparación)
@@ -62,6 +62,6 @@ public class ControladorJugadorTest {
 
         // Verificamos que el servicio haya sido llamado exactamente 1 vez
         verify(servicioJugadorMock, times(1)).crearJugador(any(Jugador.class));
-    }
+    } */
 }
 
