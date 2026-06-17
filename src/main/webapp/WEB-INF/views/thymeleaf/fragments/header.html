@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<style> .nav-perfil-link {
+    color: #ffffff;
+    transition: color 0.2s ease-in-out;
+}
 
+.nav-perfil-link:hover {
+    color: #198754 !important; /* El color verde de Bootstrap (text-success) */
+    cursor: pointer;
+}</style>
 </head>
 <body>
 <header th:fragment="header_fragment" >
@@ -73,8 +81,9 @@
                         <i class="fas fa-search fa-lg"></i>
                     </a>
 
-                    <a th:href="@{/jugador/crear}" class="btn btn-success btn-sm px-3 rounded-pill fw-semibold text-black shadow-sm hover-brightness">
-                        <i class="fas fa-user-plus me-1"></i>Completar perfil jugador
+                    <a th:href="@{/perfil}" class="text-secondary text-decoration-none fw-semibold d-inline-flex align-items-center gap-2 nav-perfil-link">
+                        <i class="fas fa-user text-success small"></i>
+                        <span th:text="${#session.getAttribute('usuarioNick')}">Mi Perfil</span>
                     </a>
                 </div>
             </div>

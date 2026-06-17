@@ -76,6 +76,11 @@
               <input th:field="*{apellido}" id="apellido" class="form-control bg-black text-light border-secondary p-3 rounded-3" placeholder="Tu apellido" required />
             </div>
 
+            <div class="col-md-6 mb-2">
+              <label for="nick" class="form-label text-secondary small">Nick Deportivo</label>
+              <input th:field="*{jugador.nick}" id="nick" class="form-control bg-black text-light border-secondary p-3 rounded-3" placeholder="Ej: KunAguero" required />
+            </div>
+
             <div class="col-12">
               <label for="email" class="form-label text-secondary small">Email</label>
               <input th:field="*{email}" type="email" id="email" class="form-control bg-black text-light border-secondary p-3 rounded-3" placeholder="nombre@ejemplo.com" required />

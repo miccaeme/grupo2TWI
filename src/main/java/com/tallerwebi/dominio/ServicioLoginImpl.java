@@ -33,6 +33,17 @@ public class ServicioLoginImpl implements ServicioLogin {
     if (usuarioEncontrado != null) {
       throw new UsuarioExistente();
     }
+    Jugador jugador = usuario.getJugador();
+    if (jugador != null) {
+      jugador.setUsuario(usuario);
+      usuario.setJugador(jugador);
+    }
+    usuario.setRol("JUGADOR");
     repositorioUsuario.guardar(usuario);
+  }
+
+  @Override
+  public Usuario buscarUsuarioPorId(Long id) {
+    return repositorioUsuario.buscarUsuarioPorId(id);
   }
 }

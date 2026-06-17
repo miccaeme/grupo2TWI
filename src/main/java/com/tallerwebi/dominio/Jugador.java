@@ -10,12 +10,11 @@ public class Jugador {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  private String nick;
 
-  private String nombre;
-  private String apellido;
+  @OneToOne
+  private Usuario usuario;
 
-  @Column(unique = true, nullable = false)
-  private Integer dni;
 
   public Long getId() {
     return id;
@@ -24,29 +23,19 @@ public class Jugador {
     this.id = id;
   }
 
-  public String getNombre() {
-    return nombre;
+  public String getNick() {
+    return nick;
   }
 
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
+  public void setNick(String nick) {
+    this.nick = nick;
   }
 
-  public String getApellido() {
-    return apellido;
+  public Usuario getUsuario() {
+    return usuario;
   }
 
-  public void setApellido(String apellido) {
-    this.apellido = apellido;
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
   }
-
-
-  public Integer getDni() {
-    return dni;
-  }
-
-  public void setDni(Integer dni) {
-    this.dni = dni;
-  }
-
 }

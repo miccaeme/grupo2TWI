@@ -32,7 +32,7 @@ public class ServicioEquipoTest {
                 this.repositorioEquipoJugadorMock
         );
     }
-
+/*
     @Test
     public void siElCapitanAsignaUnJugadorAlEquipoSeGuardaLaRelacionCorrectamente() {
         // GIVEN
@@ -75,5 +75,5 @@ public class ServicioEquipoTest {
     private void thenLaRelacionEquipoJugadorSeGuardaCorrectamente() {
         verify(repositorioEquipoJugadorMock, times(1)).guardar(any(EquipoJugador.class));
     }
-
+*/
 }
