@@ -4,7 +4,6 @@ import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.EquipoJugador;
-import com.tallerwebi.dominio.Jugador;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -81,7 +79,7 @@ public class ControladorEquipo {
     public ModelAndView mostrarGestionarEquipo(@RequestParam("id") Long idEquipo) {
         ModelMap modelo = new ModelMap();
 
-        Equipo equipo = servicioEquipo.buscarEquiposPorId(idEquipo);
+        Equipo equipo = servicioEquipo.buscarEquipoPorId(idEquipo);
         modelo.put("equipo", equipo);
 
         List<EquipoJugador> actuales = servicioEquipo.obtenerJugadoresDelEquipo(idEquipo);

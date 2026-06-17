@@ -11,4 +11,6 @@ public interface RepositorioPartido {
     Partido buscarPorId(Long id);
 
     List<Partido> obtenerTodosLosPartidos();
+
+    void eliminarPartidosPorTorneoId(Long idTorneo);
 }
