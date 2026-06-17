@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Enums.EstadoPartido;
 import com.tallerwebi.dominio.contratos.RepositorioPartido;
+import com.tallerwebi.dominio.contratos.RepositorioTorneo;
 import com.tallerwebi.dominio.servicios.ServicioGeneradorFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import java.util.List;
 public class ServicioGeneradorFixtureImpl implements ServicioGeneradorFixture {
 
     private RepositorioPartido repositorioPartido;
+    private RepositorioTorneo repositorioTorneo;
 
     @Autowired
-    public ServicioGeneradorFixtureImpl(RepositorioPartido repositorioPartido) {
+    public ServicioGeneradorFixtureImpl(RepositorioPartido repositorioPartido, RepositorioTorneo repositorioTorneo) {
         this.repositorioPartido = repositorioPartido;
+        this.repositorioTorneo = repositorioTorneo;
     }
 
     @Override
@@ -27,18 +30,21 @@ public class ServicioGeneradorFixtureImpl implements ServicioGeneradorFixture {
             throw new IllegalArgumentException("Se necesitan al menos 2 equipos para armar un fixture.");
         }
 
+        Torneo torneo = repositorioTorneo.buscarPorId(idTorneo);
+
+        repositorioPartido.eliminarPartidosPorTorneoId(idTorneo);
 
         switch (formato) {
             case "liga":
-                generarLigaTodosContraTodos(idTorneo, equipos);
+                generarLigaTodosContraTodos(torneo, equipos);
                 break;
 
-            case "eliminacion_directa ":
-                generarPlayoffs(idTorneo, equipos);
+            case "eliminacion_directa":
+                generarPlayoffs(torneo, equipos);
                 break;
 
             case "grupos_playoffs":
-                generarGruposYEliminatorias(idTorneo, equipos);
+                generarGruposYEliminatorias(torneo, equipos);
                 break;
 
             default:
@@ -46,35 +52,37 @@ public class ServicioGeneradorFixtureImpl implements ServicioGeneradorFixture {
         }
     }
 
-    private void generarLigaTodosContraTodos(Long idTorneo, List<Equipo> equipos) {
-        // Cruza todos los equipos uno contra uno en formato liga
+    private void generarLigaTodosContraTodos(Torneo torneo, List<Equipo> equipos) {
         for (int i = 0; i < equipos.size(); i++) {
             for (int j = i + 1; j < equipos.size(); j++) {
                 Partido nuevoPartido = new Partido();
+                nuevoPartido.setTorneo(torneo);
                 nuevoPartido.setEquipoLocal(equipos.get(i));
                 nuevoPartido.setEquipoVisitante(equipos.get(j));
-                nuevoPartido.setFecha(LocalDate.now().plusDays(7)); // Fecha tentativa de prueba
-                nuevoPartido.setEstado(EstadoPartido.PROGRAMADO); // Usando tu Enum seguro
+                nuevoPartido.setFecha(LocalDate.now().plusDays(7));
+                nuevoPartido.setEstado(EstadoPartido.PROGRAMADO);
+                nuevoPartido.setNroFecha(1);
 
                 repositorioPartido.guardar(nuevoPartido);
             }
         }
     }
 
-    private void generarPlayoffs(Long idTorneo, List<Equipo> equipos) {
-        // Cruces de eliminación directa para la primera ronda
+    private void generarPlayoffs(Torneo torneo, List<Equipo> equipos) {
         for (int i = 0; i < equipos.size() / 2; i++) {
             Partido nuevoPartido = new Partido();
+            nuevoPartido.setTorneo(torneo); //
             nuevoPartido.setEquipoLocal(equipos.get(i));
             nuevoPartido.setEquipoVisitante(equipos.get(equipos.size() - 1 - i));
             nuevoPartido.setFecha(LocalDate.now().plusDays(7));
             nuevoPartido.setEstado(EstadoPartido.PROGRAMADO);
+            nuevoPartido.setNroFecha(1);
 
             repositorioPartido.guardar(nuevoPartido);
         }
     }
 
-    private void generarGruposYEliminatorias(Long idTorneo, List<Equipo> equipos) {
+    private void generarGruposYEliminatorias(Torneo torneo, List<Equipo> equipos) {
 
     }
 }

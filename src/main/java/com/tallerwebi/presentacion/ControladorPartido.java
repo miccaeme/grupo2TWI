@@ -27,16 +27,21 @@ public class ControladorPartido {
         this.servicioEstadistica = servicioEstadistica;
     }
 
-    // 📅 1. PANTALLA PRINCIPAL: Listar el Fixture
     @RequestMapping(path = "/fixture", method = RequestMethod.GET)
-    public ModelAndView verFixture() {
+    public ModelAndView verFixture(@RequestParam(value = "idTorneo") Long idTorneo) {
         ModelMap modelo = new ModelMap();
+        List<Partido> partidos;
 
-        List<Partido> partidos = servicioPartido.listarFixture();
+        if (idTorneo != null) {
+            partidos = servicioPartido.buscarPartidosPorTorneoId(idTorneo);
+        } else {
+            partidos = servicioPartido.listarFixture();
+        }
+
         modelo.put("listaPartidos", partidos);
-
-        return new ModelAndView("fixture", modelo); // renderiza fixture.html
+        return new ModelAndView("fixture", modelo);
     }
+
 
 
     @RequestMapping(path = "/partido/nuevo", method = RequestMethod.GET)

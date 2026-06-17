@@ -4,10 +4,13 @@ import com.tallerwebi.dominio.contratos.RepositorioPartido;
 import com.tallerwebi.dominio.excepcion.PartidoInvalidoException;
 import com.tallerwebi.dominio.servicios.ServicioPartido;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class ServicioPartidoImpl implements ServicioPartido {
 
     private RepositorioPartido repositorioPartido;
@@ -45,7 +48,17 @@ public class ServicioPartidoImpl implements ServicioPartido {
     @Override
     @Transactional
     public List<Partido> listarFixture() {
+
         return repositorioPartido.obtenerTodosLosPartidos();
+    }
+
+    @Override
+    public List<Partido> buscarPartidosPorTorneoId(Long idTorneo) {
+        if (idTorneo == null) {
+            throw new IllegalArgumentException("El ID del torneo no puede ser nulo");
+        }
+        // Le pide al repositorio que busque usando el Criteria que armamos antes
+        return repositorioPartido.buscarPartidosPorTorneoId(idTorneo);
     }
 
 }

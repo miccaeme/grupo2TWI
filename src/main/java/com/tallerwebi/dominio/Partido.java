@@ -13,6 +13,9 @@ public class Partido {
     private Long id;
 
     @ManyToOne
+    private Torneo torneo;
+
+    @ManyToOne
     private Equipo equipoLocal;
 
     @ManyToOne
@@ -20,13 +23,13 @@ public class Partido {
 
     private LocalDate fecha;
 
+    private Integer nroFecha;
+
     @Enumerated(EnumType.STRING)
     private EstadoPartido estado;
 
     public Partido() {
     }
-
-    // --- GETTERS Y SETTERS ---
 
     public Long getId() {
         return id;
@@ -34,6 +37,14 @@ public class Partido {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Torneo getTorneo() {
+        return torneo;
+    }
+
+    public void setTorneo(Torneo torneo) {
+        this.torneo = torneo;
     }
 
     public Equipo getEquipoLocal() {
@@ -58,6 +69,14 @@ public class Partido {
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    public Integer getNroFecha() {
+        return nroFecha;
+    }
+
+    public void setNroFecha(Integer nroFecha) {
+        this.nroFecha = nroFecha;
     }
 
     public EstadoPartido getEstado() {

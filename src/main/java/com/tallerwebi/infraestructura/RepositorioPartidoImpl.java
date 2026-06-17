@@ -5,9 +5,11 @@ import com.tallerwebi.dominio.contratos.RepositorioPartido;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class RepositorioPartidoImpl implements RepositorioPartido {
 
     private SessionFactory sessionFactory;
@@ -39,15 +41,25 @@ public class RepositorioPartidoImpl implements RepositorioPartido {
 
     @Override
     @SuppressWarnings({"deprecation", "unchecked"})
+    public List<Partido> buscarPartidosPorTorneoId(Long idTorneo) {
+        return sessionFactory.getCurrentSession()
+                .createCriteria(Partido.class)
+                .add(Restrictions.eq("torneo.id", idTorneo)) // filtro por la propiedad torneo.id de la entidad
+                .list();
+    }
+
+
+    @Override
+    @SuppressWarnings({"deprecation", "unchecked"})
     public void eliminarPartidosPorTorneoId(Long idTorneo) {
         var session = sessionFactory.getCurrentSession();
 
-        // 1. Usamos tu misma estructura corta para BUSCAR los partidos de ese torneo
+
         List<Partido> partidosDelTorneo = session.createCriteria(Partido.class)
                 .add(Restrictions.eq("torneo.id", idTorneo))
                 .list();
 
-        // 2. Recorremos la lista y los borramos uno por uno usando la sesión de Hibernate
+        // recorre la lista y borra uno por uno
         for (Partido partido : partidosDelTorneo) {
             session.delete(partido);
         }

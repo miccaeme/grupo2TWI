@@ -11,4 +11,6 @@ public interface ServicioPartido {
     Partido buscarPorId(Long id);
 
     List<Partido> listarFixture();
+
+    List<Partido> buscarPartidosPorTorneoId(Long idTorneo);
 }
