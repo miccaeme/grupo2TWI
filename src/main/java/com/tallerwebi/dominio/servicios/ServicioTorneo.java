@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public interface ServicioTorneo {
 
-    void guardar(Torneo torneo);
+    void guardar(Torneo torneo, Long idUsuarioLogueado);
     List<Torneo> buscarTodos();
     
     void asignarEquipos(Long id, List<Long> equiposIds);

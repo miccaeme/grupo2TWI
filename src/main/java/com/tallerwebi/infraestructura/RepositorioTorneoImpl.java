@@ -17,6 +17,7 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
     @Autowired
     private SessionFactory sessionFactory;
 
+
     @Override
     public void guardar(Torneo torneo) {
         sessionFactory.getCurrentSession().save(torneo);
