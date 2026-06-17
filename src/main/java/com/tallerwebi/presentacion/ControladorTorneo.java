@@ -84,8 +84,19 @@ public class ControladorTorneo {
   }
 
 
+ @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
+ public ModelAndView guardarEquiposAsignados (@RequestParam("id") Long id,
+                                               @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds){
+   if(equiposIds == null){
+      equiposIds = new ArrayList<>();
+    }
+   servicioTorneo.asignarEquipos(id,equiposIds);
+   return new ModelAndView("redirect:/asignarEquipos?id=" + id);
+ }
+
+ /*
   @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
-  public ModelAndView guardarEquiposAsignados (@RequestParam("id") Long id,
+  public ModelAndView guardarEquiposAsignadoss (@RequestParam("id") Long id,
                                                @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds){
     if(equiposIds == null){
      equiposIds = new ArrayList<>();
@@ -106,9 +117,10 @@ public class ControladorTorneo {
     // 🚀 4. ¡LA MAGIA! Gatillamos el algoritmo pasándole el formato (String) del torneo
     servicioGeneradorFixture.generarFixtureAutomatico(id, equiposCompletos, torneo.getFormato());
 
-    return new ModelAndView("redirect:/fixture?idTorneo=" + id);
+    // 5. En vez de volver a la misma pantalla, lo mandamos derecho al Fixture visual a festejar
+    return new ModelAndView("redirect:/fixture");
   }
-
+  */
 
 
 
