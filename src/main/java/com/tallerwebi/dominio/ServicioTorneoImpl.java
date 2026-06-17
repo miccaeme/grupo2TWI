@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioTorneo;
+import com.tallerwebi.dominio.contratos.RepositorioUsuario;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import com.tallerwebi.dominio.servicios.ServicioTorneo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     private ServicioEquipo servicioEquipo;
     @Autowired
     private RepositorioEquipo repositorioEquipo;
+    @Autowired
+    private RepositorioUsuario repositorioUsuario;
 
 
     public ServicioTorneoImpl(RepositorioTorneo repositorioTorneo, RepositorioEquipo repositorioEquipo, SessionFactory sessionFactory) {
@@ -34,10 +37,12 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     }
 
     @Override
-    public void guardar(Torneo torneo) {
+    public void guardar(Torneo torneo, Long idUsuarioLogueado) {
         if (torneo.getFechaDeInicio() == null || !torneo.getFechaDeInicio().isAfter(LocalDate.now())){
             throw new IllegalArgumentException("La fecha del torneo debe ser posterior al dia actual");
         }
+        Usuario creador = repositorioUsuario.buscarUsuarioPorId(idUsuarioLogueado);
+        torneo.setCreador(creador);
 
         repositorioTorneo.guardar(torneo);
     }

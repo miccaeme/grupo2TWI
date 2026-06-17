@@ -28,6 +28,8 @@ public class Torneo {
     private TipoDeTorneo tipoDeTorneo;
     private Double precio;
     private String descripcion;
+    @ManyToOne
+    private Usuario creador;
 
 
 
@@ -114,5 +116,11 @@ public class Torneo {
         this.id = id;
     }
 
+    public Usuario getCreador() {
+        return creador;
+    }
 
+    public void setCreador(Usuario creador) {
+        this.creador = creador;
+    }
 }
