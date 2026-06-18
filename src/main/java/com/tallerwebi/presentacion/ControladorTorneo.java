@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +41,11 @@ public class ControladorTorneo {
 
   @RequestMapping(value = "/guardarTorneoCreado", method = RequestMethod.POST)
 
-  public ModelAndView guardarTorneo(@ModelAttribute("torneo") Torneo torneo) {
+  public ModelAndView guardarTorneo(@ModelAttribute("torneo") Torneo torneo, HttpServletRequest request) {
     ModelMap model = new ModelMap();
     try{
-      servicioTorneo.guardar(torneo);
+      Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
+      servicioTorneo.guardar(torneo, idLogueado);
       String urlRedireccion = "redirect:/asignarEquipos?id=" + torneo.getId();
       return new ModelAndView(urlRedireccion, model);
 

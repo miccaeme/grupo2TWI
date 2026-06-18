@@ -72,7 +72,9 @@
                 <h5 class="text-success small fw-bold text-uppercase mb-0 tracking-wider">
                     <i class="fas fa-users me-2"></i>Slots de Equipos Confirmados
                 </h5>
-                <a th:href="@{/asignarEquipos(id=${torneo.id})}" class="btn btn-success text-black fw-bold btn-sm px-3 rounded-pill" style="font-size: 0.8rem;">
+                <a th:if="${torneo.creador != null and torneo.creador.id == #session.getAttribute('usuarioId')}"
+                   th:href="@{/asignarEquipos(id=${torneo.id})}"
+                   class="btn btn-success text-black fw-bold btn-sm px-3 rounded-pill" style="font-size: 0.8rem;">
                     <i class="fas fa-edit me-1"></i> Administrar Slots
                 </a>
             </div>
@@ -80,8 +82,15 @@
             <div th:if="${asignaciones == null or asignaciones.isEmpty()}" class="alert alert-dark border-secondary text-center py-5 shadow-sm" >
                 <i class="fas fa-user-plus fa-2x text-muted mb-3"></i>
                 <h5 class="text-white">No hay equipos inscriptos</h5>
-                <p class="text-muted small">Aun no se asignaron equipos a los slots de este torneo.</p>
-                <a th:href="@{/asignarEquipos(id=${torneo.id})}" class="btn btn-outline-success btn-sm mt-1">Asignar ahora</a>
+
+                <div th:if="${torneo.creador != null and torneo.creador.id == #session.getAttribute('usuarioId')}">
+                    <p class="text-muted small">Aun no se asignaron equipos a los slots de este torneo.</p>
+                    <a th:href="@{/asignarEquipos(id=${torneo.id})}" class="btn btn-outline-success btn-sm mt-1">Asignar ahora</a>
+                </div>
+
+                <div th:unless="${torneo.creador != null and torneo.creador.id == #session.getAttribute('usuarioId')}">
+                    <p class="text-muted small">Los organizadores del torneo confirmarán los equipos participantes próximamente.</p>
+                </div>
             </div>
 
             <div th:unless="${asignaciones == null or asignaciones.isEmpty()}" class="row g-3 mb-4">
