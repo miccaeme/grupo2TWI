@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.Enums.TipoDeTorneo;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.TorneoEquipo;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
+import com.tallerwebi.dominio.servicios.ServicioGeneradorFixture;
 import com.tallerwebi.dominio.servicios.ServicioTorneo;
 import com.tallerwebi.dominio.Torneo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import java.util.List;
 
 @Controller
 public class ControladorTorneo {
+
+  @Autowired
+  private ServicioGeneradorFixture servicioGeneradorFixture;
 
   @Autowired
   private ServicioTorneo servicioTorneo;
@@ -81,16 +85,32 @@ public class ControladorTorneo {
     return new ModelAndView("asignarEquipos", model);
   }
 
-
- @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
- public ModelAndView guardarEquiposAsignados (@RequestParam("id") Long id,
-                                               @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds){
-   if(equiposIds == null){
+  @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
+  public ModelAndView guardarEquiposAsignados(@RequestParam("id") Long id,
+                                              @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds) {
+    if (equiposIds == null) {
       equiposIds = new ArrayList<>();
     }
-   servicioTorneo.asignarEquipos(id,equiposIds);
-   return new ModelAndView("redirect:/asignarEquipos?id=" + id);
- }
+
+    servicioTorneo.asignarEquipos(id, equiposIds);
+
+
+    Torneo torneo = servicioTorneo.buscarPorId(id);
+
+
+    List<Equipo> equiposCompletos = new ArrayList<>();
+    for (Long equipoId : equiposIds) {
+      equiposCompletos.add(servicioEquipo.buscarEquipoPorId(equipoId));
+    }
+
+    servicioGeneradorFixture.generarFixtureAutomatico(id, equiposCompletos, torneo.getFormato());
+
+    return new ModelAndView("redirect:/fixture?idTorneo=" + id);
+  }
+
+
+
+
 
 @RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)
   public ModelAndView mostrarDetalleTorneo(@RequestParam("id") Long id) {

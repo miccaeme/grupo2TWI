@@ -65,7 +65,7 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     }
 
     @Override
-    public Equipo buscarEquiposPorId(Long id) {
+    public Equipo buscarEquipoPorId(Long id) {
 
         return repositorioEquipo.buscarPorId(id);
     }

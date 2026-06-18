@@ -1,0 +1,95 @@
+body {
+    background-color: #0f1113;
+    color: white;
+}
+
+/* La tarjeta contenedora de las fechas usa su formato de card */
+.card-jornada {
+    background-color: #1b1f23; /* Su .card-custom */
+    border: 1px solid #3a3f44; /* Borde a tono con su navbar */
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    overflow: hidden; /* Evita que los bordes del encabezado sobresalgan */
+}
+
+/* El encabezado de la jornada/fecha */
+.header-jornada {
+    background-color: #212529; /* Color de su navbar */
+    border-bottom: 2px solid #15945f; /* Su verde característico */
+    padding: 1rem 1.25rem;
+}
+
+/* El texto principal del encabezado usa su verde */
+.header-jornada h3 {
+    color: #15945f;
+    font-weight: bold;
+}
+
+/* Las filas donde se muestra cada partido individual */
+.partido-row {
+    border-bottom: 1px solid #2b3035;
+    padding: 1.2rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.partido-row:last-child {
+    border-bottom: none;
+}
+
+/* Efecto hover sutil al pasar el mouse por encima del partido */
+.partido-row:hover {
+    background-color: #212529;
+}
+
+/* Estilo para los nombres de los equipos en el cruce */
+.nombre-equipo {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+}
+
+/* El óvalo del "VS" en el centro */
+.vs-badge {
+    background-color: #2b3035; /* El fondo de sus inputs */
+    color: #a0a5a8;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border: 1px solid #495057;
+}
+
+/* Estilos para los botones que usen en esta pantalla */
+.btn-volver {
+    background-color: #15945f;
+    color: white;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.btn-volver:hover {
+    background-color: #12774d; /* Su hover de botón verde */
+    color: white;
+}
+
+/* Estado del partido: Pendiente */
+.badge-pendiente {
+    background-color: rgba(21, 148, 95, 0.15);
+    color: #15945f;
+    border: 1px solid #15945f;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Estado del partido: Finalizado */
+.badge-finalizado {
+    background-color: #2b3035;
+    color: #a0a5a8;
+    border: 1px solid #495057;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
