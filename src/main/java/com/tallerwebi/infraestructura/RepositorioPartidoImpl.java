@@ -23,6 +23,7 @@ public class RepositorioPartidoImpl implements RepositorioPartido {
     public void guardar(Partido partido) {
 
         sessionFactory.getCurrentSession().save(partido);
+        sessionFactory.getCurrentSession().flush();
     }
 
     @Override

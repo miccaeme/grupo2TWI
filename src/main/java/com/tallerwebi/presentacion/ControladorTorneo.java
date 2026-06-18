@@ -83,45 +83,28 @@ public class ControladorTorneo {
     return new ModelAndView("asignarEquipos", model);
   }
 
-
- @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
- public ModelAndView guardarEquiposAsignados (@RequestParam("id") Long id,
-                                               @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds){
-   if(equiposIds == null){
+  @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
+  public ModelAndView guardarEquiposAsignados(@RequestParam("id") Long id,
+                                              @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds) {
+    if (equiposIds == null) {
       equiposIds = new ArrayList<>();
     }
-   servicioTorneo.asignarEquipos(id,equiposIds);
-   return new ModelAndView("redirect:/asignarEquipos?id=" + id);
- }
 
- /*
-  @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
-  public ModelAndView guardarEquiposAsignadoss (@RequestParam("id") Long id,
-                                               @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds){
-    if(equiposIds == null){
-     equiposIds = new ArrayList<>();
-    }
-
-    // 1. Guardamos los equipos en el torneo (tu lógica actual)
     servicioTorneo.asignarEquipos(id, equiposIds);
 
-    // 2. Buscamos el objeto Torneo completo para saber qué formato tiene ("liga", "eliminacion_directa", etc.)
+
     Torneo torneo = servicioTorneo.buscarPorId(id);
 
-    // 3. Traemos las entidades de los Equipos completos usando la lista de IDs que marcó el usuario
+
     List<Equipo> equiposCompletos = new ArrayList<>();
-    for(Long equipoId : equiposIds) {
-      equiposCompletos.add(servicioEquipo.buscarEquipoPorId(equipoId)); // Asegurate de que servicioEquipo
+    for (Long equipoId : equiposIds) {
+      equiposCompletos.add(servicioEquipo.buscarEquipoPorId(equipoId));
     }
 
-    // 🚀 4. ¡LA MAGIA! Gatillamos el algoritmo pasándole el formato (String) del torneo
     servicioGeneradorFixture.generarFixtureAutomatico(id, equiposCompletos, torneo.getFormato());
 
-    // 5. En vez de volver a la misma pantalla, lo mandamos derecho al Fixture visual a festejar
-    return new ModelAndView("redirect:/fixture");
+    return new ModelAndView("redirect:/fixture?idTorneo=" + id);
   }
-  */
-
 
 
 

@@ -28,7 +28,7 @@ public class ControladorPartido {
     }
 
     @RequestMapping(path = "/fixture", method = RequestMethod.GET)
-    public ModelAndView verFixture(@RequestParam(value = "idTorneo") Long idTorneo) {
+    public ModelAndView verFixture(@RequestParam(value = "idTorneo", required = false) Long idTorneo) {
         ModelMap modelo = new ModelMap();
         List<Partido> partidos;
 
@@ -38,7 +38,8 @@ public class ControladorPartido {
             partidos = servicioPartido.listarFixture();
         }
 
-        modelo.put("listaPartidos", partidos);
+        modelo.put("partidos", partidos);
+
         return new ModelAndView("fixture", modelo);
     }
 
