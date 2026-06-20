@@ -2,39 +2,42 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioTorneo;
+import com.tallerwebi.dominio.contratos.RepositorioTorneoEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioUsuario;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import com.tallerwebi.dominio.servicios.ServicioTorneo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.SessionFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
 public class ServicioTorneoImpl implements ServicioTorneo {
-    @Autowired
-    private SessionFactory sessionFactory;
+
     @Autowired
     private RepositorioTorneo repositorioTorneo;
-    @Autowired
-    private ServicioEquipo servicioEquipo;
+
     @Autowired
     private RepositorioEquipo repositorioEquipo;
+
     @Autowired
     private RepositorioUsuario repositorioUsuario;
 
+    @Autowired
+    private RepositorioTorneoEquipo repositorioTorneoEquipo;
 
-    public ServicioTorneoImpl(RepositorioTorneo repositorioTorneo, RepositorioEquipo repositorioEquipo, SessionFactory sessionFactory) {
+
+    @Autowired
+    public ServicioTorneoImpl(RepositorioTorneo repositorioTorneo, RepositorioEquipo repositorioEquipo, RepositorioTorneoEquipo repositorioTorneoEquipo) {
         this.repositorioTorneo = repositorioTorneo;
         this.repositorioEquipo = repositorioEquipo;
-        this.sessionFactory = sessionFactory;
+        this.repositorioTorneoEquipo = repositorioTorneoEquipo;
     }
+
 
     @Override
     public void guardar(Torneo torneo, Long idUsuarioLogueado) {
@@ -47,7 +50,6 @@ public class ServicioTorneoImpl implements ServicioTorneo {
         repositorioTorneo.guardar(torneo);
     }
 
-
     @Override
     public List<Torneo> buscarTodos() {
         return repositorioTorneo.buscarTodos();
@@ -55,22 +57,24 @@ public class ServicioTorneoImpl implements ServicioTorneo {
 
     @Override
     public Torneo buscarPorId(Long id) {
-        return sessionFactory.getCurrentSession().get(Torneo.class, id);
+        return repositorioTorneo.buscarPorId(id);
     }
 
     @Override
     public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
-        return List.of();
+        return repositorioTorneoEquipo.buscarEquiposPorTorneoId(id);
     }
 
     @Override
     public void asignarEquipos(Long id, List<Long> equiposIds){
         Torneo torneo = repositorioTorneo.buscarPorId(id);
-        if(torneo!=null){
+        if(torneo != null){
 
-            List<TorneoEquipo> relacionesExistentes = repositorioTorneo.buscarEquiposPorTorneoId(id);
+            // Buscamos las relaciones existentes usando el método limpio
+            List<TorneoEquipo> relacionesExistentes = buscarEquiposPorTorneoId(id);
+
             for(Long equiposId : equiposIds){
-                if(equiposId!=null){
+                if(equiposId != null){
 
                     boolean yaEstaAsignado = false;
                     for(TorneoEquipo relacion : relacionesExistentes){
@@ -79,22 +83,16 @@ public class ServicioTorneoImpl implements ServicioTorneo {
                             break;
                         }
                     }
+
                     if(!yaEstaAsignado){
                         Equipo equipo = repositorioEquipo.buscarPorId(equiposId);
-                        if(equipo!=null){
+                        if(equipo != null){
                             TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo, torneo.getDeporte());
-
-                            sessionFactory.getCurrentSession().persist(nuevaAsignacion);
+                            repositorioTorneo.guardarRelacion(nuevaAsignacion);
                         }
                     }
                 }
             }
-            //forzar a sql a guardar
-            sessionFactory.getCurrentSession().flush();
         }
     }
-
-
-
-
 }

@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Enums.TipoDeTorneo;
 import com.tallerwebi.dominio.Equipo;
+import com.tallerwebi.dominio.ServicioTorneoImpl;
 import com.tallerwebi.dominio.TorneoEquipo;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import com.tallerwebi.dominio.servicios.ServicioGeneradorFixture;
@@ -69,15 +70,18 @@ public class ControladorTorneo {
     return new ModelAndView("verTorneosCreados", model);
   }
 
-
-
   @RequestMapping(value= "/asignarEquipos", method = RequestMethod.GET)
   public ModelAndView mostrarFormularioAsignarEquipos(@RequestParam("id") Long id) {
     ModelMap model = new ModelMap();
     Torneo torneo = servicioTorneo.buscarPorId(id);
     model.put("torneo", torneo);
-    List<TorneoEquipo> relaciones =servicioTorneo.buscarEquiposPorTorneoId(id);
+
+    List<TorneoEquipo> relaciones = servicioTorneo.buscarEquiposPorTorneoId(id);
     model.put("relacionesExistentes", relaciones);
+
+    // determino si ya tiene los equipos asignados guardados en la BD
+    boolean yaAsignados = relaciones != null && !relaciones.isEmpty();
+    model.put("yaAsignados", yaAsignados);
 
     List<Equipo> equiposDisponibles = servicioEquipo.listarTodos();
     model.put("todosLosEquipos", equiposDisponibles);
@@ -92,24 +96,31 @@ public class ControladorTorneo {
       equiposIds = new ArrayList<>();
     }
 
+    // Control de seguridad por si vuelven a enviar un torneo con equipos ya fijos
+    List<TorneoEquipo> relacionesExistentes = servicioTorneo.buscarEquiposPorTorneoId(id);
+    if (relacionesExistentes != null && !relacionesExistentes.isEmpty()) {
+      return new ModelAndView("redirect:/fixture?idTorneo=" + id);
+    }
+
+    // Persistir de verdad los equipos en la tabla intermedia del torneo
+    // Esto asegura que al ir a "Ver Detalles" no salte vacío
     servicioTorneo.asignarEquipos(id, equiposIds);
 
-
+    //Buscar el objeto torneo para extraer los metadatos necesarios (como el formato)
     Torneo torneo = servicioTorneo.buscarPorId(id);
 
-
+    // 4. Mapear y buscar los objetos completos de cada equipo mediante su ID
     List<Equipo> equiposCompletos = new ArrayList<>();
     for (Long equipoId : equiposIds) {
       equiposCompletos.add(servicioEquipo.buscarEquipoPorId(equipoId));
     }
 
+    // 5. Generar el fixture automático impecable pasándole los objetos correctos
     servicioGeneradorFixture.generarFixtureAutomatico(id, equiposCompletos, torneo.getFormato());
 
+    // 6. Redirigir a la pantalla del fixture definitivo
     return new ModelAndView("redirect:/fixture?idTorneo=" + id);
   }
-
-
-
 
 
 @RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)
