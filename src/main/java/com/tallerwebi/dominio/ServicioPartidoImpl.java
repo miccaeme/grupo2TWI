@@ -17,6 +17,7 @@ public class ServicioPartidoImpl implements ServicioPartido {
 
     @Autowired
     public ServicioPartidoImpl(RepositorioPartido repositorioPartido) {
+
         this.repositorioPartido = repositorioPartido;
     }
 

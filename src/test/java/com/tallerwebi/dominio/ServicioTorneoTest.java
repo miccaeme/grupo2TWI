@@ -41,7 +41,7 @@ public class ServicioTorneoTest {
         this.sessionMock = mock(Session.class);
 
 
-        this.servicioTorneo = new ServicioTorneoImpl(this.repositorioTorneoMock, this.repositorioEquipoMock, this.sessionFactoryMock);
+        //this.servicioTorneo = new ServicioTorneoImpl(this.repositorioTorneoMock, this.repositorioEquipoMock, this.sessionFactoryMock);
 
         torneoValido = new Torneo();
         torneoValido.setFechaDeInicio(LocalDate.now().plusDays(2)); //posterior a Hoy

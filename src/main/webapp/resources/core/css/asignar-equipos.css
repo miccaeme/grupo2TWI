@@ -1,0 +1,31 @@
+/* ==========================================================================
+   TorneosPro - Estilos para el buscador y selección de equipos
+   ========================================================================== */
+
+/* Obligamos a que el contenedor de resultados tenga fondo y se note */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #111417 !important; /* Gris ultra oscuro tirando a negro */
+    border: 1px solid #198754 !important; /* Borde verde para que combine con tus labels */
+    z-index: 9999 !important; /* Máxima prioridad para que flote encima de todo */
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Estilo para cada fila de equipo sugerido */
+.search-result-item {
+    padding: 10px;
+    color: #ffffff !important;
+    background-color: #1a1d20;
+    border-bottom: 1px solid #2d3238;
+}
+
+/* El efecto cuando pasás el mouse por arriba */
+.search-result-item:hover {
+    background-color: #198754 !important; /* Cambia a verde */
+    color: #000000 !important; /* Texto negro para que contraste impecable */
+    font-weight: bold;
+}

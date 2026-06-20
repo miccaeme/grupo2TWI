@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.servicios;
 
 import com.tallerwebi.dominio.Partido;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

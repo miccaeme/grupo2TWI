@@ -20,7 +20,13 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
 
     @Override
     public void guardar(Torneo torneo) {
+
         sessionFactory.getCurrentSession().save(torneo);
+    }
+
+    @Override
+    public void guardarRelacion(TorneoEquipo torneoEquipo) {
+        sessionFactory.getCurrentSession().save(torneoEquipo);
     }
 
 
@@ -36,7 +42,11 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "unchecked"})
     public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
-        return List.of();
+        return sessionFactory.getCurrentSession()
+                .createCriteria(TorneoEquipo.class)
+                .add(org.hibernate.criterion.Restrictions.eq("torneo.id", id))
+                .list();
     }
 }
