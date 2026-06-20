@@ -51,6 +51,12 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     }
 
     @Override
+    public void guardarEstadoFixture(Torneo torneo) {
+
+        repositorioTorneo.guardar(torneo);
+    }
+
+    @Override
     public List<Torneo> buscarTodos() {
         return repositorioTorneo.buscarTodos();
     }

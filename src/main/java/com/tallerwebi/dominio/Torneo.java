@@ -28,6 +28,7 @@ public class Torneo {
     private TipoDeTorneo tipoDeTorneo;
     private Double precio;
     private String descripcion;
+    private Boolean fixtureGenerado = false;
     @ManyToOne
     private Usuario creador;
 
@@ -122,5 +123,13 @@ public class Torneo {
 
     public void setCreador(Usuario creador) {
         this.creador = creador;
+    }
+
+    public Boolean getFixtureGenerado() {
+        return fixtureGenerado;
+    }
+
+    public void setFixtureGenerado(Boolean fixtureGenerado) {
+        this.fixtureGenerado = fixtureGenerado;
     }
 }

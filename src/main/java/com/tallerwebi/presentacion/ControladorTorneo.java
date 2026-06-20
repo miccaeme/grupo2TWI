@@ -96,30 +96,16 @@ public class ControladorTorneo {
       equiposIds = new ArrayList<>();
     }
 
-    // Control de seguridad por si vuelven a enviar un torneo con equipos ya fijos
     List<TorneoEquipo> relacionesExistentes = servicioTorneo.buscarEquiposPorTorneoId(id);
     if (relacionesExistentes != null && !relacionesExistentes.isEmpty()) {
-      return new ModelAndView("redirect:/fixture?idTorneo=" + id);
+      return new ModelAndView("redirect:/verTorneosCreados");
     }
 
-    // Persistir de verdad los equipos en la tabla intermedia del torneo
-    // Esto asegura que al ir a "Ver Detalles" no salte vacío
+
     servicioTorneo.asignarEquipos(id, equiposIds);
 
-    //Buscar el objeto torneo para extraer los metadatos necesarios (como el formato)
-    Torneo torneo = servicioTorneo.buscarPorId(id);
 
-    // 4. Mapear y buscar los objetos completos de cada equipo mediante su ID
-    List<Equipo> equiposCompletos = new ArrayList<>();
-    for (Long equipoId : equiposIds) {
-      equiposCompletos.add(servicioEquipo.buscarEquipoPorId(equipoId));
-    }
-
-    // 5. Generar el fixture automático impecable pasándole los objetos correctos
-    servicioGeneradorFixture.generarFixtureAutomatico(id, equiposCompletos, torneo.getFormato());
-
-    // 6. Redirigir a la pantalla del fixture definitivo
-    return new ModelAndView("redirect:/fixture?idTorneo=" + id);
+    return new ModelAndView("redirect:/verTorneosCreados");
   }
 
 
@@ -133,6 +119,33 @@ public class ControladorTorneo {
     model.addAttribute("asignaciones", asignaciones);
     return new ModelAndView("verDetalleTorneo",model);
 
+  }
+
+  @RequestMapping(value = "/generarFixtureManual", method = RequestMethod.GET)
+  public ModelAndView generarFixtureManual(@RequestParam("idTorneo") Long idTorneo) {
+
+    // 1. Buscamos el torneo original de la BD
+    Torneo torneo = servicioTorneo.buscarPorId(idTorneo);
+
+    // 2. Traemos las asignaciones para el algoritmo
+    List<TorneoEquipo> relaciones = servicioTorneo.buscarEquiposPorTorneoId(idTorneo);
+
+    List<Equipo> equiposCompletos = new ArrayList<>();
+    for (TorneoEquipo rel : relaciones) {
+      equiposCompletos.add(rel.getEquipo());
+    }
+
+    // 3. Se ejecuta el algoritmo matemático que genera los partidos
+    servicioGeneradorFixture.generarFixtureAutomatico(idTorneo, equiposCompletos, torneo.getFormato());
+
+    // 4. CAMBIO CRÍTICO: Modificamos la bandera directamente sobre el torneo persistido
+    torneo.setFixtureGenerado(true);
+
+    // Le avisamos al servicio que guarde/actualice el torneo existente en lugar de duplicarlo
+    servicioTorneo.guardarEstadoFixture(torneo);
+
+    // 5. Redirigimos al fixture de forma limpia
+    return new ModelAndView("redirect:/fixture?idTorneo=" + idTorneo);
   }
 
 

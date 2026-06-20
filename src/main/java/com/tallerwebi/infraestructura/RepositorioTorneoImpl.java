@@ -20,15 +20,13 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
 
     @Override
     public void guardar(Torneo torneo) {
-
-        sessionFactory.getCurrentSession().save(torneo);
+        sessionFactory.getCurrentSession().saveOrUpdate(torneo);
     }
 
     @Override
     public void guardarRelacion(TorneoEquipo torneoEquipo) {
-        sessionFactory.getCurrentSession().save(torneoEquipo);
+        sessionFactory.getCurrentSession().saveOrUpdate(torneoEquipo);
     }
-
 
     @Override
     public List<Torneo> buscarTodos() {

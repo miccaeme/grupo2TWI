@@ -11,6 +11,7 @@ import java.util.List;
 public interface ServicioTorneo {
 
     void guardar(Torneo torneo, Long idUsuarioLogueado);
+    void guardarEstadoFixture(Torneo torneo);
     List<Torneo> buscarTodos();
     
     void asignarEquipos(Long id, List<Long> equiposIds);
