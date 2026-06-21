@@ -123,4 +123,38 @@ public class ControladorEquipo {
 
         return new ModelAndView("gestionar-equipo", modelo);
     }*/
+
+    @RequestMapping(path = "/equipo/gestionar", method = RequestMethod.GET)
+    public ModelAndView mostrarGestionarEquipo(@RequestParam("id") Long idEquipo, HttpServletRequest request) {
+        ModelMap modelo = new ModelMap();
+
+        // 1. Control de seguridad básico (que esté logueado)
+        Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        if (idLogueado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        // 2. Buscamos el equipo por su ID
+        Equipo equipo = servicioEquipo.buscarEquipoPorId(idEquipo);
+        modelo.put("equipo", equipo);
+
+        // 3. Traemos los integrantes actuales del equipo
+        List<EquipoJugador> actuales = servicioEquipo.obtenerJugadoresDelEquipo(idEquipo);
+
+
+        for (EquipoJugador ej : actuales) {
+
+            if (ej.getPosicion() != null) {
+                modelo.put("JUGADOR_" + ej.getPosicion().name(), ej.getJugador());
+            } else {
+
+                modelo.put("JUGADOR_CAPITAN", ej.getJugador());
+            }
+        }
+
+
+        modelo.put("jugadoresEquipo", actuales);
+
+        return new ModelAndView("gestionar-equipo", modelo);
+    }
 }
