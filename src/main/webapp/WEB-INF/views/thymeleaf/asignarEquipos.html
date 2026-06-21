@@ -35,26 +35,30 @@
                     <h5 class="text-success small fw-bold mb-3 text-uppercase">Slots de Inscripción del Torneo</h5>
 
                     <div class="row g-3 mb-4">
-                        <div class="col-md-6" th:each="i, stat : ${#numbers.sequence(1, torneo.cantidadEquipos)}">
+                        <div class="col-md-6" th:each="e, i : ${#numbers.sequence(1, torneo.cantidadEquipos)}">
                             <div class="p-3 border border-secondary rounded" style="background-color: #24292d;">
-                                <label class="text-muted d-block small mb-2" th:text="'Slot #' + ${i}">Slot #1</label>
+                                <label class="text-muted d-block small mb-2" th:text="'Slot #' + ${e}">Slot #1</label>
 
-                                <div th:if="${relacionesExistentes != null and stat.index < relacionesExistentes.size()}">
-                                    <span class="fw-bold text-success" th:text="${relacionesExistentes[stat.index].equipo.nombre}">Equipo Confirmado</span>
+                                <div th:if="${relacionesExistentes != null and i.index < relacionesExistentes.size()}">
+                                    <span class="fw-bold text-success" th:text="${relacionesExistentes[i.index].equipo.nombre}">Equipo Confirmado</span>
                                     <span class="text-secondary small d-block mt-1">
                                         <i class="fas fa-lock me-1"></i> Inscripción Confirmada
                                     </span>
-                                    <input type="hidden" name="equiposIds" th:value="${relacionesExistentes[stat.index].equipo.id}" />
+                                    <input type="hidden" name="equiposIds" th:value="${relacionesExistentes[i.index].equipo.id}" />
                                 </div>
 
-                                <div th:unless="${relacionesExistentes != null and stat.index < relacionesExistentes.size()}">
+                                <div th:unless="${relacionesExistentes != null and i.index < relacionesExistentes.size()}">
                                     <select class="form-select bg-dark text-white border-secondary selector-equipo"
-                                            name="equiposIds"
-                                            required>
-                                        <option value="">-- Seleccionar Equipo --</option>
-                                        <option th:each="equipo : ${todosLosEquipos}"
-                                                th:value="${equipo.id}"
-                                                th:text="${equipo.nombre}">Nombre del Equipo</option>
+                                            name="equiposIds">
+                                        <option th:value="${null}">-- Seleccionar Equipo --</option>
+
+                                        <th:block th:each="equipo : ${todosLosEquipos}">
+                                            <option th:if="${relacionesExistentes == null or !#lists.contains(relacionesExistentes.![equipo.id], equipo.id)}"
+                                                    th:value="${equipo.id}"
+                                                    th:text="${equipo.nombre}">
+                                                Nombre del Equipo
+                                            </option>
+                                        </th:block>
                                     </select>
                                 </div>
                             </div>
@@ -64,7 +68,9 @@
                     <div class="d-flex justify-content-end gap-2 border-top border-secondary pt-3 mt-4">
                         <a th:href="@{/verTorneosCreados}" class="btn btn-outline-secondary text-white border-secondary btn-sm rounded-pill px-4">Volver</a>
 
-                        <button type="submit" class="btn btn-success btn-sm text-black fw-bold px-4 rounded-pill" th:if="${!yaAsignados}">
+                        <button type="submit"
+                                class="btn btn-success btn-sm text-black fw-bold px-4 rounded-pill"
+                                th:if="${relacionesExistentes == null or relacionesExistentes.size() < torneo.cantidadEquipos}">
                             <i class="fas fa-check-circle me-1"></i> Confirmar Inscripciones
                         </button>
                     </div>
