@@ -18,20 +18,38 @@
     </h1>
     <p class="text-secondary" th:text="'Disciplina: ' + ${equipo.deporte}">Disciplina:</p>
   </div>
-
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show rounded-4 mb-4" role="alert">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <div class="row g-4">
     <div class="col-lg-4">
       <div class="card bg-black border border-secondary rounded-4 p-4 shadow-lg mb-4">
-        <h5 class="fw-bold text-light mb-3"><i class="bi bi-person-plus text-success me-2"></i>Asignar por ID</h5>
-        <p class="text-secondary small">Ingresá el ID único del jugador para sumarlo directamente a un slot libre.</p>
+        <h5 class="fw-bold text-light mb-3"><i class="bi bi-person-plus text-success me-2"></i>Inscribir Jugador</h5>
+        <p class="text-secondary small">Ingresá el apodo (Nickname) del jugador y asignale un puesto en el plantel.</p>
 
-        <form th:action="@{/equipo/asignar-directo}" method="POST">
+        <form th:action="@{/equipo/asignar-jugador}" method="POST">
           <input type="hidden" name="equipoId" th:value="${equipo.id}">
+
           <div class="mb-3">
-            <label class="form-label text-secondary small fw-bold">ID del Jugador</label>
-            <input type="number" name="jugadorId" class="form-control bg-dark text-white border-secondary" placeholder="Ej: 14" required>
+            <label class="form-label text-secondary small fw-bold">Nickname del Usuario</label>
+            <div class="input-group">
+              <span class="input-group-text bg-dark border-secondary text-secondary">@</span>
+              <input type="text" name="nickname" class="form-control bg-dark text-white border-secondary" placeholder="Ej: mica2026" required>
+            </div>
           </div>
-          <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold">Inscribir Jugador</button>
+
+          <div class="mb-3">
+            <label class="form-label text-secondary small fw-bold">Posición </label>
+            <select name="posicion" class="form-select bg-dark text-white border-secondary" required>
+              <option value="">Seleccione un puesto</option>
+              <option th:each="pos : ${posiciones}"
+                      th:value="${pos}"
+                      th:text="${pos.name()}">ARQUERO</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold">Agregar al Equipo</button>
         </form>
       </div>
 
@@ -49,31 +67,46 @@
         <h5 class="fw-bold text-light mb-4"><i class="bi bi-grid-3x3-gap text-success me-2"></i>Distribución del Plantel</h5>
 
         <div th:if="${equipo.deporte.name() == 'FUTBOL'}" class="cancha rounded-4 p-4 position-relative"
-             style="background: linear-gradient(135deg, #11381e 0%, #092413 100%); min-height: 520px; border: 2px solid #206030;">
+             style="background: linear-gradient(135deg, #11381e 0%, #092413 100%); min-height: 480px; border: 2px solid #206030;">
 
-          <div class="position-absolute top-50 start-50 translate-middle rounded-circle border border-white border-opacity-10" style="width: 140px; height: 140px;"></div>
+          <div class="position-absolute top-50 start-50 translate-middle rounded-circle border border-white border-opacity-10" style="width: 120px; height: 120px;"></div>
           <div class="position-absolute top-50 start-0 end-0 border-top border-white border-opacity-10"></div>
 
-          <div class="d-flex flex-column justify-content-between h-100 gap-4">
-            <div class="d-flex justify-content-around">
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 100px;" placeholder="EI (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 100px;" placeholder="DC (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 100px;" placeholder="ED (Vacante)" readonly>
+          <div class="d-flex flex-column justify-content-between h-100 gap-4 position-relative" style="z-index: 2;">
+
+            <div class="d-flex justify-content-center mt-2">
+              <div style="width: 130px;">
+                <input th:if="${JUGADOR_DELANTERO_PIVOT != null}" type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" th:value="'@' + ${JUGADOR_DELANTERO_PIVOT.nickname}" readonly>
+                <input th:if="${JUGADOR_DELANTERO_PIVOT == null}" type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" placeholder="PIVOT (Vacante)" readonly>
+              </div>
             </div>
-            <div class="d-flex justify-content-around">
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 100px;" placeholder="MC (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 100px;" placeholder="MCD (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 100px;" placeholder="MC (Vacante)" readonly>
+
+            <div class="d-flex justify-content-between px-4">
+              <div style="width: 120px;">
+                <input th:if="${JUGADOR_LATERAL_IZQUIERDO != null}" type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" th:value="'@' + ${JUGADOR_LATERAL_IZQUIERDO.nickname}" readonly>
+                <input th:if="${JUGADOR_LATERAL_IZQUIERDO == null}" type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" placeholder="LI (Vacante)" readonly>
+              </div>
+              <div style="width: 120px;">
+                <input th:if="${JUGADOR_LATERAL_DERECHO != null}" type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" th:value="'@' + ${JUGADOR_LATERAL_DERECHO.nickname}" readonly>
+                <input th:if="${JUGADOR_LATERAL_DERECHO == null}" type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" placeholder="LD (Vacante)" readonly>
+              </div>
             </div>
-            <div class="d-flex justify-content-around">
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 90px;" placeholder="DFI (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 90px;" placeholder="DFC (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 90px;" placeholder="DFC (Vacante)" readonly>
-              <input type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" style="width: 90px;" placeholder="DFD (Vacante)" readonly>
-            </div>
+
             <div class="d-flex justify-content-center">
-              <input type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" style="width: 110px;" th:value="${equipo.creador.nombre}" readonly>
+              <div style="width: 130px;">
+                <input th:if="${JUGADOR_DEFENSOR_CENTRAL != null}" type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" th:value="'@' + ${JUGADOR_DEFENSOR_CENTRAL.nickname}" readonly>
+                <input th:if="${JUGADOR_DEFENSOR_CENTRAL == null}" type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" placeholder="CENTRAL (Vacante)" readonly>
+              </div>
             </div>
+
+            <div class="d-flex justify-content-center mb-2">
+              <div style="width: 140px;" class="text-center">
+                <input th:if="${JUGADOR_ARQUERO != null}" type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" th:value="'@' + ${JUGADOR_ARQUERO.nickname}" readonly>
+                <input th:if="${JUGADOR_ARQUERO == null && JUGADOR_CAPITAN != null}" type="text" class="form-control form-control-sm text-center bg-success text-white border-success fw-bold" th:value="'👑 @' + ${JUGADOR_CAPITAN.nickname}" readonly>
+                <input th:if="${JUGADOR_ARQUERO == null && JUGADOR_CAPITAN == null}" type="text" class="form-control form-control-sm text-center bg-dark text-white border-secondary" placeholder="ARQ (Vacante)" readonly>
+              </div>
+            </div>
+
           </div>
         </div>
 

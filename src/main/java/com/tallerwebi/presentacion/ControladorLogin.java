@@ -43,7 +43,7 @@ public class ControladorLogin {
       request.getSession().setAttribute("usuarioId", usuarioBuscado.getId());
     //se busca nick
     if (usuarioBuscado.getJugador() != null) {
-      request.getSession().setAttribute("usuarioNick", usuarioBuscado.getJugador().getNick());
+      request.getSession().setAttribute("usuarioNick", usuarioBuscado.getJugador().getNickname());
     }
       return new ModelAndView("redirect:/home"); }
     else {

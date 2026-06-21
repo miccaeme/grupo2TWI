@@ -18,6 +18,7 @@ public interface ServicioEquipo {
     List<Equipo> listarTodos();
     List<Equipo> buscarEquiposDelCapitan(Long idJugador);
     List<EquipoJugador> obtenerJugadoresDelEquipo(Long idEquipo);
+    void asignarJugadorAlEquipoPorNickname(Long equipoId, String nickname, Posicion posicion) throws Exception;
 
 
 }

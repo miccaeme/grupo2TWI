@@ -11,4 +11,8 @@ public interface RepositorioEquipoJugador {
     List<Equipo> buscarEquiposPorJugadorYCapitan(Long idJugador, boolean esCapitan);
 
     List<EquipoJugador> buscarJugadoresPorEquipo(Long idEquipo);
+
+    int contarJugadoresEnEquipo(Long equipoId);
+
+    boolean elJugadorYaEstaEnElEquipo(Long equipoId, Long jugadorId);
 }
