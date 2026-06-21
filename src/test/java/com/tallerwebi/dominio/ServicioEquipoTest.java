@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioEquipoJugador;
 import com.tallerwebi.dominio.contratos.RepositorioJugador;
+import com.tallerwebi.dominio.contratos.RepositorioUsuario;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ public class ServicioEquipoTest {
     private RepositorioEquipo repositorioEquipoMock;
     private RepositorioJugador repositorioJugadorMock;
     private RepositorioEquipoJugador repositorioEquipoJugadorMock;
+    private RepositorioUsuario repositorioUsuarioMock;
 
     @BeforeEach
     public void init() {
@@ -24,12 +26,14 @@ public class ServicioEquipoTest {
         this.repositorioEquipoMock = mock(RepositorioEquipo.class);
         this.repositorioJugadorMock = mock(RepositorioJugador.class);
         this.repositorioEquipoJugadorMock = mock(RepositorioEquipoJugador.class);
+        this.repositorioUsuarioMock = mock(RepositorioUsuario.class);
 
         // 2. Instans la impl real del servicio pasándole los mocks por construct
         this.servicioEquipo = new ServicioEquipoImpl(
                 this.repositorioEquipoMock,
                 this.repositorioJugadorMock,
-                this.repositorioEquipoJugadorMock
+                this.repositorioEquipoJugadorMock,
+               this.repositorioUsuarioMock
         );
     }
 /*

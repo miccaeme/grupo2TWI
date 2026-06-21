@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioEquipoJugador;
 import com.tallerwebi.dominio.contratos.RepositorioJugador;
+import com.tallerwebi.dominio.contratos.RepositorioUsuario;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,28 +20,44 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     private RepositorioEquipo repositorioEquipo;
     private RepositorioJugador repositorioJugador;
     private RepositorioEquipoJugador repositorioEquipoJugador;
+    private RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioEquipoImpl(RepositorioEquipo repositorioEquipo, RepositorioJugador repositorioJugador, RepositorioEquipoJugador repositorioEquipoJugador) {
+    public ServicioEquipoImpl(RepositorioEquipo repositorioEquipo,
+                              RepositorioJugador repositorioJugador,
+                              RepositorioEquipoJugador repositorioEquipoJugador,
+                              RepositorioUsuario repositorioUsuario) {
         this.repositorioEquipo = repositorioEquipo;
         this.repositorioJugador = repositorioJugador;
         this.repositorioEquipoJugador = repositorioEquipoJugador;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
 
     @Override
-    public void crearEquipo(Equipo equipo, Long jugadorId, Posicion posicion) {
+    public void crearEquipo(Equipo equipo, Long idUsuarioLogueado) {
+
+        //Referencia Enum
+        int cupoMaximo = equipo.getDeporte().getSlots();
+        equipo.setCantidadMaximaSlots(cupoMaximo);
+
+        Usuario creador = repositorioUsuario.buscarUsuarioPorId(idUsuarioLogueado);
+        equipo.setCreador(creador);
+
+
         repositorioEquipo.guardar(equipo);
 
-        Jugador jugador = repositorioJugador.buscarPorId(jugadorId);
+        //el creador es el primer integrante y Capitan
         EquipoJugador equipoJugador = new EquipoJugador();
         equipoJugador.setEquipo(equipo);
-        equipoJugador.setJugador(jugador);
+        equipoJugador.setJugador(creador.getJugador()); // Vinculamos su perfil de jugador
         equipoJugador.setCapitan(true);
-        equipoJugador.setPosicion(posicion);
+
+
         repositorioEquipoJugador.guardar(equipoJugador);
     }
 
+/*
     @Override
     public void asignarJugadorAlEquipo(Long idEquipo, Long idJugador, Posicion posicion) {
         Equipo equipo = repositorioEquipo.buscarPorId(idEquipo);
@@ -56,7 +73,7 @@ public class ServicioEquipoImpl implements ServicioEquipo {
 
 
         repositorioEquipoJugador.guardar(relacionNueva);
-    }
+    } */
 
     @Override
     public List<Equipo> buscarEquiposPorNombre(String nombre) {
@@ -75,8 +92,15 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     }
 
     @Override
-    public List<Equipo> buscarEquiposDelCapitan(Long idJugador) {
-        return repositorioEquipoJugador.buscarEquiposPorJugadorYCapitan(idJugador, true);
+    public List<Equipo> buscarEquiposDelCapitan(Long idUsuarioLogueado) {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuarioLogueado);
+
+        if (usuario == null || usuario.getJugador() == null) {
+            return List.of();
+        }
+
+        Long jugadorId = usuario.getJugador().getId();
+        return repositorioEquipo.buscarEquiposPorJugadorIdYCapitan(jugadorId, true);
     }
 
     @Override

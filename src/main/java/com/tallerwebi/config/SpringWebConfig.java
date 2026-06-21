@@ -80,14 +80,14 @@ public class SpringWebConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new LoginInterceptor())
-            .addPathPatterns("/**") // Protege absolutamente TODAS las URLs de la web
+            .addPathPatterns("/**")
             .excludePathPatterns(
-                    "/login",           // Excluye la pantalla de login para evitar bucles infinitos
-                    "/validar-login",   // Excluye el procesamiento del formulario de login
-                    "/nuevo-usuario",   // Excluye la pantalla de registro
-                    "/registrarme",     // Excluye el procesamiento del registro
-                    "/css/**",          // Excluye estilos para que el login se siga viendo bien
-                    "/js/**"            // Excluye scripts públicos
+                    "/login",
+                    "/validar-login",
+                    "/nuevo-usuario",
+                    "/registrarme",
+                    "/css/**",
+                    "/js/**"            // Excluye scripts publicos
             );
   }
 }

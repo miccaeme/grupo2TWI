@@ -3,8 +3,6 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.Enums.Deporte;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Equipo {
@@ -19,6 +17,8 @@ public class Equipo {
     @Enumerated(EnumType.STRING)
     private Deporte deporte; //cambiar por torneo manyToOne? pero cuando cree el equipo no me va a pedir de que deporte es , ni en que posicion va a jugar el capitan
 
+    @ManyToOne
+    private Usuario creador;
 
     public Long getId() {
         return id;
@@ -32,6 +32,10 @@ public class Equipo {
         this.nombre = nombre;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Deporte getDeporte() {
         return deporte;
     }
@@ -40,9 +44,14 @@ public class Equipo {
         this.deporte = deporte;
     }
 
-
-    public void setId(Long id) {
-        this.id = id;
+    public Usuario getCreador() {
+        return creador;
     }
 
+    public void setCreador(Usuario creador) {
+        this.creador = creador;
+    }
+
+    public void setCantidadMaximaSlots(int cupoMaximo) {
+    }
 }

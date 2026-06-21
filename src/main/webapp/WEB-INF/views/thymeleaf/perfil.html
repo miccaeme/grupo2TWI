@@ -110,15 +110,27 @@
               <a th:href="@{/equipo/buscar}" class="btn btn-outline-success btn-sm rounded-pill px-3 text-light">Buscar Equipo</a>
             </div>
 
-            <div class="p-3 bg-dark bg-opacity-20 border border-secondary rounded-3 d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center gap-3">
-                <div class="p-2 bg-success bg-opacity-10 rounded-2 text-success fw-bold">FC</div>
-                <div>
-                  <h6 class="mb-0 text-light fw-bold">Deportivo Laferrere</h6>
-                  <small class="text-secondary">Rol: Jugador (Nº 10)</small>
+            <div class="d-flex flex-column gap-2 mb-3">
+              <div th:each="equipo, status : ${listaEquipos}"
+                   th:if="${status.index < 3}"
+                   class="p-3 bg-dark bg-opacity-20 border border-secondary rounded-3 d-flex align-items-center justify-content-between">
+
+                <div class="d-flex align-items-center gap-3">
+                  <div class="p-2 bg-success bg-opacity-10 rounded-2 text-success fw-bold text-uppercase"
+                       th:text="${#strings.substring(equipo.nombre, 0, 2)}">FC</div>
+                  <div>
+                    <h6 class="mb-0 text-light fw-bold" th:text="${equipo.nombre}">Deportivo Laferrere</h6>
+                    <small class="text-secondary" th:text="'Deporte: ' + ${equipo.deporte}">Deporte: FUTBOL</small>
+                  </div>
                 </div>
+                <span class="badge bg-success text-white fw-bold px-3 py-2 shadow-sm">Capitán</span>
               </div>
-              <span class="badge bg-secondary text-dark fw-bold">Miembro</span>
+            </div>
+
+            <div th:if="${#lists.size(listaEquipos) > 3}" class="text-center mt-2">
+              <a th:href="@{/equipo/mis-equipos}" class="btn btn-link text-success p-0 small fw-bold text-decoration-none">
+                Ver más (<span th:text="${#lists.size(listaEquipos) - 3}"></span> equipos más) <i class="bi bi-chevron-down small"></i>
+              </a>
             </div>
           </div>
 

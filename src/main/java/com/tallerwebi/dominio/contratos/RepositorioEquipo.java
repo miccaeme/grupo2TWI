@@ -13,4 +13,6 @@ public interface RepositorioEquipo {
     List<Equipo> findAll();
 
     List<Equipo> buscarPorNombre(String nombre);
+
+    List<Equipo> buscarEquiposPorJugadorIdYCapitan(Long jugadorId, boolean b);
 }

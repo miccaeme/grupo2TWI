@@ -10,8 +10,9 @@ import java.util.List;
 @Service
 public interface ServicioEquipo {
 
-    void crearEquipo(Equipo equipo, Long jugadorId, Posicion posicion);
-    void asignarJugadorAlEquipo(Long idEquipo, Long idJugador, Posicion posicion);
+    void crearEquipo(Equipo equipo, Long jugadorId);
+
+   // void asignarJugadorAlEquipo(Long idEquipo);
     List<Equipo> buscarEquiposPorNombre(String nombre);
     Equipo buscarEquipoPorId(Long id);
     List<Equipo> listarTodos();

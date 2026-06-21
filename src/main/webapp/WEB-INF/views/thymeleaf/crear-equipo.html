@@ -49,62 +49,28 @@
                                    placeholder="Ej: Los Titanes"
                                    required>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">
+                            <label class="form-label text-secondary small fw-bold">
                                 Deporte del equipo
                             </label>
 
                             <select th:field="*{deporte}"
                                     id="deporte"
-                                    class="form-select"
+                                    class="form-select bg-dark text-white border-secondary"
                                     required>
 
                                 <option value="">
                                     Seleccione un deporte
                                 </option>
 
-                                <option th:each="deporte : ${deportes}"
-                                        th:value="${deporte}"
-                                        th:text="${deporte}">
+                                <option th:each="unDeporte : ${deportes}"
+                                        th:value="${unDeporte}"
+                                        th:text="${unDeporte.name() + ' (' + unDeporte.getSlots() + ' slots)'}">
                                 </option>
 
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">
-                                ID del jugador capitán
-                            </label>
-
-                            <input type="number"
-                                   name="jugadorId"
-                                   class="form-control"
-                                   placeholder="Ej: 1"
-                                   required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Tu posición en este equipo
-                            </label>
-
-                            <select name="posicion"
-                                    id="posicion"
-                                    class="form-select"
-                                    required>
-
-                                <option value="">
-                                    Seleccione una posición
-                                </option>
-
-                                <option th:each="posicion : ${posiciones}"
-                                        th:value="${posicion}"
-                                        th:text="${posicion}">
-                                </option>
-
-                            </select>
-                        </div>
 
                         <button type="submit"
                                 class="btn w-100 fw-bold rounded-pill boton-verde">

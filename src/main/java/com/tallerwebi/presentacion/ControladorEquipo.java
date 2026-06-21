@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -45,21 +46,54 @@ public class ControladorEquipo {
     @RequestMapping(path = "/equipo/crear", method = RequestMethod.POST)
     public ModelAndView crearEquipo(
             @ModelAttribute("equipo") Equipo equipo,
-            @RequestParam("jugadorId") Long jugadorId, // modificar cuando hagamos el login por httpSession
-            @RequestParam("posicion") Posicion posicion,
-            RedirectAttributes redirectAttributes) {
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes
+         ) {
 
-        servicioEquipo.crearEquipo(equipo, jugadorId, posicion);
+        Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
 
-        // para mostrar un mensaje temporal de exito y se borra solo
-        redirectAttributes.addFlashAttribute("mensaje", "Equipo creado correctamente");
+        if (idUsuarioLogueado == null) {
+            return new ModelAndView("redirect:/login");
+        }
 
-        //Redirigimos a mis-equipos arrastrando el id de prueba hardcodeado
-        return new ModelAndView("redirect:/equipo/mis-equipos?jugadorId=" + jugadorId);
+        try {
+            servicioEquipo.crearEquipo(equipo, idUsuarioLogueado);
+
+            redirectAttributes.addFlashAttribute("mensaje", "Equipo creado correctamente");
+
+
+            return new ModelAndView("redirect:/equipo/mis-equipos");
+
+        } catch (Exception e) {
+
+            ModelMap model = new ModelMap();
+            model.put("error", "No se pudo crear el equipo: " + e.getMessage());
+            model.put("equipo", equipo);
+            return new ModelAndView("crear-equipo", model);
+
+        }
     }
+        @RequestMapping(path = "/equipo/mis-equipos", method = RequestMethod.GET)
+        public ModelAndView mostrarMisEquipos(HttpServletRequest request) {
+            ModelMap modelo = new ModelMap();
+
+            Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
+
+            // 3. Control de seguridad: si no hay sesión, derecho al login
+            if (idLogueado == null) {
+                return new ModelAndView("redirect:/login");
+            }
+
+            // 4. Buscamos los equipos usando el ID real que viene de la sesión
+            List<Equipo> misEquipos = servicioEquipo.buscarEquiposDelCapitan(idLogueado);
+
+            modelo.put("listaEquipos", misEquipos);
+
+            return new ModelAndView("mis-equipos", modelo);
+        }
 
 
-
+/*
     @RequestMapping(path = "/equipo/mis-equipos", method = RequestMethod.GET)
     public ModelAndView mostrarMisEquipos(@RequestParam(value = "jugadorId", required = false) Long jugadorId) {
         ModelMap modelo = new ModelMap();
@@ -88,5 +122,5 @@ public class ControladorEquipo {
         modelo.put("posiciones", Posicion.values());
 
         return new ModelAndView("gestionar-equipo", modelo);
-    }
+    }*/
 }
