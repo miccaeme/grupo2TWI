@@ -96,16 +96,18 @@ public class ControladorTorneo {
       equiposIds = new ArrayList<>();
     }
 
-    List<TorneoEquipo> relacionesExistentes = servicioTorneo.buscarEquiposPorTorneoId(id);
-    if (relacionesExistentes != null && !relacionesExistentes.isEmpty()) {
-      return new ModelAndView("redirect:/verTorneosCreados");
+    // 1. Filtramos las opciones vacías (-- Seleccionar Equipo --)
+    List<Long> idsValidos = new ArrayList<>();
+    for (Long eqId : equiposIds) {
+      if (eqId != null) {
+        idsValidos.add(eqId);
+      }
     }
 
+    servicioTorneo.asignarEquipos(id, idsValidos);
 
-    servicioTorneo.asignarEquipos(id, equiposIds);
-
-
-    return new ModelAndView("redirect:/verTorneosCreados");
+    // Redirigimos al detalle del torneo para ver reflejado el nuevo slot confirmado
+    return new ModelAndView("redirect:/verDetalleTorneo?id=" + id);
   }
 
 
