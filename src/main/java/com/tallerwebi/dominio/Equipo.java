@@ -54,4 +54,11 @@ public class Equipo {
 
     public void setCantidadMaximaSlots(int cupoMaximo) {
     }
+
+    public int getCantidadMaximaSlots() {
+        if (this.deporte != null) {
+            return this.deporte.getSlots();
+        }
+        return 0;
+    }
 }
