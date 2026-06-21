@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -90,13 +91,11 @@ public class ControladorTorneo {
   }
 
   @RequestMapping(value = "/guardarEquiposAsignados", method = RequestMethod.POST)
-  public ModelAndView guardarEquiposAsignados(@RequestParam("id") Long id,
-                                              @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds) {
+  public ModelAndView guardarEquiposAsignados(@RequestParam("id") Long id, @RequestParam(value = "equiposIds", required = false) List<Long> equiposIds, RedirectAttributes redirectAttributes) {
     if (equiposIds == null) {
       equiposIds = new ArrayList<>();
     }
 
-    // 1. Filtramos las opciones vacías (-- Seleccionar Equipo --)
     List<Long> idsValidos = new ArrayList<>();
     for (Long eqId : equiposIds) {
       if (eqId != null) {
@@ -105,8 +104,9 @@ public class ControladorTorneo {
     }
 
     servicioTorneo.asignarEquipos(id, idsValidos);
+    redirectAttributes.addFlashAttribute("mensajeExito", "Se ha confirmado la inscripción del equipo correctamente.");
 
-    // Redirigimos al detalle del torneo para ver reflejado el nuevo slot confirmado
+
     return new ModelAndView("redirect:/verDetalleTorneo?id=" + id);
   }
 
