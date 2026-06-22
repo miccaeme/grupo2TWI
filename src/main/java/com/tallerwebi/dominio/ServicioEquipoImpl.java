@@ -2,11 +2,9 @@ package com.tallerwebi.dominio;
 
 
 import com.tallerwebi.dominio.Enums.Posicion;
-import com.tallerwebi.dominio.contratos.RepositorioEquipo;
-import com.tallerwebi.dominio.contratos.RepositorioEquipoJugador;
-import com.tallerwebi.dominio.contratos.RepositorioJugador;
-import com.tallerwebi.dominio.contratos.RepositorioUsuario;
+import com.tallerwebi.dominio.contratos.*;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
+import com.tallerwebi.dominio.servicios.ServicioNotificacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +19,21 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     private RepositorioJugador repositorioJugador;
     private RepositorioEquipoJugador repositorioEquipoJugador;
     private RepositorioUsuario repositorioUsuario;
+    private ServicioNotificacion servicioNotificacion;
 
     @Autowired
     public ServicioEquipoImpl(RepositorioEquipo repositorioEquipo,
                               RepositorioJugador repositorioJugador,
                               RepositorioEquipoJugador repositorioEquipoJugador,
-                              RepositorioUsuario repositorioUsuario) {
+                              RepositorioUsuario repositorioUsuario,
+                              ServicioNotificacion servicioNotificacion
+                             ) {
         this.repositorioEquipo = repositorioEquipo;
         this.repositorioJugador = repositorioJugador;
         this.repositorioEquipoJugador = repositorioEquipoJugador;
         this.repositorioUsuario = repositorioUsuario;
+        this.servicioNotificacion = servicioNotificacion;
+
     }
 
 
@@ -52,6 +55,7 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         equipoJugador.setEquipo(equipo);
         equipoJugador.setJugador(creador.getJugador()); // Vinculamos su perfil de jugador
         equipoJugador.setCapitan(true);
+
 
 
         repositorioEquipoJugador.guardar(equipoJugador);
@@ -93,10 +97,10 @@ public class ServicioEquipoImpl implements ServicioEquipo {
 
     @Override
     public void asignarJugadorAlEquipoPorNickname(Long equipoId, String nickname, Posicion posicion) throws Exception {
-        // 1. Buscamos si el jugador realmente existe en el sistema
+
         Jugador jugador = repositorioJugador.buscarPorNickname(nickname);
         if (jugador == null) {
-            // Al tirar la excepción, nuestro controlador la atrapa y muestra el mensaje de error en la pantalla
+
             throw new Exception("El jugador con el nickname @" + nickname + " no existe.");
         }
 
@@ -116,9 +120,15 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         nuevoIntegrante.setEquipo(equipo);
         nuevoIntegrante.setJugador(jugador);
         nuevoIntegrante.setPosicion(posicion);
-        nuevoIntegrante.setCapitan(false); // Es un jugador normal, el creador ya es capitán
-
-        // 4. Guardamos la relación en la base de datos
+        nuevoIntegrante.setCapitan(false);
         repositorioEquipoJugador.guardar(nuevoIntegrante);
+
+        // 🔥 2. DESPUÉS disparamos el servicio de notificación
+        if (servicioNotificacion != null) {
+            servicioNotificacion.crearAvisoInscripcionDirecta(jugador, equipo, posicion);
+        } else {
+            throw new Exception("Error interno: El servicio de notificaciones es null. Revisar inyección.");
+        }
+
     }
 }
