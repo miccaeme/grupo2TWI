@@ -1,11 +1,9 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Enums.Posicion;
-import com.tallerwebi.dominio.contratos.RepositorioEquipo;
-import com.tallerwebi.dominio.contratos.RepositorioEquipoJugador;
-import com.tallerwebi.dominio.contratos.RepositorioJugador;
-import com.tallerwebi.dominio.contratos.RepositorioUsuario;
+import com.tallerwebi.dominio.contratos.*;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
+import com.tallerwebi.dominio.servicios.ServicioNotificacion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +17,8 @@ public class ServicioEquipoTest {
     private RepositorioJugador repositorioJugadorMock;
     private RepositorioEquipoJugador repositorioEquipoJugadorMock;
     private RepositorioUsuario repositorioUsuarioMock;
+    private RepositorioNotificacion repositorioNotificacionMock;
+    private ServicioNotificacion   servicioNotificacionMock;
 
     @BeforeEach
     public void init() {
@@ -27,13 +27,17 @@ public class ServicioEquipoTest {
         this.repositorioJugadorMock = mock(RepositorioJugador.class);
         this.repositorioEquipoJugadorMock = mock(RepositorioEquipoJugador.class);
         this.repositorioUsuarioMock = mock(RepositorioUsuario.class);
+        this.repositorioNotificacionMock = mock(RepositorioNotificacion.class);
+        this.servicioNotificacionMock = mock(ServicioNotificacion.class);
 
         // 2. Instans la impl real del servicio pasándole los mocks por construct
         this.servicioEquipo = new ServicioEquipoImpl(
                 this.repositorioEquipoMock,
                 this.repositorioJugadorMock,
                 this.repositorioEquipoJugadorMock,
-               this.repositorioUsuarioMock
+               this.repositorioUsuarioMock,
+                this.servicioNotificacionMock
+
         );
     }
 /*
