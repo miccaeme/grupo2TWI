@@ -43,6 +43,19 @@ public class ControladorPartido {
         return new ModelAndView("fixture", modelo);
     }
 
+    @RequestMapping(path = "/partido/detalle", method = RequestMethod.GET)
+    public ModelAndView verDetallePartido(@RequestParam("id") Long idPartido) {
+        ModelMap modelo = new ModelMap();
+
+        // Buscamos el partido por ID para traer sus datos, los equipos y sus goles actuales
+        Partido partido = servicioPartido.buscarPorId(idPartido);
+
+        modelo.put("partido", partido);
+
+        // Renderiza el archivo 'detalle-partido.html' que te pasé antes
+        return new ModelAndView("detalle-partido", modelo);
+    }
+
 
 
     @RequestMapping(path = "/partido/nuevo", method = RequestMethod.GET)

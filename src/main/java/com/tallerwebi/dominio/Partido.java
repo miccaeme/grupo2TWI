@@ -25,6 +25,10 @@ public class Partido {
 
     private Integer nroFecha;
 
+    private Integer golesLocal;
+
+    private Integer golesVisitante;
+
     @Enumerated(EnumType.STRING)
     private EstadoPartido estado;
 
@@ -77,6 +81,22 @@ public class Partido {
 
     public void setNroFecha(Integer nroFecha) {
         this.nroFecha = nroFecha;
+    }
+
+    public Integer getGolesLocal(){
+        return golesLocal;
+    }
+
+    public void setGolesLocal(Integer golesLocal){
+        this.golesLocal = golesLocal;
+    }
+
+    public Integer getGolesVisitante() {
+        return golesVisitante;
+    }
+
+    public void setGolesVisitante(Integer golesVisitante) {
+        this.golesVisitante = golesVisitante;
     }
 
     public EstadoPartido getEstado() {
