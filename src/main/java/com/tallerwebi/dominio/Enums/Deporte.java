@@ -11,7 +11,7 @@ public enum Deporte {
   public int getSlots() {
     switch (this) {
       case FUTBOL:
-        return 11;
+        return 5;
       case BASQUET:
         return 5;
       case PADEL:

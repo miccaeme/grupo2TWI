@@ -10,7 +10,7 @@ public class Jugador {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String nick;
+  private String nickname;
 
   @OneToOne
   private Usuario usuario;
@@ -23,12 +23,12 @@ public class Jugador {
     this.id = id;
   }
 
-  public String getNick() {
-    return nick;
+  public String getNickname() {
+    return nickname;
   }
 
-  public void setNick(String nick) {
-    this.nick = nick;
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
   }
 
   public Usuario getUsuario() {

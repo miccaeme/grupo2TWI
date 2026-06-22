@@ -39,7 +39,7 @@ public class ServicioEquipoImpl implements ServicioEquipo {
 
         //Referencia Enum
         int cupoMaximo = equipo.getDeporte().getSlots();
-        equipo.setCantidadMaximaSlots(cupoMaximo);
+
 
         Usuario creador = repositorioUsuario.buscarUsuarioPorId(idUsuarioLogueado);
         equipo.setCreador(creador);
@@ -57,23 +57,6 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         repositorioEquipoJugador.guardar(equipoJugador);
     }
 
-/*
-    @Override
-    public void asignarJugadorAlEquipo(Long idEquipo, Long idJugador, Posicion posicion) {
-        Equipo equipo = repositorioEquipo.buscarPorId(idEquipo);
-        Jugador jugador = repositorioJugador.buscarPorId(idJugador);
-
-
-        EquipoJugador relacionNueva = new EquipoJugador();
-        relacionNueva.setEquipo(equipo);
-        relacionNueva.setJugador(jugador);
-        relacionNueva.setPosicion(posicion);
-
-        relacionNueva.setCapitan(false);
-
-
-        repositorioEquipoJugador.guardar(relacionNueva);
-    } */
 
     @Override
     public List<Equipo> buscarEquiposPorNombre(String nombre) {
@@ -106,5 +89,36 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     @Override
     public List<EquipoJugador> obtenerJugadoresDelEquipo(Long idEquipo) {
         return repositorioEquipoJugador.buscarJugadoresPorEquipo(idEquipo);
+    }
+
+    @Override
+    public void asignarJugadorAlEquipoPorNickname(Long equipoId, String nickname, Posicion posicion) throws Exception {
+        // 1. Buscamos si el jugador realmente existe en el sistema
+        Jugador jugador = repositorioJugador.buscarPorNickname(nickname);
+        if (jugador == null) {
+            // Al tirar la excepción, nuestro controlador la atrapa y muestra el mensaje de error en la pantalla
+            throw new Exception("El jugador con el nickname @" + nickname + " no existe.");
+        }
+
+
+        Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
+        boolean yaExiste = repositorioEquipoJugador.elJugadorYaEstaEnElEquipo(equipoId, jugador.getId());
+        if (yaExiste) {
+            throw new Exception("El jugador @" + nickname + " ya forma parte de este equipo.");
+        }
+
+        int cantidadActual = repositorioEquipoJugador.contarJugadoresEnEquipo(equipoId);
+        if (cantidadActual >= equipo.getCantidadMaximaSlots()) {
+            throw new Exception("El equipo ya alcanzó el cupo máximo de " + equipo.getCantidadMaximaSlots() + " slots.");
+        }
+
+        EquipoJugador nuevoIntegrante = new EquipoJugador();
+        nuevoIntegrante.setEquipo(equipo);
+        nuevoIntegrante.setJugador(jugador);
+        nuevoIntegrante.setPosicion(posicion);
+        nuevoIntegrante.setCapitan(false); // Es un jugador normal, el creador ya es capitán
+
+        // 4. Guardamos la relación en la base de datos
+        repositorioEquipoJugador.guardar(nuevoIntegrante);
     }
 }

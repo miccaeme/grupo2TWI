@@ -93,37 +93,6 @@ public class ControladorEquipo {
         }
 
 
-/*
-    @RequestMapping(path = "/equipo/mis-equipos", method = RequestMethod.GET)
-    public ModelAndView mostrarMisEquipos(@RequestParam(value = "jugadorId", required = false) Long jugadorId) {
-        ModelMap modelo = new ModelMap();
-
-        //
-        Long idParaBuscar = (jugadorId != null) ? jugadorId : 1L;
-
-        // 2. Buscamos en el servicio los equipos de los cuales es Capitán usando ese id provisorio
-        List<Equipo> misEquipos = servicioEquipo.buscarEquiposDelCapitan(idParaBuscar);
-
-        modelo.put("listaEquipos", misEquipos);
-
-        return new ModelAndView("mis-equipos", modelo);
-    }
-
-    @RequestMapping(path = "/equipo/gestionar", method = RequestMethod.GET)
-    public ModelAndView mostrarGestionarEquipo(@RequestParam("id") Long idEquipo) {
-        ModelMap modelo = new ModelMap();
-
-        Equipo equipo = servicioEquipo.buscarEquipoPorId(idEquipo);
-        modelo.put("equipo", equipo);
-
-        List<EquipoJugador> actuales = servicioEquipo.obtenerJugadoresDelEquipo(idEquipo);
-        modelo.put("jugadoresEquipo", actuales);
-
-        modelo.put("posiciones", Posicion.values());
-
-        return new ModelAndView("gestionar-equipo", modelo);
-    }*/
-
     @RequestMapping(path = "/equipo/gestionar", method = RequestMethod.GET)
     public ModelAndView mostrarGestionarEquipo(@RequestParam("id") Long idEquipo, HttpServletRequest request) {
         ModelMap modelo = new ModelMap();
@@ -137,6 +106,7 @@ public class ControladorEquipo {
         // 2. Buscamos el equipo por su ID
         Equipo equipo = servicioEquipo.buscarEquipoPorId(idEquipo);
         modelo.put("equipo", equipo);
+        modelo.put("posiciones", Posicion.values());
 
         // 3. Traemos los integrantes actuales del equipo
         List<EquipoJugador> actuales = servicioEquipo.obtenerJugadoresDelEquipo(idEquipo);
@@ -156,5 +126,22 @@ public class ControladorEquipo {
         modelo.put("jugadoresEquipo", actuales);
 
         return new ModelAndView("gestionar-equipo", modelo);
+    }
+
+    @RequestMapping(path = "/equipo/asignar-jugador", method = RequestMethod.POST)
+    public ModelAndView asignarJugadorPorNickname(
+            @RequestParam("equipoId") Long equipoId,
+            @RequestParam("nickname") String nickname,
+            @RequestParam("posicion") Posicion posicion,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            servicioEquipo.asignarJugadorAlEquipoPorNickname(equipoId, nickname, posicion);
+            redirectAttributes.addFlashAttribute("mensaje", "¡Jugador " + nickname + " agregado con éxito!");
+        } catch(Exception e){
+            redirectAttributes.addFlashAttribute("error","Error: " +  e.getMessage());
+        }
+        return new ModelAndView("redirect:/equipo/gestionar?id="+equipoId);
+
     }
 }

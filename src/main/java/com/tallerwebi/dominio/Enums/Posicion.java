@@ -1,10 +1,13 @@
 package com.tallerwebi.dominio.Enums;
 
 public enum Posicion {
+  // Fútbol 5
   ARQUERO,
-  DEFENSOR,
-  MEDIOCAMPISTA,
-  DELANTERO,
+  DEFENSOR_CENTRAL,
+  LATERAL_IZQUIERDO,
+  LATERAL_DERECHO,
+  DELANTERO_PIVOT,
+
   BASE,
   ESCOLTA,
   ALERO,
@@ -15,6 +18,8 @@ public enum Posicion {
   PUNTA,
   OPUESTO,
   LIBERO,
+
+  //padel
   DRIVE,
   REVES,
 }

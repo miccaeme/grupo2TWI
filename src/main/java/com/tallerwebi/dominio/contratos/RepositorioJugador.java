@@ -6,4 +6,6 @@ public interface RepositorioJugador {
   void save(Jugador jugador);
 
   Jugador buscarPorId(Long id);
+
+    Jugador buscarPorNickname(String nickname);
 }
