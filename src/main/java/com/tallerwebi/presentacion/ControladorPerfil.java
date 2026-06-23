@@ -1,9 +1,11 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Equipo;
+import com.tallerwebi.dominio.Notificacion;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
 import com.tallerwebi.dominio.servicios.ServicioLogin;
+import com.tallerwebi.dominio.servicios.ServicioNotificacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -21,9 +23,10 @@ public class ControladorPerfil {
 
     @Autowired
     private ServicioLogin servicioLogin;
-
     @Autowired
     private ServicioEquipo servicioEquipo;
+    @Autowired
+    private ServicioNotificacion servicioNotificacion;
 
     @RequestMapping(path = "/perfil", method = RequestMethod.GET)
     public ModelAndView irAPerfil(HttpServletRequest request) {
@@ -35,8 +38,14 @@ public class ControladorPerfil {
         }
         Usuario usuarioLogueado = servicioLogin.buscarUsuarioPorId(idUsuario);
         model.put("usuarioLogueado", usuarioLogueado);
+
         List<Equipo> misEquipos = servicioEquipo.buscarEquiposDelCapitan(idUsuario);
         model.put("listaEquipos", misEquipos);
+
+        String nickDelUsuarioLogueado = usuarioLogueado.getJugador().getNickname();
+
+        List<Notificacion> novedades = servicioNotificacion.obtenerNotificacionesPorJugador(nickDelUsuarioLogueado);
+        model.put("notificaciones", novedades);
         return new ModelAndView("perfil", model);
     }
 }
