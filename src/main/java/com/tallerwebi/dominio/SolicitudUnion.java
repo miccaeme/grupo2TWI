@@ -1,23 +1,24 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import com.tallerwebi.dominio.Enums.EstadoSolicitud;
+
+import javax.persistence.*;
 
 @Entity
 public class SolicitudUnion {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private Equipo equipo;
     @ManyToOne
     private Jugador jugador;
-    private String estado;
+    @Enumerated
+    private EstadoSolicitud estado;
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -38,11 +39,11 @@ public class SolicitudUnion {
         this.jugador = jugador;
     }
 
-    public String getEstado() {
+    public EstadoSolicitud getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoSolicitud estado) {
         this.estado = estado;
     }
 }
