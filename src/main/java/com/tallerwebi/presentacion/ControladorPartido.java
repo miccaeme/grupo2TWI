@@ -1,12 +1,14 @@
     package com.tallerwebi.presentacion;
 
     import com.tallerwebi.dominio.Enums.TipoEstadistica;
+    import com.tallerwebi.dominio.Estadistica;
     import com.tallerwebi.dominio.Partido;
     import com.tallerwebi.dominio.excepcion.PartidoInvalidoException;
     import com.tallerwebi.dominio.servicios.ServicioEstadistica;
     import com.tallerwebi.dominio.servicios.ServicioPartido;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
     import org.springframework.ui.ModelMap;
     import org.springframework.web.bind.annotation.*;
     import org.springframework.web.servlet.ModelAndView;
@@ -46,12 +48,16 @@
             return new ModelAndView("fixture", modelo);
         }
 
-        //  detalle del partido
         @RequestMapping(path = "/partido/detalle", method = RequestMethod.GET)
         public ModelAndView verDetallePartido(@RequestParam("id") Long idPartido) {
             ModelMap modelo = new ModelMap();
             Partido partido = servicioPartido.buscarPorId(idPartido);
+
+            List<Estadistica> estadisticas = servicioEstadistica.obtenerEstadisticasDelPartido(idPartido);
+
             modelo.put("partido", partido);
+            modelo.put("estadisticas", estadisticas);
+
             return new ModelAndView("detalle-partido", modelo);
         }
 
@@ -124,33 +130,40 @@
         }
 
         @RequestMapping(path = "/partido/registrar-incidencia", method = RequestMethod.POST)
-        public ModelAndView registrarIncidencia(@RequestParam("idPartido") Long idPartido, @RequestParam("idJugador") Long idJugador, @RequestParam("tipoIncidencia") TipoEstadistica tipoEstadistica, @RequestParam(value = "bando", required = false) String bando) {
+        public ModelAndView registrarIncidencia(
+                @RequestParam("idPartido") Long idPartido,
+                @RequestParam("idJugador") Long idJugador,
+                @RequestParam("tipoIncidencia") TipoEstadistica tipoIncidencia,
+                @RequestParam("bando") String bando,
+                @RequestParam(value = "minuto", defaultValue = "0") Integer minuto) {
 
-            // Se lo pasamos al servicio con su nuevo tipo
-            servicioPartido.registrarIncidencia(idPartido, idJugador, tipoEstadistica, bando);
+
+            servicioPartido.registrarIncidencia(idPartido, idJugador, tipoIncidencia, bando, minuto);
 
             return new ModelAndView("redirect:/partido/detalle?id=" + idPartido);
         }
 
         @RequestMapping(path = "/partido/gestionar", method = RequestMethod.GET)
-        public ModelAndView gestionarPartido(
+        public String gestionarPartido(
                 @RequestParam("idPartido") Long idPartido,
-                @RequestParam(value = "bando", required = false) String bando) {
+                @RequestParam(value = "bando", required = false) String bando,
+                Model model) {
 
-            ModelAndView modelAndView = new ModelAndView("detalle-partido");
-
+            // 1. Buscamos el partido completo y lo mandamos a la vista
             Partido partido = servicioPartido.buscarPorId(idPartido);
-            modelAndView.addObject("partido", partido);
+            model.addAttribute("partido", partido);
 
-            List<JugadorDTO> jugadores = new ArrayList<>();
-            if (bando != null && !bando.isEmpty()) {
-                jugadores = servicioPartido.buscarJugadoresDelPartido(idPartido, bando);
+            List<Estadistica> estadisticas = servicioEstadistica.obtenerEstadisticasDelPartido(idPartido);
+            model.addAttribute("estadisticas", estadisticas);
+
+            // 3. Mantenemos el bando seleccionado y cargamos sus jugadores si aplica
+            model.addAttribute("bandoSeleccionado", bando);
+            if (bando != null) {
+                List<JugadorDTO> jugadores = servicioPartido.buscarJugadoresDelPartido(idPartido, bando);
+                model.addAttribute("jugadores", jugadores);
             }
 
-            modelAndView.addObject("jugadores", jugadores);
-            modelAndView.addObject("bandoSeleccionado", bando);
-
-            return modelAndView;
+            return "detalle-partido";
         }
 
     }

@@ -11,4 +11,6 @@ public interface RepositorioEstadistica {
     List<Estadistica> buscarPorJugadorYPartido(Long idJugador, Long idPartido);
 
     List<Estadistica> buscarPorJugador(Long idJugador);
+
+    List<Estadistica> buscarPorPartido(Long idPartido);
 }

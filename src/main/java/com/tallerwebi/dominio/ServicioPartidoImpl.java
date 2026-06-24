@@ -95,7 +95,7 @@ public class ServicioPartidoImpl implements ServicioPartido {
 
     @Override
     @Transactional
-    public void registrarIncidencia(Long idPartido, Long idJugador, TipoEstadistica tipoEstadistica, String bando) {
+    public void registrarIncidencia(Long idPartido, Long idJugador, TipoEstadistica tipoEstadistica, String bando, Integer minuto) {
         // 1. Buscamos las entidades completas de la base de datos
         Partido partido = repositorioPartido.buscarPorId(idPartido);
         Jugador jugador = repositorioJugador.buscarPorId(idJugador);
@@ -104,7 +104,7 @@ public class ServicioPartidoImpl implements ServicioPartido {
             throw new IllegalArgumentException("El partido o el jugador especificado no existe.");
         }
 
-        // Si la incidencia elegida en el modal es un GOL, sumamos al tanteador global del partido
+        //
         if (TipoEstadistica.GOL == tipoEstadistica) {
             if ("LOCAL".equals(bando)) {
                 partido.setGolesLocal((partido.getGolesLocal() != null ? partido.getGolesLocal() : 0) + 1);
@@ -114,14 +114,13 @@ public class ServicioPartidoImpl implements ServicioPartido {
             repositorioPartido.guardar(partido);
         }
 
-        //  creamos el obj usando la entidad estadistica
+        // Creamos el objeto Estadistica con el minuto real recibido
         Estadistica nuevaEstadistica = new Estadistica();
         nuevaEstadistica.setPartido(partido);
         nuevaEstadistica.setJugador(jugador);
         nuevaEstadistica.setTipo(tipoEstadistica);
-        nuevaEstadistica.setTiempo(0);
+        nuevaEstadistica.setTiempo(minuto);
 
-        // servicio de estadísticas para persistirlo en la tabla Estadistica
         servicioEstadistica.registrarAccionJugador(nuevaEstadistica);
     }
 }
