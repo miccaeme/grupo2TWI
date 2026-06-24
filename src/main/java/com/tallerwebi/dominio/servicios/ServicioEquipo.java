@@ -11,14 +11,13 @@ import java.util.List;
 public interface ServicioEquipo {
 
     void crearEquipo(Equipo equipo, Long jugadorId);
-
-   // void asignarJugadorAlEquipo(Long idEquipo);
     List<Equipo> buscarEquiposPorNombre(String nombre);
     Equipo buscarEquipoPorId(Long id);
     List<Equipo> listarTodos();
     List<Equipo> buscarEquiposDelCapitan(Long idJugador);
     List<EquipoJugador> obtenerJugadoresDelEquipo(Long idEquipo);
     void asignarJugadorAlEquipoPorNickname(Long equipoId, String nickname, Posicion posicion) throws Exception;
+    List<Posicion> obtenerPosicionesDisponiblesParaElEquipo(Long equipoId);
 
 
 }
