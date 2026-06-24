@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TorneosPro - Crear Partido</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="d-flex flex-column h-100 bg-dark text-white">
+
+<div th:replace="~{fragments/header :: header_fragment}"></div>
+
+<main role="main" class="container flex-shrink-0 my-5 py-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card border-secondary shadow-lg rounded-3" style="background-color: #1a1a1a;">
+                <div class="card-header border-secondary p-3" style="background-color: #111;">
+                    <h3 class="h6 mb-0 text-uppercase fw-bold text-success font-monospace">
+                        <i class="fas fa-plus-circle me-2"></i> Programar Nuevo Partido
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+                    <div th:if="${error != null}" class="alert alert-danger d-flex align-items-center small" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span th:text="${error}">Error al guardar el partido</span>
+                    </div>
+
+                    <form th:action="@{/partido/guardar}" th:object="${partido}" method="POST">
+
+                        <div class="mb-3">
+                            <label for="nroFecha" class="form-label small text-muted text-uppercase fw-bold">Número de Fecha</label>
+                            <input type="number" class="form-control bg-secondary bg-opacity-25 border-secondary text-white shadow-none"
+                                   id="nroFecha" th:field="*{nroFecha}" placeholder="Ej: 1" min="1" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label small text-muted text-uppercase fw-bold">Fecha del Encuentro</label>
+                            <input type="date" class="form-control bg-secondary bg-opacity-25 border-secondary text-white shadow-none"
+                                   id="fecha" th:field="*{fecha}" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="estado" class="form-label small text-muted text-uppercase fw-bold">Estado Inicial</label>
+                            <select class="form-select bg-secondary bg-opacity-25 border-secondary text-white shadow-none"
+                                    id="estado" th:field="*{estado}" required>
+                                <option value="PROGRAMADO">PROGRAMADO</option>
+                            </select>
+                        </div>
+
+                        <div class="alert alert-secondary bg-dark border-secondary text-muted small p-3 mb-4 rounded-3">
+                            <i class="fas fa-info-circle text-success me-2"></i>
+                            Los equipos e ID de torneo se asignan automáticamente al generar o vincular las llaves desde la administración de slots.
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-2 border-top border-secondary">
+                            <a th:href="@{/fixture}" class="btn btn-sm btn-outline-secondary rounded-pill text-white border-secondary px-3">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 fw-bold">
+                                <i class="fas fa-save me-1"></i> Guardar Partido
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer_fragment}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+</html>

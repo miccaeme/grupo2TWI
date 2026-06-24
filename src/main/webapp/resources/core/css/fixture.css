@@ -93,3 +93,13 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
 }
+
+.cronometro-vivo {
+    font-family: 'Courier New', Courier, monospace;
+    color: #2ed573;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+}
+.cronometro-vivo i {
+    color: #ff4757;
+}

@@ -80,18 +80,15 @@
                                 </div>
 
                                 <div class="pe-2 text-end" style="min-width: 120px;">
-                                    <span th:if="${partido.estado != null and partido.estado.name() == 'FINALIZADO'}" class="badge-finalizado">Finalizado</span>
-
-                                    <span th:if="${partido.estado != null and partido.estado.name() == 'EN_VIVO'}" class="badge text-bg-danger fw-bold text-uppercase px-2 py-1 small">En Vivo</span>
-
-                                    <span th:if="${partido.estado != null and partido.estado.name() == 'SUSPENDIDO'}" class="badge text-bg-warning text-dark fw-bold text-uppercase px-2 py-1 small">Suspendido</span>
-
-                                    <span th:if="${partido.estado == null or partido.estado.name() == 'PROGRAMADO'}" class="badge-pendiente">Pendiente</span>
+                                    <a th:href="@{/partido/detalle(id=${partido.id})}" class="btn btn-sm btn-outline-success px-3 rounded-pill" style="font-size: 0.75rem;">
+                                        <span th:if="${partido.estado != null and partido.estado.name() == 'FINALIZADO'}">Ver Detalle</span>
+                                        <span th:if="${partido.estado != null and partido.estado.name() == 'EN_VIVO'}" class="text-danger fw-bold">En Vivo</span>
+                                        <span th:if="${partido.estado == null or partido.estado.name() == 'PROGRAMADO'}">Gestionar</span>
+                                    </a>
                                 </div>
 
                             </div>
-                        </div>
-                    </div>
+                        </div> </div>
 
                 </div>
             </div>
