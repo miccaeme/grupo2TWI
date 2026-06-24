@@ -26,6 +26,12 @@ public class ServicioEstadisticaImpl implements ServicioEstadistica {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Estadistica> obtenerEstadisticasDelPartido(Long idPartido) {
+        return repositorioEstadistica.buscarPorPartido(idPartido);
+    }
+
+    @Override
     @Transactional
     public int calcularGolesDelJugadorEnPartido(Long idJugador, Long idPartido) {
         List<Estadistica> estadisticas = repositorioEstadistica.buscarPorJugadorYPartido(idJugador, idPartido);

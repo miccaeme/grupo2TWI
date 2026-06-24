@@ -46,4 +46,14 @@ public class RepositorioEstadisticaImpl implements RepositorioEstadistica {
                 .add(Restrictions.eq("j.id", idJugador)) // Filtramos SOLO por el jugador
                 .list();
     }
+
+    @Override
+    @SuppressWarnings({"deprecation", "unchecked"})
+    public List<Estadistica> buscarPorPartido(Long idPartido) {
+        return sessionFactory.getCurrentSession()
+                .createCriteria(Estadistica.class, "est")
+                .createAlias("est.partido", "p")
+                .add(Restrictions.eq("p.id", idPartido))
+                .list();
+    }
 }

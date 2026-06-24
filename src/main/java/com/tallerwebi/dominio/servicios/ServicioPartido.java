@@ -22,5 +22,6 @@ public interface ServicioPartido {
 
     List<JugadorDTO> buscarJugadoresDelPartido(Long idPartido, String bando);
 
-    void registrarIncidencia(Long idPartido, Long idJugador, TipoEstadistica tipoEstadistica, String bando);
+    void registrarIncidencia(Long idPartido, Long idJugador, TipoEstadistica tipoEstadistica, String bando, Integer minuto);
 }
+

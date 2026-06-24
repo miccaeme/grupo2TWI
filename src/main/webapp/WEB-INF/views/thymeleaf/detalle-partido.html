@@ -97,10 +97,33 @@
                         <i class="fas fa-bars-staggered text-success me-2"></i> Estadísticas e Incidencias del Partido
                     </h3>
                 </div>
-                <div class="card-body p-5 text-center text-muted">
-                    <div class="py-4">
+                <div class="card-body p-4">
+                    <div th:if="${#lists.isEmpty(estadisticas)}" class="text-center text-muted py-4">
                         <i class="far fa-clock fa-3x mb-3 opacity-50"></i>
                         <p class="mb-0 small">Los eventos y jugadas del partido aparecerán cronológicamente en esta sección.</p>
+                    </div>
+
+                    <div th:if="${not #lists.isEmpty(estadisticas)}" class="list-group list-group-flush">
+                        <div th:each="est : ${estadisticas}" class="list-group-item bg-transparent text-white border-secondary d-flex align-items-center justify-content-between py-3 px-1">
+                            <div class="d-flex align-items-center gap-3">
+                                <span th:if="${est.tipo.name() == 'GOL'}" class="fs-4">⚽</span>
+                                <span th:if="${est.tipo.name() == 'ASISTENCIA'}" class="fs-4">👟</span>
+                                <span th:if="${est.tipo.name() == 'FALTA'}" class="fs-4">⚠️</span>
+                                <span th:if="${est.tipo.name() == 'TARJETA_AMARILLA'}" class="fs-4">🟨</span>
+                                <span th:if="${est.tipo.name() == 'TARJETA_ROJA'}" class="fs-4">🟥</span>
+                                <span th:if="${est.tipo.name() == 'ATAJADA'}" class="fs-4">🧤</span>
+
+                                <div>
+                                    <span class="fw-bold text-success" th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : est.jugador.nombre) : 'Jugador'}">Jugador</span>
+                                    <span class="text-muted mx-1">—</span>
+                                    <span class="text-uppercase small font-monospace text-light tracking-wide" th:text="${est.tipo.name()}">INCIDENCIA</span>
+                                </div>
+                            </div>
+                            <span class="badge bg-dark border border-secondary text-muted font-monospace py-2 px-3">
+                                <span th:if="${est.tiempo != null}" th:text="|${est.tiempo}'|">0'</span>
+                                <span th:unless="${est.tiempo != null}">0'</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,13 +151,27 @@
                 <a th:href="@{/partido/detalle(id=${partido.id})}" class="btn-close btn-close-white"></a>
             </div>
 
-            <form th:action="@{/partido/gestionar}" method="GET" id="formIncidencia">
+            <form th:action="@{/partido/registrar-incidencia}" method="POST" id="formIncidencia">
                 <div class="modal-body p-4">
                     <input type="hidden" name="idPartido" th:value="${partido.id}">
 
+                    <input type="hidden" name="minuto" id="inputMinutoIncidencia" th:value="${param.minuto != null ? param.minuto : 0}">
+
                     <div class="mb-3">
                         <label class="form-label small text-muted text-uppercase fw-bold">Equipo involucrado</label>
-                        <select class="form-select border-secondary text-white shadow-none" id="selectEquipo" name="bando" style="background-color: #212529;" onchange="this.form.submit()" required>
+                        <select class="form-select border-secondary text-white shadow-none" id="selectEquipo" name="bando" style="background-color: #212529;"
+                                onchange="
+                                    let textoReloj = document.getElementById('tiempo-reloj').innerText;
+                                    let min = parseInt(textoReloj.split(':')[0]) || 0;
+                                    let f = document.getElementById('formIncidencia');
+                                    f.method = 'GET';
+                                    f.action = '/spring/partido/gestionar';
+
+                                    let inputMin = document.getElementById('inputMinutoIncidencia');
+                                    inputMin.value = min;
+
+                                    f.submit();
+                                " required>
                             <option value="" disabled th:selected="${bandoSeleccionado == null}" hidden style="background-color: #212529; color: #6c757d;">🔍 Seleccione un equipo...</option>
                             <option value="LOCAL" style="background-color: #212529; color: white;" th:selected="${bandoSeleccionado == 'LOCAL'}" th:text="${partido.equipoLocal != null ? partido.equipoLocal.nombre : 'Local'}">Local</option>
                             <option value="VISITANTE" style="background-color: #212529; color: white;" th:selected="${bandoSeleccionado == 'VISITANTE'}" th:text="${partido.equipoVisitante != null ? partido.equipoVisitante.nombre : 'Visitante'}">Visitante</option>
@@ -170,10 +207,12 @@
                 <div class="modal-footer border-secondary" style="background-color: #111;">
                     <a th:href="@{/partido/detalle(id=${partido.id})}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill text-white border-secondary">Cancelar</a>
 
-                    <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 fw-bold"
-                            th:disabled="${#lists.isEmpty(jugadores)}"
-                            th:data-url="@{/partido/registrar-incidencia}"
-                            onclick="this.form.method='POST'; this.form.action=this.getAttribute('data-url');">
+                    <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 fw-bold" th:disabled="${#lists.isEmpty(jugadores)}"
+                            onclick="
+                                let textoReloj = document.getElementById('tiempo-reloj').innerText;
+                                let min = parseInt(textoReloj.split(':')[0]) || 0;
+                                document.getElementById('inputMinutoIncidencia').value = min;
+                            ">
                         Guardar Incidencia
                     </button>
                 </div>
