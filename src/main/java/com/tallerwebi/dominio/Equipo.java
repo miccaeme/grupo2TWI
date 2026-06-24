@@ -15,7 +15,7 @@ public class Equipo {
     private String nombre;
 
     @Enumerated(EnumType.STRING)
-    private Deporte deporte; //cambiar por torneo manyToOne? pero cuando cree el equipo no me va a pedir de que deporte es , ni en que posicion va a jugar el capitan
+    private Deporte deporte;
 
     @ManyToOne
     private Usuario creador;
