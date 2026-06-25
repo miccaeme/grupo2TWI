@@ -61,7 +61,7 @@
             return new ModelAndView("detalle-partido", modelo);
         }
 
-        // formulario para nuevo partido
+
         @RequestMapping(path = "/partido/nuevo", method = RequestMethod.GET)
         public ModelAndView irACrearPartido() {
             ModelMap modelo = new ModelMap();

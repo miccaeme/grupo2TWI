@@ -79,12 +79,12 @@ public class ControladorEquipo {
 
             Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
 
-            // 3. Control de seguridad: si no hay sesión, derecho al login
+            // Control de seguridad: si no hay sesión, derecho al login
             if (idLogueado == null) {
                 return new ModelAndView("redirect:/login");
             }
 
-            // 4. Buscamos los equipos usando el ID real que viene de la sesión
+            // Buscamos los equipos usando el ID real que viene de la sesión
             List<Equipo> misEquipos = servicioEquipo.buscarEquiposDelCapitan(idLogueado);
 
             modelo.put("listaEquipos", misEquipos);

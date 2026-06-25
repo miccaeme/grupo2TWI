@@ -9,7 +9,7 @@ public class JugadorDTO {
     public JugadorDTO() {
     }
 
-    // Constructor cómodo para armarlo desde tu Servicio
+
     public JugadorDTO(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;

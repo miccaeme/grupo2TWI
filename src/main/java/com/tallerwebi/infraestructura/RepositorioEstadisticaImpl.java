@@ -30,10 +30,10 @@ public class RepositorioEstadisticaImpl implements RepositorioEstadistica {
     public List<Estadistica> buscarPorJugadorYPartido(Long idJugador, Long idPartido) {
         return sessionFactory.getCurrentSession()
                 .createCriteria(Estadistica.class, "est")
-                .createAlias("est.jugador", "j")  // Join con Jugador
-                .createAlias("est.partido", "p")  // Join con Partido (Fixture)
-                .add(Restrictions.eq("j.id", idJugador))  // Filtro por Jugador
-                .add(Restrictions.eq("p.id", idPartido))  // Filtro por Partido
+                .createAlias("est.jugador", "j")
+                .createAlias("est.partido", "p")
+                .add(Restrictions.eq("j.id", idJugador))
+                .add(Restrictions.eq("p.id", idPartido))
                 .list();
     }
 
@@ -43,7 +43,7 @@ public class RepositorioEstadisticaImpl implements RepositorioEstadistica {
         return sessionFactory.getCurrentSession()
                 .createCriteria(Estadistica.class, "est")
                 .createAlias("est.jugador", "j")
-                .add(Restrictions.eq("j.id", idJugador)) // Filtramos SOLO por el jugador
+                .add(Restrictions.eq("j.id", idJugador))
                 .list();
     }
 

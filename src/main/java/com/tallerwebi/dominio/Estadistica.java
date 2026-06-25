@@ -18,6 +18,8 @@ public class Estadistica {
     @ManyToOne
     private Jugador jugador;
 
+    //local visitante enum.
+
     @Enumerated(EnumType.STRING)
     private TipoEstadistica tipo;
 
