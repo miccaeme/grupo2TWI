@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,20 +44,15 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         //Referencia Enum
         int cupoMaximo = equipo.getDeporte().getSlots();
 
-
         Usuario creador = repositorioUsuario.buscarUsuarioPorId(idUsuarioLogueado);
         equipo.setCreador(creador);
 
-
         repositorioEquipo.guardar(equipo);
 
-        //el creador es el primer integrante y Capitan
         EquipoJugador equipoJugador = new EquipoJugador();
         equipoJugador.setEquipo(equipo);
         equipoJugador.setJugador(creador.getJugador()); // Vinculamos su perfil de jugador
         equipoJugador.setCapitan(true);
-
-
 
         repositorioEquipoJugador.guardar(equipoJugador);
     }
@@ -72,7 +68,8 @@ public class ServicioEquipoImpl implements ServicioEquipo {
 
         return repositorioEquipo.buscarPorId(id);
     }
-    @Transactional(readOnly = true)
+
+    @Override
     public List<Equipo> listarTodos() {
 
         return repositorioEquipo.findAll();
@@ -123,12 +120,46 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         nuevoIntegrante.setCapitan(false);
         repositorioEquipoJugador.guardar(nuevoIntegrante);
 
-        // 🔥 2. DESPUÉS disparamos el servicio de notificación
+
         if (servicioNotificacion != null) {
             servicioNotificacion.crearAvisoInscripcionDirecta(jugador, equipo, posicion);
         } else {
             throw new Exception("Error interno: El servicio de notificaciones es null. Revisar inyección.");
         }
+
+    }
+
+    @Override
+    public List<Posicion> obtenerPosicionesDisponiblesParaElEquipo(Long equipoId) {
+        Equipo equipo = repositorioEquipo.buscarPorId(equipoId);
+        List<EquipoJugador> actuales = repositorioEquipoJugador.buscarJugadoresPorEquipo(equipoId);
+        List<Posicion> posicionesOcupadas = new ArrayList<>();
+        for (EquipoJugador ej : actuales) {
+            if (ej.getPosicion() != null) {
+                posicionesOcupadas.add(ej.getPosicion());
+            }
+        }
+        List<Posicion>posicionesDisponibles = new ArrayList<>();
+
+        if(equipo.getDeporte()!=null) {
+            for(Posicion pos : Posicion.values()) {
+                String nombrePos = pos.name();
+                boolean perteneceAlDeporte = false;
+
+                if(equipo.getDeporte().name().equals("FUTBOL")) {
+                    perteneceAlDeporte = nombrePos.equals("ARQUERO") ||
+                            nombrePos.equals("DEFENSOR_CENTRAL") ||
+                            nombrePos.equals("LATERAL_IZQUIERDO") ||
+                            nombrePos.equals("LATERAL_DERECHO") ||
+                            nombrePos.equals("DELANTERO_PIVOT");
+
+                }
+                if(perteneceAlDeporte && !posicionesDisponibles.contains(pos)) {
+                    posicionesDisponibles.add(pos);
+                }
+            }
+        }
+    return posicionesDisponibles;
 
     }
 }

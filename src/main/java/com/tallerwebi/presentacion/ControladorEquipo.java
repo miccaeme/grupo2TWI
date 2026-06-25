@@ -4,7 +4,9 @@ import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.EquipoJugador;
+import com.tallerwebi.dominio.SolicitudUnion;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
+import com.tallerwebi.dominio.servicios.ServicioSolicitudUnion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,11 +26,14 @@ import java.util.List;
 public class ControladorEquipo {
 
     private ServicioEquipo servicioEquipo;
+    private ServicioSolicitudUnion servicioSolicitudUnion;
+
 
     @Autowired
-    public ControladorEquipo(ServicioEquipo servicioEquipo) {
+    public ControladorEquipo(ServicioEquipo servicioEquipo, ServicioSolicitudUnion servicioSolicitudUnion) {
 
         this.servicioEquipo = servicioEquipo;
+        this.servicioSolicitudUnion = servicioSolicitudUnion;
     }
 
 
@@ -79,12 +85,10 @@ public class ControladorEquipo {
 
             Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
 
-            // Control de seguridad: si no hay sesión, derecho al login
             if (idLogueado == null) {
                 return new ModelAndView("redirect:/login");
             }
 
-            // Buscamos los equipos usando el ID real que viene de la sesión
             List<Equipo> misEquipos = servicioEquipo.buscarEquiposDelCapitan(idLogueado);
 
             modelo.put("listaEquipos", misEquipos);
@@ -97,34 +101,27 @@ public class ControladorEquipo {
     public ModelAndView mostrarGestionarEquipo(@RequestParam("id") Long idEquipo, HttpServletRequest request) {
         ModelMap modelo = new ModelMap();
 
-        // 1. Control de seguridad básico (que esté logueado)
         Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
         if (idLogueado == null) {
             return new ModelAndView("redirect:/login");
         }
-
-        // 2. Buscamos el equipo por su ID
         Equipo equipo = servicioEquipo.buscarEquipoPorId(idEquipo);
         modelo.put("equipo", equipo);
-        modelo.put("posiciones", Posicion.values());
-
-        // 3. Traemos los integrantes actuales del equipo
         List<EquipoJugador> actuales = servicioEquipo.obtenerJugadoresDelEquipo(idEquipo);
 
-
         for (EquipoJugador ej : actuales) {
-
             if (ej.getPosicion() != null) {
                 modelo.put("JUGADOR_" + ej.getPosicion().name(), ej.getJugador());
-            } else {
 
+            } else if (ej.getCapitan() != null && ej.getCapitan()) {
                 modelo.put("JUGADOR_CAPITAN", ej.getJugador());
             }
         }
-
-
         modelo.put("jugadoresEquipo", actuales);
-
+       List<Posicion>posicionesDisponibles = servicioEquipo.obtenerPosicionesDisponiblesParaElEquipo(idEquipo);
+        modelo.put("posiciones", posicionesDisponibles);
+        List<SolicitudUnion> pendientes = servicioSolicitudUnion.obtenerSolicitudesPendientesPorEquipo(idEquipo);
+        modelo.put("solicitudesPendientes", pendientes);
         return new ModelAndView("gestionar-equipo", modelo);
     }
 
@@ -143,5 +140,20 @@ public class ControladorEquipo {
         }
         return new ModelAndView("redirect:/equipo/gestionar?id="+equipoId);
 
+    }
+
+    @RequestMapping(path = "/verEquiposCreados", method = RequestMethod.GET)
+    public ModelAndView mostrarEquiposCreados(HttpServletRequest request) {
+        ModelMap modelo = new ModelMap();
+
+        Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        if (idLogueado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+        List<Equipo> todosLosEquipos = servicioEquipo.listarTodos();
+
+        modelo.put("equipos", todosLosEquipos);
+
+        return new ModelAndView("verEquiposCreados", modelo);
     }
 }

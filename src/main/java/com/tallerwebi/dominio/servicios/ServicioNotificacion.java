@@ -10,4 +10,6 @@ import java.util.List;
 public interface ServicioNotificacion {
     void crearAvisoInscripcionDirecta(Jugador jugador, Equipo equipo, Posicion posicion);
     List<Notificacion>obtenerNotificacionesPorJugador(String nickname);
+    void crearAvisoSolicitudAceptada(Jugador jugador, Equipo equipo);
+    void crearAvisoSolicitudRechazada(Jugador jugador , Equipo equipo);
 }

@@ -33,4 +33,25 @@ public class ServicioNotificacionImpl implements ServicioNotificacion {
     public List<Notificacion> obtenerNotificacionesPorJugador(String nickname) {
         return repositorioNotificacion.obtenerNotificacionesPorJugador(nickname);
     }
+
+    @Override
+    public void crearAvisoSolicitudAceptada(Jugador jugador, Equipo equipo) {
+        Notificacion aviso = new Notificacion();
+        aviso.setJugador(jugador);
+        aviso.setMensaje("¡Tu solicitud fue aprobada! Ya formás parte del equipo '" + equipo.getNombre() + "'.");
+        aviso.setLeida(false);
+
+        repositorioNotificacion.guardar(aviso);
+
+    }
+
+    @Override
+    public void crearAvisoSolicitudRechazada(Jugador jugador, Equipo equipo) {
+        Notificacion aviso = new Notificacion();
+        aviso.setJugador(jugador);
+        aviso.setMensaje("¡Tu solicitud para unirte al equipo '" + equipo.getNombre() + "'fue rechazada.");
+        aviso.setLeida(false);
+
+        repositorioNotificacion.guardar(aviso);
+    }
 }
