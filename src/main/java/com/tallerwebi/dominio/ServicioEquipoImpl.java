@@ -97,7 +97,6 @@ public class ServicioEquipoImpl implements ServicioEquipo {
 
         Jugador jugador = repositorioJugador.buscarPorNickname(nickname);
         if (jugador == null) {
-
             throw new Exception("El jugador con el nickname @" + nickname + " no existe.");
         }
 
@@ -124,7 +123,7 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         if (servicioNotificacion != null) {
             servicioNotificacion.crearAvisoInscripcionDirecta(jugador, equipo, posicion);
         } else {
-            throw new Exception("Error interno: El servicio de notificaciones es null. Revisar inyección.");
+            throw new Exception("Error interno: El servicio de notificaciones no funciona.");
         }
 
     }
@@ -153,6 +152,12 @@ public class ServicioEquipoImpl implements ServicioEquipo {
                             nombrePos.equals("LATERAL_DERECHO") ||
                             nombrePos.equals("DELANTERO_PIVOT");
 
+                }else if (equipo.getDeporte().name().equals("BASQUET")) {
+                    perteneceAlDeporte = nombrePos.equals("BASE") ||
+                            nombrePos.equals("ESCOLTA")||
+                            nombrePos.equals("ALERO") ||
+                            nombrePos.equals("PIVOT") ||
+                            nombrePos.equals("ALA_PIVOT");
                 }
                 if(perteneceAlDeporte && !posicionesDisponibles.contains(pos)) {
                     posicionesDisponibles.add(pos);
