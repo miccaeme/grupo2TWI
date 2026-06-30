@@ -48,8 +48,9 @@
         <table class="table table-dark table-dark-custom mb-0">
           <thead>
           <tr>
-            <th scope="col" class="ps-4 py-3" style="width: 45%;">Nombre del Equipo</th>
-            <th scope="col" class="py-3" style="width: 30%;">Capitán</th>
+            <th scope="col" class="ps-4 py-3" style="width: 25%;">Nombre del Equipo</th>
+            <th scope="col" class="py-3" style="width: 25%;">Capitán</th>
+            <th scope="col" class="py-3" style="width: 25%;">Deporte</th>
             <th scope="col" class="text-center py-3" style="width: 25%;">Acciones</th>
           </tr>
           </thead>
@@ -58,12 +59,17 @@
 
             <td class="ps-4 py-3 fw-semibold text-white">
               <i class="fas fa-tshirt text-success me-2"></i>
-              <span th:text="${unEquipo.nombre}">Los Borrachos de la 20</span>
+              <span th:text="${unEquipo.nombre}">Los  de la 20</span>
+            </td>
+
+            <td class="py-3 text-secondary">
+            <i class="fas fa-user text-warning me-2 opacity-75"></i>
+            <span th:text="${unEquipo.creador != null and unEquipo.creador.jugador != null ? unEquipo.creador.jugador.nickname : 'Sin asignar'}">@capitan10</span>
             </td>
 
             <td class="py-3 text-secondary">
               <i class="fas fa-user text-warning me-2 opacity-75"></i>
-              <span th:text="${unEquipo.creador != null and unEquipo.creador.jugador != null ? unEquipo.creador.jugador.nickname : 'Sin asignar'}">@capitan10</span>
+              <span th:text="${unEquipo.deporte}">Futbol</span>
             </td>
 
             <td class="text-center py-3">

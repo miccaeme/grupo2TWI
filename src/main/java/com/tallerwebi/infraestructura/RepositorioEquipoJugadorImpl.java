@@ -57,25 +57,25 @@ public class RepositorioEquipoJugadorImpl implements RepositorioEquipoJugador {
 
     @Override
     public int contarJugadoresEnEquipo(Long equipoId) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EquipoJugador.class);
-        criteria.createAlias("equipo", "e");
-        criteria.add(Restrictions.eq("e.id", equipoId));
-
-        // Contamos las filas devueltas (nivel principiante: traemos la lista y vemos su size)
-        return criteria.list().size();
+        return sessionFactory.getCurrentSession()
+                .createCriteria(EquipoJugador.class, "ej")
+                .createAlias("ej.equipo", "e")
+                .add(Restrictions.eq("e.id", equipoId))
+                .list()
+                .size();
     }
 
     @Override
     public boolean elJugadorYaEstaEnElEquipo(Long equipoId, Long jugadorId) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EquipoJugador.class);
-        criteria.createAlias("equipo", "e");
-        criteria.createAlias("jugador", "j");
+        List<?> resultado = sessionFactory.getCurrentSession()
+                .createCriteria(EquipoJugador.class, "ej")
+                .createAlias("ej.equipo", "e")
+                .createAlias("ej.jugador", "j")
+                .add(Restrictions.eq("e.id", equipoId))
+                .add(Restrictions.eq("j.id", jugadorId))
+                .list();
 
-        criteria.add(Restrictions.eq("e.id", equipoId));
-        criteria.add(Restrictions.eq("j.id", jugadorId));
-
-        List<?> resultado = criteria.list();
-        return !resultado.isEmpty(); // Si no está vacía, es porque ya juega en este equipo
+        return !resultado.isEmpty(); // si nno esta vacio es porque ya juega en el equipo.
     }
 
 }
