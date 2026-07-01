@@ -248,7 +248,7 @@
                                     if(inputMin) { inputMin.value = min; }
                                     f.submit();
                                 " required>
-                            <option value="" disabled th:selected="${bandoSeleccionado == null}" hidden style="background-color: #212529; color: #6c757d;">🔍 Seleccione un equipo...</option>
+                            <option value="" disabled th:selected="${bandoSeleccionado == null}" hidden style="background-color: #212529; color: #6c757d;">Seleccione un equipo...</option>
                             <option value="LOCAL" style="background-color: #212529; color: white;" th:selected="${bandoSeleccionado == 'LOCAL'}" th:text="${partido.equipoLocal != null ? partido.equipoLocal.nombre : 'Local'}">Local</option>
                             <option value="VISITANTE" style="background-color: #212529; color: white;" th:selected="${bandoSeleccionado == 'VISITANTE'}" th:text="${partido.equipoVisitante != null ? partido.equipoVisitante.nombre : 'Visitante'}">Visitante</option>
                         </select>
@@ -278,7 +278,7 @@
                         <label class="form-label small text-muted text-uppercase fw-bold">Jugador</label>
                         <select class="form-select border-secondary text-white shadow-none" id="selectJugador" name="idJugador" style="background-color: #212529;" th:disabled="${#lists.isEmpty(jugadores)}" required>
                             <option value="" style="background-color: #212529; color: #6c757d;" th:if="${#lists.isEmpty(jugadores)}">Primero seleccione un equipo...</option>
-                            <option value="" style="background-color: #212529; color: #6c757d;" th:if="${not #lists.isEmpty(jugadores)}">🔍 Seleccione un jugador...</option>
+                            <option value="" style="background-color: #212529; color: #6c757d;" th:if="${not #lists.isEmpty(jugadores)}">Seleccione un jugador...</option>
                             <option th:each="jugador : ${jugadores}" th:value="${jugador.id}" th:text="${jugador.nombre}" style="background-color: #212529; color: white;"></option>
                         </select>
                     </div>
@@ -309,9 +309,9 @@
                                 <option value="TRIPLE" style="background-color: #212529; color: white;">🏀 Triple (3 Pts)</option>
                                 <option value="DOBLE" style="background-color: #212529; color: white;">🏀 Doble (2 Pts)</option>
                                 <option value="SIMPLE" style="background-color: #212529; color: white;">🎯 Tiro Libre (1 Pt)</option>
-                                <option value="REBOTE" style="background-color: #212529; color: white;">🗑️ Rebote</option>
-                                <option value="ASISTENCIA_BASKET" style="background-color: #212529; color: white;">👟 Asistencia</option>
-                                <option value="TAPON" style="background-color: #212529; color: white;">❌ Tapón / Bloqueo</option>
+                                <option value="REBOTE" style="background-color: #212529; color: white;">Rebote</option>
+                                <option value="ASISTENCIA_BASKET" style="background-color: #212529; color: white;">Asistencia</option>
+                                <option value="TAPON" style="background-color: #212529; color: white;" >Tapón / Bloqueo</option>
                             </th:block>
                         </select>
                     </div>
