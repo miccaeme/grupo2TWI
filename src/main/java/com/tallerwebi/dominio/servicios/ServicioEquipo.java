@@ -22,4 +22,5 @@ public interface ServicioEquipo {
     List<Equipo> listarPorDeporte(Deporte deporte);
 
 
+    void asignarPosicionAlCapitan(Long equipoId, Long idLogueado, Posicion posicion) throws Exception;
 }
