@@ -6,5 +6,14 @@ public enum TipoEstadistica {
     FALTA,
     TARJETA_AMARILLA,
     TARJETA_ROJA,
-    ATAJADA
+    ATAJADA,
+    PUNTO_VOLEY,
+    ACE,
+    BLOQUEO,
+    TRIPLE,
+    DOBLE,
+    SIMPLE,
+    REBOTE,
+    ASISTENCIA_BASKET,
+    TAPON
 }

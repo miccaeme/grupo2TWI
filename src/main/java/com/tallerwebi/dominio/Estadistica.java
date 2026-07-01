@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Enums.Bando;
 import com.tallerwebi.dominio.Enums.TipoEstadistica;
 
 import javax.persistence.*;
@@ -22,6 +23,9 @@ public class Estadistica {
 
     @Enumerated(EnumType.STRING)
     private TipoEstadistica tipo;
+
+    @Enumerated(EnumType.STRING)
+    private Bando bando;
 
     private Integer tiempo;
 
@@ -60,6 +64,14 @@ public class Estadistica {
 
     public void setTipo(TipoEstadistica tipo) {
         this.tipo = tipo;
+    }
+
+    public Bando getBando() {
+        return bando;
+    }
+
+    public void setBando(Bando bando) {
+        this.bando = bando;
     }
 
     public Integer getTiempo() {

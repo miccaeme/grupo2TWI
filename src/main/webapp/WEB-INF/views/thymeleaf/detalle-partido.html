@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -45,11 +45,13 @@
 
                     <div class="text-center mb-2">
                         <span class="text-success fw-bold text-uppercase tracking-wider small font-monospace">
-                            <i class="far fa-calendar-alt me-1"></i> Fecha <span th:text="${partido.nroFecha}">1</span>
+                            <i class="far fa-calendar-alt me-1"></i>
+                            <span th:text="${partido.torneo != null ? partido.torneo.deporte.name() : 'FUTBOL'}">FUTBOL</span> -
+                            Fecha <span th:text="${partido.nroFecha}">1</span>
                         </span>
                     </div>
 
-                    <div class="text-center mb-2" id="contenedor-cronometro" style="display: none;"
+                    <div class="text-center mb-2" id="contenedor-cronometro"
                          th:data-estado="${partido.estado != null ? partido.estado.name() : 'PROGRAMADO'}"
                          th:data-id="${partido.id}">
                         <span class="cronometro-vivo fw-bold">
@@ -82,10 +84,37 @@
                         <span id="estado-partido-badge"
                               th:classappend="${partido.estado != null and partido.estado.name() == 'EN_VIVO' ? 'bg-danger text-white' : 'bg-secondary text-white'}"
                               class="badge text-uppercase px-3 py-2 font-monospace border border-light border-opacity-25 shadow-sm"
-                              style="font-size: 0.75rem; letter-spacing: 1px;"
-                              th:text="${partido.estado != null ? partido.estado.name() : 'PROGRAMADO'}">
-                            PROGRAMADO
+                              style="font-size: 0.75rem; letter-spacing: 1px;">
+                            <i th:if="${partido.estado != null and partido.estado.name() == 'FINALIZADO'}" class="fas fa-flag me-1"></i>
+                            <span th:text="${partido.estado != null ? partido.estado.name() : 'PROGRAMADO'}">PROGRAMADO</span>
                         </span>
+                    </div>
+
+                    <div th:if="${partido.estado != null and partido.estado.name() == 'FINALIZADO'}" class="text-center mt-3">
+
+                        <div class="mb-2">
+                            <span th:if="${partido.golesLocal > partido.golesVisitante}" class="text-success fw-bold small text-uppercase tracking-wider">
+                                <i class="fas fa-trophy me-1 text-warning"></i> Ganador: <span th:text="${partido.equipoLocal.nombre}">ARGENTINA</span>
+                            </span>
+                            <span th:if="${partido.golesVisitante > partido.golesLocal}" class="text-success fw-bold small text-uppercase tracking-wider">
+                                <i class="fas fa-trophy me-1 text-warning"></i> Ganador: <span th:text="${partido.equipoVisitante.nombre}">FRANCIA</span>
+                            </span>
+                            <span th:if="${partido.golesLocal == partido.golesVisitante}" class="text-muted fw-bold small text-uppercase tracking-wider">
+                                <i class="fas fa-handshake me-1"></i> Partido Empatado
+                            </span>
+                        </div>
+
+                        <div th:if="${estadisticas != null and #lists.size(estadisticas) > 0}" class="d-inline-block bg-dark border border-secondary border-opacity-50 rounded-pill px-3 py-1 mt-1 shadow-sm">
+                            <small class="text-muted text-uppercase font-monospace" style="font-size: 0.7rem;">
+                                <i class="fas fa-star text-warning me-1"></i> Destacado:
+                                <span class="text-white fw-bold" th:text="${estadisticas[0].jugador.nickname != null ? estadisticas[0].jugador.nickname : estadisticas[0].jugador.nombre}">neo</span>
+                                <span class="text-muted">
+                                    <th:block th:if="${estadisticas[0].tipo.name() == 'GOL' or estadisticas[0].tipo.name() == 'PUNTO_VOLEY' or estadisticas[0].tipo.name() == 'TRIPLE' or estadisticas[0].tipo.name() == 'DOBLE'}">(Anotación clave) 🔥</th:block>
+                                    <th:block th:if="${estadisticas[0].tipo.name() == 'TARJETA_ROJA'}">(Expulsado) 🟥</th:block>
+                                    <th:block th:if="${estadisticas[0].tipo.name() != 'GOL' and estadisticas[0].tipo.name() != 'PUNTO_VOLEY' and estadisticas[0].tipo.name() != 'TRIPLE' and estadisticas[0].tipo.name() != 'DOBLE' and estadisticas[0].tipo.name() != 'TARJETA_ROJA'}">(Participación importante)</th:block>
+                                </span>
+                            </small>
+                        </div>
                     </div>
 
                 </div>
@@ -93,37 +122,87 @@
 
             <div class="card border-secondary shadow-lg rounded-3" style="background-color: #1a1a1a;">
                 <div class="card-header border-secondary p-3" style="background-color: #111;">
-                    <h3 class="h6 mb-0 text-uppercase fw-bold text-white small">
+                    <h3 class="h6 mb-0 text-uppercase fw-bold text-white small text-center">
                         <i class="fas fa-bars-staggered text-success me-2"></i> Estadísticas e Incidencias del Partido
                     </h3>
                 </div>
                 <div class="card-body p-4">
+
                     <div th:if="${#lists.isEmpty(estadisticas)}" class="text-center text-muted py-4">
                         <i class="far fa-clock fa-3x mb-3 opacity-50"></i>
-                        <p class="mb-0 small">Los eventos y jugadas del partido aparecerán cronológicamente en esta sección.</p>
+                        <p class="mb-0 small">Los eventos y jugadas del partido aparecerán en las columnas correspondientes.</p>
                     </div>
 
-                    <div th:if="${not #lists.isEmpty(estadisticas)}" class="list-group list-group-flush">
-                        <div th:each="est : ${estadisticas}" class="list-group-item bg-transparent text-white border-secondary d-flex align-items-center justify-content-between py-3 px-1">
-                            <div class="d-flex align-items-center gap-3">
-                                <span th:if="${est.tipo.name() == 'GOL'}" class="fs-4">⚽</span>
-                                <span th:if="${est.tipo.name() == 'ASISTENCIA'}" class="fs-4">👟</span>
-                                <span th:if="${est.tipo.name() == 'FALTA'}" class="fs-4">⚠️</span>
-                                <span th:if="${est.tipo.name() == 'TARJETA_AMARILLA'}" class="fs-4">🟨</span>
-                                <span th:if="${est.tipo.name() == 'TARJETA_ROJA'}" class="fs-4">🟥</span>
-                                <span th:if="${est.tipo.name() == 'ATAJADA'}" class="fs-4">🧤</span>
+                    <div th:if="${not #lists.isEmpty(estadisticas)}" class="row g-4">
 
-                                <div>
-                                    <span class="fw-bold text-success" th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : est.jugador.nombre) : 'Jugador'}">Jugador</span>
-                                    <span class="text-muted mx-1">—</span>
-                                    <span class="text-uppercase small font-monospace text-light tracking-wide" th:text="${est.tipo.name()}">INCIDENCIA</span>
+                        <div class="col-md-6 border-end border-secondary border-opacity-50">
+                            <div class="text-center pb-2 mb-2 border-bottom border-secondary">
+                                <span class="fw-bold text-uppercase tracking-wider small text-success"
+                                      th:text="${partido.equipoLocal != null ? partido.equipoLocal.nombre : 'LOCAL'}">LOCAL</span>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div th:each="est : ${estadisticas}" th:if="${est.bando != null and est.bando.name() == 'LOCAL'}"
+                                     class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center justify-content-between py-2 px-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span th:if="${est.tipo.name() == 'GOL'}" class="fs-5">⚽</span>
+                                        <span th:if="${est.tipo.name() == 'ASISTENCIA' or est.tipo.name() == 'ASISTENCIA_BASKET'}" class="fs-5">👟</span>
+                                        <span th:if="${est.tipo.name() == 'FALTA'}" class="fs-5">⚠️</span>
+                                        <span th:if="${est.tipo.name() == 'TARJETA_AMARILLA'}" class="fs-5">🟨</span>
+                                        <span th:if="${est.tipo.name() == 'TARJETA_ROJA'}" class="fs-5">🟥</span>
+                                        <span th:if="${est.tipo.name() == 'ATAJADA'}" class="fs-5">🧤</span>
+                                        <span th:if="${est.tipo.name() == 'PUNTO_VOLEY'}" class="fs-5">🏐</span>
+                                        <span th:if="${est.tipo.name() == 'ACE'}" class="fs-5">💥</span>
+                                        <span th:if="${est.tipo.name() == 'BLOQUEO'}" class="fs-5">🚫</span>
+                                        <span th:if="${est.tipo.name() == 'TRIPLE' or est.tipo.name() == 'DOBLE' or est.tipo.name() == 'SIMPLE'}" class="fs-5">🏀</span>
+                                        <span th:if="${est.tipo.name() == 'TAPON'}" class="fs-5">❌</span>
+                                        <span th:if="${est.tipo.name() == 'REBOTE'}" class="fs-5">🗑️</span>
+
+                                        <div>
+                                            <span class="fw-bold text-white small" th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : 'Jugador') : 'Jugador'}">Jugador</span>
+                                            <span class="text-muted mx-1 font-monospace" style="font-size: 0.75rem;" th:text="|(${est.tipo.name()})|">(GOL)</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-dark border border-secondary text-muted font-monospace py-1 px-2" style="font-size: 0.7rem;">
+                                        <span th:text="${partido.torneo != null and partido.torneo.deporte.name() == 'VOLEY' ? 'Set ' + est.tiempo : est.tiempo + ''''}">0'</span>
+                                    </span>
                                 </div>
                             </div>
-                            <span class="badge bg-dark border border-secondary text-muted font-monospace py-2 px-3">
-                                <span th:if="${est.tiempo != null}" th:text="|${est.tiempo}'|">0'</span>
-                                <span th:unless="${est.tiempo != null}">0'</span>
-                            </span>
                         </div>
+
+                        <div class="col-md-6">
+                            <div class="text-center pb-2 mb-2 border-bottom border-secondary">
+                                <span class="fw-bold text-uppercase tracking-wider small text-success"
+                                      th:text="${partido.equipoVisitante != null ? partido.equipoVisitante.nombre : 'VISITANTE'}">VISITANTE</span>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div th:each="est : ${estadisticas}" th:if="${est.bando != null and est.bando.name() == 'VISITANTE'}"
+                                     class="list-group-item bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center justify-content-between py-2 px-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span th:if="${est.tipo.name() == 'GOL'}" class="fs-5">⚽</span>
+                                        <span th:if="${est.tipo.name() == 'ASISTENCIA' or est.tipo.name() == 'ASISTENCIA_BASKET'}" class="fs-5">👟</span>
+                                        <span th:if="${est.tipo.name() == 'FALTA'}" class="fs-5">⚠️</span>
+                                        <span th:if="${est.tipo.name() == 'TARJETA_AMARILLA'}" class="fs-5">🟨</span>
+                                        <span th:if="${est.tipo.name() == 'TARJETA_ROJA'}" class="fs-5">🟥</span>
+                                        <span th:if="${est.tipo.name() == 'ATAJADA'}" class="fs-5">🧤</span>
+                                        <span th:if="${est.tipo.name() == 'PUNTO_VOLEY'}" class="fs-5">🏐</span>
+                                        <span th:if="${est.tipo.name() == 'ACE'}" class="fs-5">💥</span>
+                                        <span th:if="${est.tipo.name() == 'BLOQUEO'}" class="fs-5">🚫</span>
+                                        <span th:if="${est.tipo.name() == 'TRIPLE' or est.tipo.name() == 'DOBLE' or est.tipo.name() == 'SIMPLE'}" class="fs-5">🏀</span>
+                                        <span th:if="${est.tipo.name() == 'TAPON'}" class="fs-5">❌</span>
+                                        <span th:if="${est.tipo.name() == 'REBOTE'}" class="fs-5">🗑️</span>
+
+                                        <div>
+                                            <span class="fw-bold text-white small" th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : 'Jugador') : 'Jugador'}">Jugador</span>
+                                            <span class="text-muted mx-1 font-monospace" style="font-size: 0.75rem;" th:text="|(${est.tipo.name()})|">(GOL)</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-dark border border-secondary text-muted font-monospace py-1 px-2" style="font-size: 0.7rem;">
+                                       <span th:text="${partido.torneo != null and partido.torneo.deporte.name() == 'VOLEY' ? 'Set ' + est.tiempo : est.tiempo + ''''}">0'</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -155,21 +234,18 @@
                 <div class="modal-body p-4">
                     <input type="hidden" name="idPartido" th:value="${partido.id}">
 
-                    <input type="hidden" name="minuto" id="inputMinutoIncidencia" th:value="${param.minuto != null ? param.minuto : 0}">
-
                     <div class="mb-3">
                         <label class="form-label small text-muted text-uppercase fw-bold">Equipo involucrado</label>
                         <select class="form-select border-secondary text-white shadow-none" id="selectEquipo" name="bando" style="background-color: #212529;"
                                 onchange="
-                                    let textoReloj = document.getElementById('tiempo-reloj').innerText;
-                                    let min = parseInt(textoReloj.split(':')[0]) || 0;
+                                    let crono = document.getElementById('tiempo-reloj');
+                                    let min = crono ? (parseInt(crono.innerText.split(':')[0]) || 0) : 1;
                                     let f = document.getElementById('formIncidencia');
                                     f.method = 'GET';
                                     f.action = '/spring/partido/gestionar';
 
                                     let inputMin = document.getElementById('inputMinutoIncidencia');
-                                    inputMin.value = min;
-
+                                    if(inputMin) { inputMin.value = min; }
                                     f.submit();
                                 " required>
                             <option value="" disabled th:selected="${bandoSeleccionado == null}" hidden style="background-color: #212529; color: #6c757d;">🔍 Seleccione un equipo...</option>
@@ -179,14 +255,31 @@
                     </div>
 
                     <div class="mb-3">
+                        <th:block th:if="${partido.torneo == null or partido.torneo.deporte.name() == 'FUTBOL' or partido.torneo.deporte.name() == 'BASQUET'}">
+                            <label class="form-label small text-muted text-uppercase fw-bold">Minuto del evento</label>
+                            <div class="input-group border border-secondary rounded" style="background-color: #212529;">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="far fa-clock"></i></span>
+                                <input type="number" name="minuto" id="inputMinutoIncidencia" th:value="${param.minuto != null ? param.minuto : 0}" class="form-control bg-transparent border-0 text-white shadow-none" min="0" max="120" required>
+                                <span class="input-group-text bg-transparent border-0 text-muted font-monospace">'</span>
+                            </div>
+                        </th:block>
+
+                        <th:block th:if="${partido.torneo != null and partido.torneo.deporte.name() == 'VOLEY'}">
+                            <label class="form-label small text-muted text-uppercase fw-bold">Número de Set</label>
+                            <div class="input-group border border-secondary rounded" style="background-color: #212529;">
+                                <span class="input-group-text bg-transparent border-0 text-muted"><i class="fas fa-list-ol"></i></span>
+                                <input type="number" name="minuto" id="inputMinutoIncidencia" th:value="${param.minuto != null ? param.minuto : 1}" class="form-control bg-transparent border-0 text-white shadow-none" min="1" max="5" required>
+                                <span class="input-group-text bg-transparent border-0 text-muted font-monospace">Set</span>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label small text-muted text-uppercase fw-bold">Jugador</label>
                         <select class="form-select border-secondary text-white shadow-none" id="selectJugador" name="idJugador" style="background-color: #212529;" th:disabled="${#lists.isEmpty(jugadores)}" required>
                             <option value="" style="background-color: #212529; color: #6c757d;" th:if="${#lists.isEmpty(jugadores)}">Primero seleccione un equipo...</option>
                             <option value="" style="background-color: #212529; color: #6c757d;" th:if="${not #lists.isEmpty(jugadores)}">🔍 Seleccione un jugador...</option>
-                            <option th:each="jugador : ${jugadores}"
-                                    th:value="${jugador.id}"
-                                    th:text="${jugador.nombre}"
-                                    style="background-color: #212529; color: white;"></option>
+                            <option th:each="jugador : ${jugadores}" th:value="${jugador.id}" th:text="${jugador.nombre}" style="background-color: #212529; color: white;"></option>
                         </select>
                     </div>
 
@@ -194,25 +287,39 @@
                         <label class="form-label small text-muted text-uppercase fw-bold">Tipo de Incidencia</label>
                         <select class="form-select border-secondary text-white shadow-none" name="tipoIncidencia" style="background-color: #212529;" required>
                             <option value="" disabled selected hidden style="background-color: #212529; color: #6c757d;">Seleccione una incidencia...</option>
-                            <option value="GOL" style="background-color: #212529; color: white;">⚽ Gol</option>
-                            <option value="ASISTENCIA" style="background-color: #212529; color: white;">👟 Asistencia</option>
-                            <option value="FALTA" style="background-color: #212529; color: white;">⚠️ Falta cometida</option>
-                            <option value="TARJETA_AMARILLA" style="background-color: #212529; color: white;">🟨 Tarjeta Amarilla</option>
-                            <option value="TARJETA_ROJA" style="background-color: #212529; color: white;">🟥 Tarjeta Roja</option>
-                            <option value="ATAJADA" style="background-color: #212529; color: white;">🧤 Atajada</option>
+
+                            <th:block th:if="${partido.torneo == null or partido.torneo.deporte.name() == 'FUTBOL'}">
+                                <option value="GOL" style="background-color: #212529; color: white;">⚽ Gol</option>
+                                <option value="ASISTENCIA" style="background-color: #212529; color: white;">👟 Asistencia</option>
+                                <option value="FALTA" style="background-color: #212529; color: white;">⚠️ Falta cometida</option>
+                                <option value="TARJETA_AMARILLA" style="background-color: #212529; color: white;">🟨 Tarjeta Amarilla</option>
+                                <option value="TARJETA_ROJA" style="background-color: #212529; color: white;">🟥 Tarjeta Roja</option>
+                                <option value="ATAJADA" style="background-color: #212529; color: white;">🧤 Atajada</option>
+                            </th:block>
+
+                            <th:block th:if="${partido.torneo != null and partido.torneo.deporte.name() == 'VOLEY'}">
+                                <option value="PUNTO_VOLEY" style="background-color: #212529; color: white;">🏐 Punto de Ataque</option>
+                                <option value="ACE" style="background-color: #212529; color: white;">💥 Punto de Saque (Ace)</option>
+                                <option value="BLOQUEO" style="background-color: #212529; color: white;">🚫 Bloqueo Exitoso</option>
+                                <option value="TARJETA_AMARILLA" style="background-color: #212529; color: white;">🟨 Tarjeta Amarilla</option>
+                                <option value="TARJETA_ROJA" style="background-color: #212529; color: white;">🟥 Tarjeta Roja</option>
+                            </th:block>
+
+                            <th:block th:if="${partido.torneo != null and partido.torneo.deporte.name() == 'BASQUET'}">
+                                <option value="TRIPLE" style="background-color: #212529; color: white;">🏀 Triple (3 Pts)</option>
+                                <option value="DOBLE" style="background-color: #212529; color: white;">🏀 Doble (2 Pts)</option>
+                                <option value="SIMPLE" style="background-color: #212529; color: white;">🎯 Tiro Libre (1 Pt)</option>
+                                <option value="REBOTE" style="background-color: #212529; color: white;">🗑️ Rebote</option>
+                                <option value="ASISTENCIA_BASKET" style="background-color: #212529; color: white;">👟 Asistencia</option>
+                                <option value="TAPON" style="background-color: #212529; color: white;">❌ Tapón / Bloqueo</option>
+                            </th:block>
                         </select>
                     </div>
                 </div>
 
                 <div class="modal-footer border-secondary" style="background-color: #111;">
                     <a th:href="@{/partido/detalle(id=${partido.id})}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill text-white border-secondary">Cancelar</a>
-
-                    <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 fw-bold" th:disabled="${#lists.isEmpty(jugadores)}"
-                            onclick="
-                                let textoReloj = document.getElementById('tiempo-reloj').innerText;
-                                let min = parseInt(textoReloj.split(':')[0]) || 0;
-                                document.getElementById('inputMinutoIncidencia').value = min;
-                            ">
+                    <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 fw-bold" th:disabled="${#lists.isEmpty(jugadores)}">
                         Guardar Incidencia
                     </button>
                 </div>

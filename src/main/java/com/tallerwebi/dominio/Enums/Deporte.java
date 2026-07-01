@@ -7,7 +7,7 @@ public enum Deporte {
   PADEL,
   VOLEY;
 
-  // 2. Agregamos este método dinámico (No rompe nada de lo anterior)
+
   public int getSlots() {
     switch (this) {
       case FUTBOL:

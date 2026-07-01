@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.contratos;
 
+import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.Torneo;
 
@@ -15,4 +16,6 @@ public interface RepositorioEquipo {
     List<Equipo> buscarPorNombre(String nombre);
 
     List<Equipo> buscarEquiposPorJugadorIdYCapitan(Long jugadorId, boolean b);
+
+    List<Equipo> buscarPorDeporte(Deporte deporte);
 }

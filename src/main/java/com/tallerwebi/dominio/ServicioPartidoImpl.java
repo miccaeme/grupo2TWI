@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Enums.TipoEstadistica;
+import com.tallerwebi.dominio.Enums.Bando;
 import com.tallerwebi.dominio.contratos.RepositorioJugador;
 import com.tallerwebi.dominio.contratos.RepositorioPartido;
 import com.tallerwebi.dominio.excepcion.PartidoInvalidoException;
@@ -96,7 +97,7 @@ public class ServicioPartidoImpl implements ServicioPartido {
     @Override
     @Transactional
     public void registrarIncidencia(Long idPartido, Long idJugador, TipoEstadistica tipoEstadistica, String bando, Integer minuto) {
-        // 1. Buscamos las entidades completas de la base de datos
+
         Partido partido = repositorioPartido.buscarPorId(idPartido);
         Jugador jugador = repositorioJugador.buscarPorId(idJugador);
 
@@ -104,22 +105,36 @@ public class ServicioPartidoImpl implements ServicioPartido {
             throw new IllegalArgumentException("El partido o el jugador especificado no existe.");
         }
 
-        //
-        if (TipoEstadistica.GOL == tipoEstadistica) {
+
+        int puntosASumar = 0;
+
+        if (TipoEstadistica.GOL == tipoEstadistica || TipoEstadistica.SIMPLE == tipoEstadistica || TipoEstadistica.PUNTO_VOLEY == tipoEstadistica || TipoEstadistica.ACE == tipoEstadistica) {
+            puntosASumar = 1;
+        } else if (TipoEstadistica.DOBLE == tipoEstadistica) {
+            puntosASumar = 2;
+        } else if (TipoEstadistica.TRIPLE == tipoEstadistica) {
+            puntosASumar = 3;
+        }
+
+        // Si la incidencia suma puntos, actualizamos el marcador
+        if (puntosASumar > 0) {
             if ("LOCAL".equals(bando)) {
-                partido.setGolesLocal((partido.getGolesLocal() != null ? partido.getGolesLocal() : 0) + 1);
+                partido.setGolesLocal((partido.getGolesLocal() != null ? partido.getGolesLocal() : 0) + puntosASumar);
             } else if ("VISITANTE".equals(bando)) {
-                partido.setGolesVisitante((partido.getGolesVisitante() != null ? partido.getGolesVisitante() : 0) + 1);
+                partido.setGolesVisitante((partido.getGolesVisitante() != null ? partido.getGolesVisitante() : 0) + puntosASumar);
             }
             repositorioPartido.guardar(partido);
         }
 
-        // Creamos el objeto Estadistica con el minuto real recibido
         Estadistica nuevaEstadistica = new Estadistica();
         nuevaEstadistica.setPartido(partido);
         nuevaEstadistica.setJugador(jugador);
         nuevaEstadistica.setTipo(tipoEstadistica);
         nuevaEstadistica.setTiempo(minuto);
+
+        if (bando != null) {
+            nuevaEstadistica.setBando(Bando.valueOf(bando.toUpperCase()));
+        }
 
         servicioEstadistica.registrarAccionJugador(nuevaEstadistica);
     }

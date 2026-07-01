@@ -80,11 +80,11 @@ public class ControladorTorneo {
     List<TorneoEquipo> relaciones = servicioTorneo.buscarEquiposPorTorneoId(id);
     model.put("relacionesExistentes", relaciones);
 
-    // determino si ya tiene los equipos asignados guardados en la BD
+
     boolean yaAsignados = relaciones != null && !relaciones.isEmpty();
     model.put("yaAsignados", yaAsignados);
 
-    List<Equipo> equiposDisponibles = servicioEquipo.listarTodos();
+    List<Equipo> equiposDisponibles = servicioEquipo.listarPorDeporte(torneo.getDeporte());
     model.put("todosLosEquipos", equiposDisponibles);
 
     return new ModelAndView("asignarEquipos", model);
