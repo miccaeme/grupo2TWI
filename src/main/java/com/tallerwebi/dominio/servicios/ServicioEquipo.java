@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.servicios;
 
+import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.EquipoJugador;
@@ -18,6 +19,7 @@ public interface ServicioEquipo {
     List<EquipoJugador> obtenerJugadoresDelEquipo(Long idEquipo);
     void asignarJugadorAlEquipoPorNickname(Long equipoId, String nickname, Posicion posicion) throws Exception;
     List<Posicion> obtenerPosicionesDisponiblesParaElEquipo(Long equipoId);
+    List<Equipo> listarPorDeporte(Deporte deporte);
 
 
     void asignarPosicionAlCapitan(Long equipoId, Long idLogueado, Posicion posicion) throws Exception;

@@ -52,7 +52,7 @@ public class ServicioGeneradorFixtureImpl implements ServicioGeneradorFixture {
         }
     }
 
-    // LOGÍCA DE LIGA PROFESIONAL (Round Robin / Algoritmo Cíclico)
+    //(Round Robin / Algoritmo Cíclico)
     private void generarLigaTodosContraTodos(Torneo torneo, List<Equipo> equiposOriginales) {
         // Clonamos la lista para no alterar la colección original que viene por parámetro
         List<Equipo> equipos = new ArrayList<>(equiposOriginales);

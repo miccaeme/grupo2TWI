@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 
+import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.contratos.*;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
@@ -90,6 +91,11 @@ public class ServicioEquipoImpl implements ServicioEquipo {
     @Override
     public List<EquipoJugador> obtenerJugadoresDelEquipo(Long idEquipo) {
         return repositorioEquipoJugador.buscarJugadoresPorEquipo(idEquipo);
+    }
+
+    @Override
+    public List<Equipo> listarPorDeporte(Deporte deporte) {
+        return repositorioEquipo.buscarPorDeporte(deporte);
     }
 
     @Override

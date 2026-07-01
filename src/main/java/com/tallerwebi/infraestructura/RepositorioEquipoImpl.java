@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Enums.Deporte;
 import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.EquipoJugador;
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
@@ -54,6 +55,16 @@ public class RepositorioEquipoImpl implements RepositorioEquipo {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<Equipo> buscarPorDeporte(Deporte deporte) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Equipo.class);
+
+        criteria.add(Restrictions.eq("deporte", deporte));
+
+        return criteria.list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Equipo> buscarEquiposPorJugadorIdYCapitan(Long jugadorId, boolean esCapitan) {
         // 1. Creamos el Criteria apuntando a la clase RAÍZ (EquipoJugador)
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EquipoJugador.class);
@@ -77,4 +88,5 @@ public class RepositorioEquipoImpl implements RepositorioEquipo {
 
         return equipos;
     }
+
 }
