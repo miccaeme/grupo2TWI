@@ -20,4 +20,5 @@ public interface ServicioEquipo {
     List<Posicion> obtenerPosicionesDisponiblesParaElEquipo(Long equipoId);
 
 
+    void asignarPosicionAlCapitan(Long equipoId, Long idLogueado, Posicion posicion) throws Exception;
 }

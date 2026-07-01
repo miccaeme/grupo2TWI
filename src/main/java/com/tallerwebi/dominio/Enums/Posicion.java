@@ -13,6 +13,8 @@ public enum Posicion {
   ALERO,
   ALA_PIVOT,
   PIVOT,
+
+  //Voley
   ARMADOR,
   CENTRAL,
   PUNTA,
