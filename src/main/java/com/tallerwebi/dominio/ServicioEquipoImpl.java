@@ -158,6 +158,15 @@ public class ServicioEquipoImpl implements ServicioEquipo {
                             nombrePos.equals("ALERO") ||
                             nombrePos.equals("PIVOT") ||
                             nombrePos.equals("ALA_PIVOT");
+                }else if(equipo.getDeporte().name().equals("VOLEY")) {
+                    perteneceAlDeporte = nombrePos.equals("ARMADOR") ||
+                            nombrePos.equals("CENTRAL")||
+                            nombrePos.equals("PUNTA") ||
+                            nombrePos.equals("OPUESTO") ||
+                            nombrePos.equals("LIBERO");
+                }else if(equipo.getDeporte().name().equals("PADEL")) {
+                    perteneceAlDeporte = nombrePos.equals("DRIVE") ||
+                            nombrePos.equals("REVES");
                 }
                 if(perteneceAlDeporte && !posicionesDisponibles.contains(pos)) {
                     posicionesDisponibles.add(pos);
@@ -166,5 +175,25 @@ public class ServicioEquipoImpl implements ServicioEquipo {
         }
     return posicionesDisponibles;
 
+    }
+
+    @Override
+    public void asignarPosicionAlCapitan(Long equipoId, Long usuarioId, Posicion posicion) throws Exception {
+        List<EquipoJugador> integrantes = repositorioEquipoJugador.buscarJugadoresPorEquipo(equipoId);
+        EquipoJugador registroCapitan = null;
+
+        for (EquipoJugador ej : integrantes) {
+            if (ej.getCapitan() != null && ej.getCapitan()) {
+                registroCapitan = ej;
+                break;
+            }
+        }
+
+        if (registroCapitan == null) {
+            throw new Exception("No se encontró el registro de capitán en el equipo.");
+        }
+
+        registroCapitan.setPosicion(posicion);
+        repositorioEquipoJugador.guardar(registroCapitan);
     }
 }

@@ -32,7 +32,7 @@
           <p class="text-muted mb-0 small">Listado de planteles registrados en el sistema para postularte.</p>
         </div>
 
-        <a th:href="@{/crear-equipo}" class="btn btn-success text-black fw-bold btn-sm px-3 rounded-pill">
+        <a th:href="@{/equipo/crear(jugadorId=1)}" class="btn btn-success text-black fw-bold btn-sm px-3 rounded-pill">
           <i class="fas fa-plus me-1"></i> Nuevo Equipo
         </a>
       </div>
@@ -41,7 +41,7 @@
         <i class="fas fa-dizzy fa-3x text-muted mb-3"></i>
         <h4 class="text-white">No se encontraron equipos</h4>
         <p class="text-muted small">Aún no hay ningún equipo cargado en la plataforma.</p>
-        <a th:href="@{/crear-equipo}" class="btn btn-outline-success btn-sm mt-2">Crear el primero</a>
+        <a th:href="@{/equipo/crear(jugadorId=1)}" class="btn btn-outline-success btn-sm mt-2">Crear el primero</a>
       </div>
 
       <div th:unless="${equipos.isEmpty()}" class="table-responsive shadow-lg rounded-3">

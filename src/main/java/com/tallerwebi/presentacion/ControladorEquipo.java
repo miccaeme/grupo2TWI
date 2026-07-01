@@ -156,4 +156,27 @@ public class ControladorEquipo {
 
         return new ModelAndView("verEquiposCreados", modelo);
     }
+
+    @RequestMapping(path = "/equipo/asignar-posicion-capitan", method = RequestMethod.POST)
+    public ModelAndView asignarPosicionCapitan(
+            @RequestParam("equipoId") Long equipoId,
+            @RequestParam("posicionCapitan") Posicion posicion,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+
+        Long idLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        if (idLogueado == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        try {
+            // Llamamos al nuevo método del servicio pasándole el ID del logueado (que es el capitán)
+            servicioEquipo.asignarPosicionAlCapitan(equipoId, idLogueado, posicion);
+            redirectAttributes.addFlashAttribute("mensaje", "¡Puesto asignado correctamente, Capitán!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
+        }
+
+        return new ModelAndView("redirect:/equipo/gestionar?id=" + equipoId);
+    }
 }
