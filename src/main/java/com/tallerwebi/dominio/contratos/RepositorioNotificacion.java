@@ -8,4 +8,6 @@ import java.util.List;
 public interface RepositorioNotificacion {
     void guardar(Notificacion notificacion);
     List<Notificacion> obtenerNotificacionesPorJugador(String nickname);
+
+    Notificacion buscarPorId(Long id);
 }

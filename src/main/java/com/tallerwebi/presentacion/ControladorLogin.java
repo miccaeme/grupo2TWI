@@ -1,9 +1,12 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Notificacion;
 import com.tallerwebi.dominio.servicios.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import javax.servlet.http.HttpServletRequest;
+
+import com.tallerwebi.dominio.servicios.ServicioNotificacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,13 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 public class ControladorLogin {
 
   private ServicioLogin servicioLogin;
+  private ServicioNotificacion servicioNotificacion;
 
-  @Autowired
-  public ControladorLogin(ServicioLogin servicioLogin) {
+    public ControladorLogin(ServicioLogin servicioLogin) {
     this.servicioLogin = servicioLogin;
   }
 
@@ -30,29 +35,55 @@ public class ControladorLogin {
   }
 
   @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+
   public ModelAndView validarLogin(
-    @ModelAttribute("datosLogin") DatosLogin datosLogin,
-    HttpServletRequest request
+
+          @ModelAttribute("datosLogin") DatosLogin datosLogin,
+
+          HttpServletRequest request
+
   ) {
+
     Usuario usuarioBuscado = servicioLogin.consultarUsuario(
-      datosLogin.getEmail(),
-      datosLogin.getPassword()
+
+            datosLogin.getEmail(),
+
+            datosLogin.getPassword()
+
     );
+
     if (usuarioBuscado != null) {
+
       request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+
       request.getSession().setAttribute("usuarioId", usuarioBuscado.getId());
-    //se busca nick
-    if (usuarioBuscado.getJugador() != null) {
-      request.getSession().setAttribute("usuarioNick", usuarioBuscado.getJugador().getNickname());
-    }
+
+
+//se busca nick
+
+      if (usuarioBuscado.getJugador() != null) {
+
+        request.getSession().setAttribute("usuarioNick", usuarioBuscado.getJugador().getNickname());
+
+      }
+
       return new ModelAndView("redirect:/home"); }
+
     else {
+
       /* Se instancia el ModelMap solo cuando es necesario (en el flujo de error) para evitar anomalías en el flujo de datos (DU-anomaly de PMD) */
+
       ModelMap model = new ModelMap();
+
       model.put("error", "Usuario o clave incorrecta");
+
       return new ModelAndView("login", model);
+
     }
+
   }
+
+
 
   @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
   public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {

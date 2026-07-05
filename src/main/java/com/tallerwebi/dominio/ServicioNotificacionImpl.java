@@ -54,4 +54,14 @@ public class ServicioNotificacionImpl implements ServicioNotificacion {
 
         repositorioNotificacion.guardar(aviso);
     }
+
+    @Override
+    public void marcarComoLeida(Long id) {
+        Notificacion noti = repositorioNotificacion.buscarPorId(id);
+
+        if (noti != null) {
+            noti.setLeida(true);
+            repositorioNotificacion.guardar(noti);
+        }
+    }
 }
