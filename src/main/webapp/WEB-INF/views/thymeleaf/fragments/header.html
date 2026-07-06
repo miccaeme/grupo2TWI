@@ -49,18 +49,24 @@
                             Torneos
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark border-secondary shadow-lg" aria-labelledby="navbarDropdownTorneos">
-                            <li><a class="dropdown-item py-2" th:href="@{/verTorneosCreados}"><i class="me-2 text-success"></i> Ver torneos</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/verTorneosCreados}"><i class="me-2 text-success"></i> Buscar torneos</a></li>
                             <li><a class="dropdown-item py-2" th:href="@{/crear-torneo}"><i class="me-2 text-success"></i> Crear torneo</a></li>
                             <li><hr class="dropdown-divider border-secondary"></li>
                             <li><a class="dropdown-item py-2" href="mis-torneos.html"><i class="me-2 text-success"></i> Mis torneos</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link hover-success" th:href="@{/equipo/mis-equipos}">Mis Equipos</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle hover-success" href="#" id="navbarDropdownEquipos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Equipos
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark border-secondary shadow-lg" aria-labelledby="navbarDropdownTorneos">
+                            <li><a class="dropdown-item py-2" th:href="@{/verEquiposCreados}"><i class="me-2 text-success"></i> Buscar equipos</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/equipo/crear}" ><i class="me-2 text-success"></i> Crear equipo </a></li>
+                            <li><hr class="dropdown-divider border-secondary"></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/equipo/mis-equipos}"><i class="me-2 text-success"></i> Mis equipos</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link hover-success" th:href="@{/verEquiposCreados}">Equipos</a>
-                    </li>
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-4 border-secondary pt-3 pt-lg-0 border-lg-0 mt-3 mt-lg-0">
@@ -79,7 +85,7 @@
                                   class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger fw-bold text-white shadow"
                                   style="font-size: 0.65rem; padding: 0.25em 0.5em;"
                                   th:text="${cantNotificacionesNoLeidas}">
-            </span>
+                            </span>
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark border-secondary shadow-lg py-2 mt-2"
