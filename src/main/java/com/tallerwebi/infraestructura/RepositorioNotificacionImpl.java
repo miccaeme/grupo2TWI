@@ -30,4 +30,9 @@ public class RepositorioNotificacionImpl implements RepositorioNotificacion {
     public List<Notificacion> obtenerNotificacionesPorJugador(String nickname) {
         return this.sessionFactory.getCurrentSession().createCriteria(Notificacion.class).createAlias("jugador", "j").add(Restrictions.eq("j.nickname", nickname)).list();
     }
+
+    @Override
+    public Notificacion buscarPorId(Long id) {
+        return (Notificacion) this.sessionFactory.getCurrentSession().get(Notificacion.class, id);
+    }
 }

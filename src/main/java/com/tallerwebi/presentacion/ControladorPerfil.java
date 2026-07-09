@@ -44,7 +44,7 @@ public class ControladorPerfil {
 
         String nickDelUsuarioLogueado = usuarioLogueado.getJugador().getNickname();
 
-        List<Notificacion> novedades = servicioNotificacion.obtenerNotificacionesPorJugador(nickDelUsuarioLogueado);
+       List<Notificacion> novedades = servicioNotificacion.obtenerNotificacionesPorJugador(nickDelUsuarioLogueado);
         model.put("notificaciones", novedades);
         return new ModelAndView("perfil", model);
     }

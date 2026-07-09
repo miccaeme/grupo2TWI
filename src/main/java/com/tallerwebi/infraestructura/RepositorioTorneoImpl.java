@@ -29,6 +29,15 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
     }
 
     @Override
+    public List<Torneo> buscarTorneosPorOrganizadorId(Long idUsuario) {
+        String hql = "FROM Torneo t WHERE t.creador.id = :idUsuario";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Torneo.class)
+                .setParameter("idUsuario", idUsuario)
+                .getResultList();
+    }
+
+    @Override
     public List<Torneo> buscarTodos() {
         return sessionFactory.getCurrentSession().createQuery("from Torneo", Torneo.class).list();
     }
@@ -47,4 +56,7 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
                 .add(org.hibernate.criterion.Restrictions.eq("torneo.id", id))
                 .list();
     }
+
+
+
 }

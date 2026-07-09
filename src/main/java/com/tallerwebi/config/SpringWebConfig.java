@@ -25,6 +25,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
   @Autowired
   private ApplicationContext applicationContext;
 
+
   @Override
   public void addResourceHandlers(final ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/css/**").addResourceLocations("/resources/core/css/");
@@ -87,7 +88,11 @@ public class SpringWebConfig implements WebMvcConfigurer {
                     "/nuevo-usuario",
                     "/registrarme",
                     "/css/**",
-                    "/js/**"            // Excluye scripts publicos
+                    "/js/**", // Excluye scripts publicos
+                    "/api/**"
             );
+
+
+
   }
 }

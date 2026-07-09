@@ -12,4 +12,5 @@ public interface ServicioNotificacion {
     List<Notificacion>obtenerNotificacionesPorJugador(String nickname);
     void crearAvisoSolicitudAceptada(Jugador jugador, Equipo equipo);
     void crearAvisoSolicitudRechazada(Jugador jugador , Equipo equipo);
+    void marcarComoLeida(Long id);
 }

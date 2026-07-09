@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,6 +70,17 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     @Override
     public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
         return repositorioTorneoEquipo.buscarEquiposPorTorneoId(id);
+    }
+    @Override
+    public List<Torneo> buscarTorneosDelOrganizador(Long idUsuario) {
+        // 1. Validamos que el ID no sea nulo por seguridad
+        if (idUsuario == null) {
+            return new ArrayList<>();
+        }
+
+        // 2. Le pedimos al repositorio que busque en la base de datos
+        // todos los torneos que tengan como organizador a este usuario
+        return repositorioTorneo.buscarTorneosPorOrganizadorId(idUsuario);
     }
 
     @Override
