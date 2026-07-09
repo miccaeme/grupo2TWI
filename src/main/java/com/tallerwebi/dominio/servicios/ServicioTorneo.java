@@ -19,4 +19,6 @@ public interface ServicioTorneo {
     Torneo buscarPorId(Long id);
 
     List<TorneoEquipo> buscarEquiposPorTorneoId(Long id);
+
+    List<Torneo> buscarTorneosDelOrganizador(Long idUsuario);
 }

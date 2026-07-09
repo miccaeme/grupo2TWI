@@ -18,8 +18,7 @@
 
     <div class="row mb-4">
       <div class="col-12">
-        <span class="badge bg-success mb-2 px-3 py-2">Panel del Jugador</span>
-        <h2 class="fw-bold text-light">Bienvenido a tu Perfil, <span class="text-success" th:text="${#session.getAttribute('usuarioNick')}">Nick</span></h2>
+        <h1 class="fw-bold text-light">Bienvenido a tu Perfil, <span class="text-success" th:text="${#session.getAttribute('usuarioNick')}">Nick</span></h1>
         <p class="text-secondary small">Gestioná tus datos, revisá tus equipos y hacé el seguimiento de tus competencias.</p>
       </div>
     </div>
@@ -63,7 +62,7 @@
           <div class="card bg-black border border-warning border-opacity-50 shadow-lg rounded-4 p-4">
             <div class="d-flex align-items-center gap-2 mb-3">
               <i class="bi bi-bell-fill text-warning fs-5"></i>
-              <h5 class="fw-bold text-warning mb-0">Notificaciones</h5>
+              <h5 class="fw-bold text-warning mb-0">Historial de Notificaciones</h5>
               <span th:if="${notificaciones != null && !notificaciones.isEmpty()}"
                     class="badge bg-warning text-black rounded-pill small fw-bold ms-auto"
                     th:text="${notificaciones.size()}">1</span>
@@ -89,34 +88,6 @@
             </div>
           </div>
 
-          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-trophy-fill text-success fs-5"></i>
-                <h5 class="fw-bold text-light mb-0">Mis Torneos Activos</h5>
-              </div>
-              <a th:href="@{/torneos}" class="btn btn-success btn-sm rounded-pill px-3 fw-semibold text-black">Ver todos</a>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-dark table-hover align-middle mb-0 text-secondary small">
-                <thead>
-                <tr class="text-light">
-                  <th>Torneo</th>
-                  <th>Deporte</th>
-                  <th>Estado</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td class="text-light fw-semibold">Copa UNLAM 2026</td>
-                  <td>Fútbol 11</td>
-                  <td><span class="badge bg-success bg-opacity-10 text-success border border-success">En Curso</span></td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
 
           <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -148,6 +119,34 @@
               <a th:href="@{/equipo/mis-equipos}" class="btn btn-link text-success p-0 small fw-bold text-decoration-none">
                 Ver más (<span th:text="${#lists.size(listaEquipos) - 3}"></span> equipos más) <i class="bi bi-chevron-down small"></i>
               </a>
+            </div>
+          </div>
+          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-trophy-fill text-success fs-5"></i>
+                <h5 class="fw-bold text-light mb-0">Mis Torneos Activos</h5>
+              </div>
+              <a th:href="@{/torneos}" class="btn btn-outline-success btn-sm rounded-pill px-3 text-light">Ver torneos</a>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle mb-0 text-secondary small">
+                <thead>
+                <tr class="text-light">
+                  <th>Torneo</th>
+                  <th>Deporte</th>
+                  <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td class="text-light fw-semibold">Copa UNLAM 2026</td>
+                  <td>Fútbol 11</td>
+                  <td><span class="badge bg-success bg-opacity-10 text-success border border-success">En Curso</span></td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 

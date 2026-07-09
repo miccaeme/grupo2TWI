@@ -1,13 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.Enums.TipoDeTorneo;
-import com.tallerwebi.dominio.Equipo;
-import com.tallerwebi.dominio.ServicioTorneoImpl;
-import com.tallerwebi.dominio.TorneoEquipo;
-import com.tallerwebi.dominio.servicios.ServicioEquipo;
-import com.tallerwebi.dominio.servicios.ServicioGeneradorFixture;
-import com.tallerwebi.dominio.servicios.ServicioTorneo;
-import com.tallerwebi.dominio.Torneo;
+import com.tallerwebi.dominio.contratos.RepositorioUsuario;
+import com.tallerwebi.dominio.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,6 +26,10 @@ public class ControladorTorneo {
 
   @Autowired
   private ServicioEquipo servicioEquipo;
+  @Autowired
+  private ServicioLogin servicioLogin;
+  @Autowired
+  private ServicioNotificacion servicioNotificacion;
 
   @RequestMapping(value = "/crear-torneo", method = RequestMethod.GET)
   public ModelAndView mostrarFormularioCrearTorneo() {
@@ -150,6 +150,45 @@ public class ControladorTorneo {
     return new ModelAndView("redirect:/fixture?idTorneo=" + idTorneo);
   }
 
+  @RequestMapping(path = "/mis-torneos", method = RequestMethod.GET)
+  public ModelAndView verMisTorneos(HttpServletRequest request) {
+    ModelMap model = new ModelMap();
+
+    // 1. Verificamos sesión
+    Long idUsuario = (Long) request.getSession().getAttribute("usuarioId");
+    if (idUsuario == null) {
+      return new ModelAndView("redirect:/login");
+    }
+
+    // 2. Buscamos los torneos organizados por el usuario logueado
+    // (Asumiendo que tenés un método en tu servicio que busque los torneos por el ID del organizador)
+    List<Torneo> misTorneos = servicioTorneo.buscarTorneosDelOrganizador(idUsuario);
+    model.put("listaTorneos", misTorneos);
+
+
+    // ==========================================
+    // 🔥 COPY-PASTE DE NOTIFICACIONES PARA EL HEADER
+    // ==========================================
+    try {
+
+      Usuario userNoti = servicioLogin.buscarUsuarioPorId(idUsuario);
+      if (userNoti != null && userNoti.getJugador() != null) {
+        String nickNoti = userNoti.getJugador().getNickname();
+        List<Notificacion> novedadesNoti = servicioNotificacion.obtenerNotificacionesPorJugador(nickNoti);
+        long noLeidasNoti = novedadesNoti.stream()
+                .filter(n -> n.getLeida() == null || !n.getLeida())
+                .count();
+
+        model.put("notificaciones", novedadesNoti);
+        model.put("cantNotificacionesNoLeidas", (int) noLeidasNoti);
+      }
+    } catch (Exception e) {
+      // Silencioso por si las dudas
+    }
+    // ==========================================
+
+    return new ModelAndView("mis-torneos", model);
+  }
 
 
 }

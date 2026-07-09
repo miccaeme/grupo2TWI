@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Notificacion;
+import com.tallerwebi.dominio.contratos.RepositorioNotificacion;
+import com.tallerwebi.dominio.contratos.RepositorioUsuario;
 import com.tallerwebi.dominio.servicios.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -22,6 +24,8 @@ public class ControladorLogin {
 
   private ServicioLogin servicioLogin;
   private ServicioNotificacion servicioNotificacion;
+  private RepositorioUsuario repositorioUsuario;
+
 
     public ControladorLogin(ServicioLogin servicioLogin) {
     this.servicioLogin = servicioLogin;
@@ -108,8 +112,33 @@ public class ControladorLogin {
   }
 
   @RequestMapping(path = "/home", method = RequestMethod.GET)
-  public ModelAndView irAHome() {
-    return new ModelAndView("home");
+  public ModelAndView irAHome(HttpServletRequest request) {
+    ModelMap model = new ModelMap();
+
+    Long idUsuarioLogueadoNoti = (Long) request.getSession().getAttribute("usuarioId");
+    if (idUsuarioLogueadoNoti != null) {
+      try {
+
+        Usuario userNoti = servicioLogin.buscarUsuarioPorId(idUsuarioLogueadoNoti);
+
+        if (userNoti != null && userNoti.getJugador() != null) {
+          String nickNoti = userNoti.getJugador().getNickname();
+
+          List<Notificacion> novedadesNoti = servicioNotificacion.obtenerNotificacionesPorJugador(nickNoti);
+
+          long noLeidasNoti = novedadesNoti.stream()
+                  .filter(n -> n.getLeida() == null || !n.getLeida())
+                  .count();
+
+          model.put("notificaciones", novedadesNoti);
+          model.put("cantNotificacionesNoLeidas", (int) noLeidasNoti);
+        }
+      } catch (Exception e) {
+
+      }
+    }
+
+    return new ModelAndView("home", model);
   }
 
   @RequestMapping(path = "/", method = RequestMethod.GET)

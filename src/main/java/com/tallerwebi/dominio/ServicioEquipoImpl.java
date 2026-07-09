@@ -174,7 +174,10 @@ public class ServicioEquipoImpl implements ServicioEquipo {
                     perteneceAlDeporte = nombrePos.equals("DRIVE") ||
                             nombrePos.equals("REVES");
                 }
-                if(perteneceAlDeporte && !posicionesDisponibles.contains(pos)) {
+                /*if(perteneceAlDeporte && !posicionesDisponibles.contains(pos)) {
+                    posicionesDisponibles.add(pos);
+                }*/
+                if (perteneceAlDeporte && !posicionesOcupadas.contains(pos) && !posicionesDisponibles.contains(pos)) {
                     posicionesDisponibles.add(pos);
                 }
             }
