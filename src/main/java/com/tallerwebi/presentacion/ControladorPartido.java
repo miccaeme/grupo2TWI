@@ -155,7 +155,8 @@
 
             List<Estadistica> estadisticas = servicioEstadistica.obtenerEstadisticasDelPartido(idPartido);
             model.addAttribute("estadisticas", estadisticas);
-
+            //armar un fragment de jugador para las estadisticas de un jugador cuando el admin lo agrega asi visualice sus estadisticas.
+            //llamar al servicio , crear un un dto para no cargar 5 veces lo mismo , frgaments para las estadisticas del jugador
             // 3. Mantenemos el bando seleccionado y cargamos sus jugadores si aplica
             model.addAttribute("bandoSeleccionado", bando);
             if (bando != null) {
