@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.Notificacion;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
+import com.tallerwebi.dominio.servicios.ServicioEstadistica;
 import com.tallerwebi.dominio.servicios.ServicioLogin;
 import com.tallerwebi.dominio.servicios.ServicioNotificacion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class ControladorPerfil {
     private ServicioEquipo servicioEquipo;
     @Autowired
     private ServicioNotificacion servicioNotificacion;
+    @Autowired
+    private ServicioEstadistica servicioEstadistica;
 
     @RequestMapping(path = "/perfil", method = RequestMethod.GET)
     public ModelAndView irAPerfil(HttpServletRequest request) {
@@ -46,6 +49,16 @@ public class ControladorPerfil {
 
        List<Notificacion> novedades = servicioNotificacion.obtenerNotificacionesPorJugador(nickDelUsuarioLogueado);
         model.put("notificaciones", novedades);
+
+        EstadisticasJugadorDTO statsFutbol = servicioEstadistica.obtenerEstadisticasHistoricas(nickDelUsuarioLogueado, "FUTBOL");
+        EstadisticasJugadorDTO statsBasquet = servicioEstadistica.obtenerEstadisticasHistoricas(nickDelUsuarioLogueado, "BASQUET");
+        EstadisticasJugadorDTO statsVoley = servicioEstadistica.obtenerEstadisticasHistoricas(nickDelUsuarioLogueado, "VOLEY");
+
+        model.put("statsFutbol", statsFutbol);
+        model.put("statsBasquet", statsBasquet);
+        model.put("statsVoley", statsVoley);
+
         return new ModelAndView("perfil", model);
+
     }
 }

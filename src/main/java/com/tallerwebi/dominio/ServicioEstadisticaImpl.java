@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.Enums.TipoEstadistica;
 import com.tallerwebi.dominio.contratos.RepositorioEstadistica;
 import com.tallerwebi.dominio.servicios.ServicioEstadistica;
+import com.tallerwebi.presentacion.EstadisticasJugadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,5 +83,31 @@ public class ServicioEstadisticaImpl implements ServicioEstadistica {
             }
         }
         return golesTotales;
+    }
+
+    @Override
+    public EstadisticasJugadorDTO obtenerEstadisticasHistoricas(String nickname, String deporte) {
+        EstadisticasJugadorDTO dto = new EstadisticasJugadorDTO();
+        dto.setNickname(nickname);
+        dto.setDeporte(deporte.toUpperCase());
+
+        // Filtrado por Deporte para el conteo de incidencias históricas
+        if ("FUTBOL".equalsIgnoreCase(deporte)) {
+            dto.setGoles(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.GOL));
+            dto.setAsistencias(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.ASISTENCIA));
+            dto.setFaltas(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.FALTA));
+
+        } else if ("BASQUET".equalsIgnoreCase(deporte)) {
+            dto.setTriples(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.TRIPLE));
+            dto.setDobles(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.DOBLE));
+            dto.setSimples(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.SIMPLE));
+
+        } else if ("VOLEY".equalsIgnoreCase(deporte)) {
+            // Adaptalo a los nombres exactos de tu enum TipoEstadistica (ej: PUNTO, ACE)
+            dto.setPuntosVoley(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.PUNTO_VOLEY));
+            dto.setAces(repositorioEstadistica.contarPorNicknameYTipo(nickname, TipoEstadistica.ACE));
+        }
+
+        return dto;
     }
 }

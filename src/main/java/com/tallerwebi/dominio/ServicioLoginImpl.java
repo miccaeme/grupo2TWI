@@ -46,4 +46,14 @@ public class ServicioLoginImpl implements ServicioLogin {
   public Usuario buscarUsuarioPorId(Long id) {
     return repositorioUsuario.buscarUsuarioPorId(id);
   }
+
+  @Override
+  public Usuario buscarUsuarioPorNickname(String nickname) {
+    // 🌟 Súper limpio: El servicio le pide al repositorio el usuario por nick
+    return repositorioUsuario.buscarPorNickname(nickname);
+  }
 }
+
+
+
+

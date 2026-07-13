@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<div th:fragment="estadisticasJr(stats)" th:if="${stats != null}">
+    <div class="p-2 animate__animated animate__fadeIn">
+
+        <div th:switch="${stats.deporte}">
+
+            <div th:case="'FUTBOL'" class="row g-3 text-center py-2">
+                <div class="col-4">
+                    <h3 class="fw-bold text-success mb-1" th:text="${stats.goles}">0</h3>
+                    <p class="text-secondary small mb-0">⚽ Goles</p>
+                </div>
+                <div class="col-4 border-start border-secondary">
+                    <h3 class="fw-bold text-info mb-1" th:text="${stats.asistencias}">0</h3>
+                    <p class="text-secondary small mb-0">👟 Asistencias</p>
+                </div>
+                <div class="col-4 border-start border-secondary">
+                    <h3 class="fw-bold text-danger mb-1" th:text="${stats.faltas}">0</h3>
+                    <p class="text-secondary small mb-0">🟨 Faltas</p>
+                </div>
+            </div>
+
+            <div th:case="'BASQUET'" class="row g-3 text-center py-2">
+                <div class="col-4">
+                    <h3 class="fw-bold text-danger mb-1" th:text="${stats.triples}">0</h3>
+                    <p class="text-secondary small mb-0">🏀 Triples</p>
+                </div>
+                <div class="col-4 border-start border-secondary">
+                    <h3 class="fw-bold text-warning mb-1" th:text="${stats.dobles}">0</h3>
+                    <p class="text-secondary small mb-0">🎯 Dobles</p>
+                </div>
+                <div class="col-4 border-start border-secondary">
+                    <h3 class="fw-bold text-success mb-1" th:text="${stats.simples}">0</h3>
+                    <p class="text-secondary small mb-0">🏳️ Simples</p>
+                </div>
+            </div>
+
+            <div th:case="'VOLEY'" class="row g-3 text-center justify-content-center py-2">
+                <div class="col-5">
+                    <h3 class="fw-bold text-info mb-1" th:text="${stats.puntosVoley}">0</h3>
+                    <p class="text-secondary small mb-0">🏐 Puntos Vóley</p>
+                </div>
+                <div class="col-5 border-start border-secondary">
+                    <h3 class="fw-bold text-warning mb-1" th:text="${stats.aces}">0</h3>
+                    <p class="text-secondary small mb-0">💥 Aces</p>
+                </div>
+            </div>
+
+            <div th:case="*" class="text-center py-2">
+                <p class="text-secondary small mb-0">No se encontraron registros deportivos para este período.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
