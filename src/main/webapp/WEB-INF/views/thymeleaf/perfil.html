@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100">
+<html lang="es" class="h-100" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Perfil </title>
+  <title>Mi Perfil - TorneosPro</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kasq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
@@ -18,8 +18,8 @@
 
     <div class="row mb-4">
       <div class="col-12">
-        <h1 class="fw-bold text-light">Bienvenido a tu Perfil, <span class="text-success" th:text="${#session.getAttribute('usuarioNick')}">Nick</span></h1>
-        <p class="text-secondary small">Gestioná tus datos, revisá tus equipos y hacé el seguimiento de tus competencias.</p>
+        <h1 class="fw-bold text-light">Bienvenido al Perfil de <span class="text-success" th:text="${usuarioLogueado.jugador.nickname}">Nick</span></h1>
+        <p class="text-secondary small">Visualización de datos de usuario, equipos activos e historial deportivo acumulado.</p>
       </div>
     </div>
 
@@ -40,8 +40,8 @@
 
           <div class="text-start space-y-3">
             <div class="mb-3">
-              <label class="text-secondary small d-block">Email </label>
-              <span class="text-light fw-medium" th:text="${usuarioLogueado.email}">juan@gmai.com</span>
+              <label class="text-secondary small d-block">Email</label>
+              <span class="text-light fw-medium" th:text="${usuarioLogueado.email}">juan@gmail.com</span>
             </div>
 
             <div class="mb-3">
@@ -59,6 +59,43 @@
       <div class="col-lg-8">
         <div class="d-flex flex-column gap-4">
 
+          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
+            <h5 class="fw-bold text-light mb-3">
+              <i class="bi bi-graph-up-arrow text-success me-2"></i> Estadísticas Históricas de @<span th:text="${usuarioLogueado.jugador.nickname}">neo</span>
+            </h5>
+
+            <ul class="nav nav-pills mb-3 border-bottom border-secondary pb-2" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active text-white fw-bold btn-sm me-2" id="pills-futbol-tab" data-bs-toggle="pill" data-bs-target="#pills-futbol" type="button" role="tab" aria-controls="pills-futbol" aria-selected="true">⚽ Fútbol</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link text-white fw-bold btn-sm me-2" id="pills-basquet-tab" data-bs-toggle="pill" data-bs-target="#pills-basquet" type="button" role="tab" aria-controls="pills-basquet" aria-selected="false">🏀 Básquet</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link text-white fw-bold btn-sm" id="pills-voley-tab" data-bs-toggle="pill" data-bs-target="#pills-voley" type="button" role="tab" aria-controls="pills-voley" aria-selected="false">🏐 Vóley</button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="pills-tabContent">
+
+              <div class="tab-pane fade show active" id="pills-futbol" role="tabpanel" aria-labelledby="pills-futbol-tab">
+                <div th:if="${statsFutbol != null}" th:replace="~{fragments/stats_templates :: estadisticasJr(${statsFutbol})}"></div>
+                <div th:if="${statsFutbol == null}" class="text-center text-secondary small py-2">Sin datos disponibles.</div>
+              </div>
+
+              <div class="tab-pane fade" id="pills-basquet" role="tabpanel" aria-labelledby="pills-basquet-tab">
+                <div th:if="${statsBasquet != null}" th:replace="~{fragments/stats_templates :: estadisticasJr(${statsBasquet})}"></div>
+                <div th:if="${statsBasquet == null}" class="text-center text-secondary small py-2">Sin datos disponibles.</div>
+              </div>
+
+              <div class="tab-pane fade" id="pills-voley" role="tabpanel" aria-labelledby="pills-voley-tab">
+                <div th:if="${statsVoley != null}" th:replace="~{fragments/stats_templates :: estadisticasJr(${statsVoley})}"></div>
+                <div th:if="${statsVoley == null}" class="text-center text-secondary small py-2">Sin datos disponibles.</div>
+              </div>
+
+            </div>
+          </div>
+
           <div class="card bg-black border border-warning border-opacity-50 shadow-lg rounded-4 p-4">
             <div class="d-flex align-items-center gap-2 mb-3">
               <i class="bi bi-bell-fill text-warning fs-5"></i>
@@ -74,7 +111,7 @@
                 <i class="bi bi-info-circle-fill text-warning mt-1"></i>
                 <div>
                   <p class="text-light small mb-0 fw-semibold" th:text="${noti.mensaje}">
-                    ¡Fuiste incorporado al equipo 'Futbolito' como DEFENSOR_CENTRAL!
+                    ¡Fuiste incorporado al equipo!
                   </p>
                 </div>
               </div>
@@ -83,11 +120,10 @@
             <div th:if="${notificaciones == null || notificaciones.isEmpty()}"
                  class="p-3 bg-dark bg-opacity-50 border border-secondary border-opacity-20 rounded-3 text-center">
               <p class="text-secondary small mb-0">
-                <i class="bi bi-info-circle me-1"></i> No tenés acciones ni solicitudes pendientes de revisión por el momento.
+                <i class="bi bi-info-circle me-1"></i> No hay acciones ni solicitudes pendientes de revisión.
               </p>
             </div>
           </div>
-
 
           <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -98,7 +134,7 @@
               <a th:href="@{/equipo/buscar}" class="btn btn-outline-success btn-sm rounded-pill px-3 text-light">Buscar Equipo</a>
             </div>
 
-            <div class="d-flex flex-column gap-2 mb-3">
+            <div th:if="${listaEquipos != null and !listaEquipos.isEmpty()}" class="d-flex flex-column gap-2 mb-3">
               <div th:each="equipo, status : ${listaEquipos}"
                    th:if="${status.index < 3}"
                    class="p-3 bg-dark bg-opacity-20 border border-secondary rounded-3 d-flex align-items-center justify-content-between">
@@ -107,7 +143,7 @@
                   <div class="p-2 bg-success bg-opacity-10 rounded-2 text-success fw-bold text-uppercase"
                        th:text="${#strings.substring(equipo.nombre, 0, 2)}">FC</div>
                   <div>
-                    <h6 class="mb-0 text-light fw-bold" th:text="${equipo.nombre}">Deportivo Laferrere</h6>
+                    <h6 class="mb-0 text-light fw-bold" th:text="${equipo.nombre}">Mi Equipo</h6>
                     <small class="text-secondary" th:text="'Deporte: ' + ${equipo.deporte}">Deporte: FUTBOL</small>
                   </div>
                 </div>
@@ -115,12 +151,17 @@
               </div>
             </div>
 
-            <div th:if="${#lists.size(listaEquipos) > 3}" class="text-center mt-2">
+            <div th:if="${listaEquipos != null and #lists.size(listaEquipos) > 3}" class="text-center mt-2">
               <a th:href="@{/equipo/mis-equipos}" class="btn btn-link text-success p-0 small fw-bold text-decoration-none">
                 Ver más (<span th:text="${#lists.size(listaEquipos) - 3}"></span> equipos más) <i class="bi bi-chevron-down small"></i>
               </a>
             </div>
+
+            <div th:if="${listaEquipos == null or listaEquipos.isEmpty()}" class="text-center text-secondary small py-2">
+              No hay equipos cargados o disponibles asociados a este usuario.
+            </div>
           </div>
+
           <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div class="d-flex align-items-center gap-2">
@@ -147,26 +188,6 @@
                 </tr>
                 </tbody>
               </table>
-            </div>
-          </div>
-
-          <div class="card bg-black border border-secondary shadow-lg rounded-4 p-4">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <i class="bi bi-clock-history text-success fs-5"></i>
-              <h5 class="fw-bold text-light mb-0">Historial de Participaciones</h5>
-            </div>
-
-            <div class="position-relative border-start border-secondary ps-3 ms-2 small text-secondary">
-              <div class="mb-3 position-relative">
-                <div class="position-absolute bg-success rounded-circle" style="width: 10px; height: 10px; left: -21px; top: 6px;"></div>
-                <span class="text-light fw-semibold d-block">Subcampeón - Torneo Relámpago</span>
-                <small class="d-block text-muted">Noviembre 2025 • Equipo: Los de Sistemas</small>
-              </div>
-              <div class="position-relative">
-                <div class="position-absolute bg-secondary rounded-circle" style="width: 10px; height: 10px; left: -21px; top: 6px;"></div>
-                <span class="text-light fw-semibold d-block">Fase de Grupos - Interfacultades</span>
-                <small class="d-block text-muted">Mayo 2025 • Equipo: TWI FC</small>
-              </div>
             </div>
           </div>
 

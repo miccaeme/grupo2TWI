@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" th:href="@{/css/fixture.css}">
+
+    <!-- Estilo para dar feedback visual interactivo al pasar por encima del nickname -->
+    <style>
+        .hover-perfil:hover {
+            text-decoration: underline !important;
+            filter: brightness(1.2);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="d-flex flex-column h-100 bg-dark text-white">
 
@@ -104,10 +113,14 @@
                             </span>
                         </div>
 
+                        <!-- 1. Enlace dinámico en el Jugador Destacado del Partido -->
                         <div th:if="${estadisticas != null and #lists.size(estadisticas) > 0}" class="d-inline-block bg-dark border border-secondary border-opacity-50 rounded-pill px-3 py-1 mt-1 shadow-sm">
                             <small class="text-muted text-uppercase font-monospace" style="font-size: 0.7rem;">
                                 <i class="fas fa-star text-warning me-1"></i> Destacado:
-                                <span class="text-white fw-bold" th:text="${estadisticas[0].jugador.nickname != null ? estadisticas[0].jugador.nickname : estadisticas[0].jugador.nombre}">neo</span>
+                                <a th:href="@{/jugador/perfil(nickname=${estadisticas[0].jugador.nickname != null ? estadisticas[0].jugador.nickname : estadisticas[0].jugador.nombre})}"
+                                   class="text-success fw-bold text-decoration-none hover-perfil">
+                                    <span th:text="${estadisticas[0].jugador.nickname != null ? estadisticas[0].jugador.nickname : estadisticas[0].jugador.nombre}">neo</span>
+                                </a>
                                 <span class="text-muted">
                                     <th:block th:if="${estadisticas[0].tipo.name() == 'GOL' or estadisticas[0].tipo.name() == 'PUNTO_VOLEY' or estadisticas[0].tipo.name() == 'TRIPLE' or estadisticas[0].tipo.name() == 'DOBLE'}">(Anotación clave) 🔥</th:block>
                                     <th:block th:if="${estadisticas[0].tipo.name() == 'TARJETA_ROJA'}">(Expulsado) 🟥</th:block>
@@ -135,6 +148,7 @@
 
                     <div th:if="${not #lists.isEmpty(estadisticas)}" class="row g-4">
 
+                        <!-- COLUMNA LOCAL -->
                         <div class="col-md-6 border-end border-secondary border-opacity-50">
                             <div class="text-center pb-2 mb-2 border-bottom border-secondary">
                                 <span class="fw-bold text-uppercase tracking-wider small text-success"
@@ -158,7 +172,11 @@
                                         <span th:if="${est.tipo.name() == 'REBOTE'}" class="fs-5">🗑️</span>
 
                                         <div>
-                                            <span class="fw-bold text-white small" th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : 'Jugador') : 'Jugador'}">Jugador</span>
+                                            <!-- 2. Enlace dinámico en el nombre del Jugador Local -->
+                                            <a th:href="@{/jugador/perfil(nickname=${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : est.jugador.nombre) : ''})}"
+                                               class="text-success fw-bold small text-decoration-none hover-perfil me-1">
+                                                <span th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : 'Jugador') : 'Jugador'}">Jugador</span>
+                                            </a>
                                             <span class="text-muted mx-1 font-monospace" style="font-size: 0.75rem;" th:text="|(${est.tipo.name()})|">(GOL)</span>
                                         </div>
                                     </div>
@@ -169,6 +187,7 @@
                             </div>
                         </div>
 
+                        <!-- COLUMNA VISITANTE -->
                         <div class="col-md-6">
                             <div class="text-center pb-2 mb-2 border-bottom border-secondary">
                                 <span class="fw-bold text-uppercase tracking-wider small text-success"
@@ -192,7 +211,11 @@
                                         <span th:if="${est.tipo.name() == 'REBOTE'}" class="fs-5">🗑️</span>
 
                                         <div>
-                                            <span class="fw-bold text-white small" th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : 'Jugador') : 'Jugador'}">Jugador</span>
+                                            <!-- 3. Enlace dinámico en el nombre del Jugador Visitante -->
+                                            <a th:href="@{/jugador/perfil(nickname=${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : est.jugador.nombre) : ''})}"
+                                               class="text-success fw-bold small text-decoration-none hover-perfil me-1">
+                                                <span th:text="${est.jugador != null ? (est.jugador.nickname != null ? est.jugador.nickname : 'Jugador') : 'Jugador'}">Jugador</span>
+                                            </a>
                                             <span class="text-muted mx-1 font-monospace" style="font-size: 0.75rem;" th:text="|(${est.tipo.name()})|">(GOL)</span>
                                         </div>
                                     </div>
@@ -218,6 +241,7 @@
     </div>
 </main>
 
+<!-- MODAL DE INCIDENCIAS -->
 <div class="modal fade" id="modalIncidencia" tabindex="-1" aria-labelledby="modalIncidenciaLabel" aria-hidden="true"
      th:classappend="${param.idPartido != null} ? 'show' : ''"
      th:style="${param.idPartido != null} ? 'display: block;' : ''">

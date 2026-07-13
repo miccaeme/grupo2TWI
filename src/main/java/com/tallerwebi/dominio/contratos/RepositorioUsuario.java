@@ -10,4 +10,5 @@ public interface RepositorioUsuario {
   Usuario buscarUsuarioPorId(Long id);
 
 
+    Usuario buscarPorNickname(String nickname);
 }

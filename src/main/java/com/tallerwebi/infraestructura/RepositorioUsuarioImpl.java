@@ -51,4 +51,22 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
   public Usuario buscarUsuarioPorId(Long id) {
     return sessionFactory.getCurrentSession().get(Usuario.class, id);
   }
+
+  @Override
+  public Usuario buscarPorNickname(String nickname) {
+    try {
+      // Usamos la sesión nativa que ya tiene tu repositorio implementado
+      var criteria = this.sessionFactory.getCurrentSession().createCriteria(Usuario.class);
+
+      // Creamos el alias para entrar a la relación 'jugador'
+      criteria.createAlias("jugador", "j");
+
+      // Filtramos por el nickname
+      criteria.add(org.hibernate.criterion.Restrictions.eq("j.nickname", nickname));
+
+      return (Usuario) criteria.uniqueResult();
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }

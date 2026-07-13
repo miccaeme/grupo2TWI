@@ -3,8 +3,10 @@
     import com.tallerwebi.dominio.Enums.TipoEstadistica;
     import com.tallerwebi.dominio.Estadistica;
     import com.tallerwebi.dominio.Partido;
+    import com.tallerwebi.dominio.Usuario;
     import com.tallerwebi.dominio.excepcion.PartidoInvalidoException;
     import com.tallerwebi.dominio.servicios.ServicioEstadistica;
+    import com.tallerwebi.dominio.servicios.ServicioLogin;
     import com.tallerwebi.dominio.servicios.ServicioPartido;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Controller;
@@ -21,12 +23,44 @@
 
         private ServicioPartido servicioPartido;
         private ServicioEstadistica servicioEstadistica;
+        private ServicioLogin servicioLogin;
 
         @Autowired
-        public ControladorPartido(ServicioPartido servicioPartido, ServicioEstadistica servicioEstadistica) {
+        public ControladorPartido(ServicioPartido servicioPartido, ServicioEstadistica servicioEstadistica, ServicioLogin servicioLogin) {
             this.servicioPartido = servicioPartido;
             this.servicioEstadistica = servicioEstadistica;
+            this.servicioLogin = servicioLogin;
         }
+
+        @RequestMapping(path = "/jugador/perfil", method = RequestMethod.GET)
+        public ModelAndView verPerfilJugador(@RequestParam("nickname") String nickname,
+                                             @RequestParam(value = "deporte", defaultValue = "FUTBOL") String deporte) {
+            ModelMap modelo = new ModelMap();
+
+            // 1. Buscamos las estadísticas acumuladas históricas del jugador
+            EstadisticasJugadorDTO dto = servicioEstadistica.obtenerEstadisticasHistoricas(nickname, deporte);
+            // 🌟 3. CORRECCIÓN: Enviamos el atributo dinámicamente según el deporte para que coincida con perfil
+            if ("FUTBOL".equalsIgnoreCase(deporte)) {
+                modelo.put("statsFutbol", dto);
+            } else if ("BASQUET".equalsIgnoreCase(deporte) || "BÁSQUET".equalsIgnoreCase(deporte)) {
+                modelo.put("statsBasquet", dto);
+            } else if ("VOLEY".equalsIgnoreCase(deporte) || "VÓLEY".equalsIgnoreCase(deporte)) {
+                modelo.put("statsVoley", dto);
+            }
+
+            // 🌟 4. CORRECCIÓN: Usamos la variable de instancia 'this.servicioLogin' (en minúscula) para evitar el error estático
+            Usuario usuarioLogueado = this.servicioLogin.buscarUsuarioPorNickname(nickname);
+            modelo.put("usuarioLogueado", usuarioLogueado);
+
+
+            // (Opcional) Si tu vista requiere la lista de equipos y notificaciones para ese usuario:
+             //modelo.put("listaEquipos", servicioEquipo.buscarEquiposDelJugador(nickname));
+             //modelo.put("notificaciones", servicioNotificacion.obtenerNotificacionesPorJugador(nickname));
+
+            return new ModelAndView("perfil", modelo); // "perfil" es el nombre de tu archivo HTML actual
+        }
+
+
 
         // ver Fixture agrupado por torneo
         @RequestMapping(path = "/fixture", method = RequestMethod.GET)
@@ -155,8 +189,7 @@
 
             List<Estadistica> estadisticas = servicioEstadistica.obtenerEstadisticasDelPartido(idPartido);
             model.addAttribute("estadisticas", estadisticas);
-            //armar un fragment de jugador para las estadisticas de un jugador cuando el admin lo agrega asi visualice sus estadisticas.
-            //llamar al servicio , crear un un dto para no cargar 5 veces lo mismo , frgaments para las estadisticas del jugador
+
             // 3. Mantenemos el bando seleccionado y cargamos sus jugadores si aplica
             model.addAttribute("bandoSeleccionado", bando);
             if (bando != null) {
