@@ -11,6 +11,6 @@ public interface RepositorioTorneo {
     Torneo buscarPorId(Long id);
     List<TorneoEquipo> buscarEquiposPorTorneoId(Long id);
     void guardarRelacion(TorneoEquipo torneoEquipo);
-
+    List<Torneo> obtenerTodos();
     List<Torneo> buscarTorneosPorOrganizadorId(Long idUsuario);
 }

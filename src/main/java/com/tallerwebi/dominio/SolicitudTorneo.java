@@ -1,41 +1,31 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.Enums.Deporte;
+import com.tallerwebi.dominio.Enums.EstadoSolicitud;
 
 import javax.persistence.*;
 
 @Entity
-public class TorneoEquipo {
-//Entidad para sumar equipos al torneo
+public class SolicitudTorneo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Enumerated(EnumType.STRING)
-    private Deporte deporte;
+
     @ManyToOne
     private Torneo torneo;
 
     @ManyToOne
     private Equipo equipo;
 
-
-    public TorneoEquipo() {
-
-    }
-
-    public TorneoEquipo(Torneo torneo, Equipo equipo, Deporte deporte) {
-        this.torneo = torneo;
-        this.equipo = equipo;
-        this.deporte = deporte;
-    }
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Enumerated
+    private EstadoSolicitud estado;
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Torneo getTorneo() {
@@ -52,5 +42,13 @@ public class TorneoEquipo {
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
+    }
+
+    public EstadoSolicitud getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoSolicitud estado) {
+        this.estado = estado;
     }
 }

@@ -26,10 +26,16 @@ public class ControladorTorneo {
 
   @Autowired
   private ServicioEquipo servicioEquipo;
+
   @Autowired
   private ServicioLogin servicioLogin;
+
   @Autowired
   private ServicioNotificacion servicioNotificacion;
+
+  // NUEVO SERVICIO INYECTADO
+  @Autowired
+  private ServicioSolicitudTorneo servicioSolicitudTorneo;
 
   @RequestMapping(value = "/crear-torneo", method = RequestMethod.GET)
   public ModelAndView mostrarFormularioCrearTorneo() {
@@ -42,7 +48,6 @@ public class ControladorTorneo {
 
 
   @RequestMapping(value = "/guardarTorneoCreado", method = RequestMethod.POST)
-
   public ModelAndView guardarTorneo(@ModelAttribute("torneo") Torneo torneo, HttpServletRequest request) {
     ModelMap model = new ModelMap();
     try{
@@ -59,16 +64,43 @@ public class ControladorTorneo {
 
   }
 
-  @RequestMapping(value = "/verTorneosCreados", method = RequestMethod.GET)
-  public ModelAndView verTorneosCreados() {
+  @RequestMapping(path = "/verTorneosCreados", method = RequestMethod.GET)
+  public ModelAndView verTorneosCreados(HttpServletRequest request) {
+    ModelAndView modelAndView = new ModelAndView("verTorneosCreados");
 
-    List<Torneo> torneos = servicioTorneo.buscarTodos();
+    Long idUsuario = (Long) request.getSession().getAttribute("usuarioId");
+    if (idUsuario != null) {
+      try {
+        // 1. Obtenemos los equipos del capitán (lo que ya tenías)
+        List<Equipo> deCapitan = servicioEquipo.buscarEquiposDelCapitan(idUsuario);
+        List<Equipo> misEquipos = new ArrayList<>();
+        if (deCapitan != null) {
+          misEquipos = new ArrayList<>(deCapitan);
+        }
+        modelAndView.addObject("misEquipos", misEquipos);
 
-    ModelMap model = new ModelMap();
+        // 2. NUEVO: Buscamos todas las solicitudes pendientes de los equipos del usuario
+        List<SolicitudTorneo> solicitudesUsuario = new ArrayList<>();
+        for (Equipo eq : misEquipos) {
+          // Buscamos las solicitudes de este equipo
+          List<SolicitudTorneo> sols = servicioSolicitudTorneo.obtenerSolicitudesPendientesPorEquipo(eq.getId());
+          if (sols != null) {
+            solicitudesUsuario.addAll(sols);
+          }
+        }
+        // Pasamos la lista de solicitudes del usuario al modelo
+        modelAndView.addObject("solicitudesUsuario", solicitudesUsuario);
 
-    model.put("torneos", torneos);
+      } catch (Exception e) {
+        System.out.println("Error al obtener datos: " + e.getMessage());
+      }
+    }
 
-    return new ModelAndView("verTorneosCreados", model);
+    // Obtenemos los torneos (lo que ya tenías)
+    List<Torneo> torneos = servicioTorneo.obtenerTodosLosTorneos();
+    modelAndView.addObject("torneos", torneos);
+
+    return modelAndView;
   }
 
   @RequestMapping(value= "/asignarEquipos", method = RequestMethod.GET)
@@ -111,7 +143,7 @@ public class ControladorTorneo {
   }
 
 
-@RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)
+  @RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)
   public ModelAndView mostrarDetalleTorneo(@RequestParam("id") Long id) {
     ModelMap model = new ModelMap();
     Torneo torneo = servicioTorneo.buscarPorId(id);
@@ -161,14 +193,10 @@ public class ControladorTorneo {
     }
 
     // 2. Buscamos los torneos organizados por el usuario logueado
-    // (Asumiendo que tenés un método en tu servicio que busque los torneos por el ID del organizador)
     List<Torneo> misTorneos = servicioTorneo.buscarTorneosDelOrganizador(idUsuario);
     model.put("listaTorneos", misTorneos);
 
 
-    // ==========================================
-    // 🔥 COPY-PASTE DE NOTIFICACIONES PARA EL HEADER
-    // ==========================================
     try {
 
       Usuario userNoti = servicioLogin.buscarUsuarioPorId(idUsuario);
@@ -191,4 +219,52 @@ public class ControladorTorneo {
   }
 
 
+
+
+  @RequestMapping(path = "/torneo/solicitar-ingreso", method = RequestMethod.POST)
+  public ModelAndView solicitarIngresoATorneo(@RequestParam("torneoId") Long torneoId,
+                                              @RequestParam("equipoId") Long equipoId) {
+    ModelMap modelo = new ModelMap();
+    try {
+      servicioSolicitudTorneo.solicitarIngreso(torneoId, equipoId);
+      return new ModelAndView("redirect:/verTorneosCreados?solicitudExitosa=true");
+    } catch (Exception e) {
+      return new ModelAndView("redirect:/verTorneosCreados?errorSolicitud=" + e.getMessage());
+    }
+  }
+
+  @RequestMapping(path = "/torneo/gestionar-solicitudes", method = RequestMethod.GET)
+  public ModelAndView verSolicitudes(@RequestParam("torneoId") Long torneoId) {
+    ModelMap modelo = new ModelMap();
+
+    Torneo torneo = servicioTorneo.buscarPorId(torneoId);
+    List<SolicitudTorneo> solicitudes = servicioSolicitudTorneo.obtenerSolicitudesPendientesPorTorneo(torneoId);
+
+    modelo.put("torneo", torneo);
+    modelo.put("solicitudes", solicitudes);
+
+    return new ModelAndView("gestionar-solicitudes-torneo", modelo);
+  }
+
+  @RequestMapping(path = "/torneo/solicitud/aceptar", method = RequestMethod.POST)
+  public ModelAndView aceptarSolicitud(@RequestParam("solicitudId") Long solicitudId,
+                                       @RequestParam("torneoId") Long torneoId) {
+    try {
+      servicioSolicitudTorneo.aceptarSolicitud(solicitudId);
+      return new ModelAndView("redirect:/torneo/gestionar-solicitudes?torneoId=" + torneoId + "&aceptado=true");
+    } catch (Exception e) {
+      return new ModelAndView("redirect:/torneo/gestionar-solicitudes?torneoId=" + torneoId + "&error=" + e.getMessage());
+    }
+  }
+
+  @RequestMapping(path = "/torneo/solicitud/rechazar", method = RequestMethod.POST)
+  public ModelAndView rechazarSolicitud(@RequestParam("solicitudId") Long solicitudId,
+                                        @RequestParam("torneoId") Long torneoId) {
+    try {
+      servicioSolicitudTorneo.rechazarSolicitud(solicitudId);
+      return new ModelAndView("redirect:/torneo/gestionar-solicitudes?torneoId=" + torneoId + "&rechazado=true");
+    } catch (Exception e) {
+      return new ModelAndView("redirect:/torneo/gestionar-solicitudes?torneoId=" + torneoId + "&error=" + e.getMessage());
+    }
+  }
 }
