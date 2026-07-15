@@ -92,27 +92,33 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     @Override
     public void asignarEquipos(Long id, List<Long> equiposIds){
         Torneo torneo = repositorioTorneo.buscarPorId(id);
-        if(torneo != null){
+        if(torneo != null && equiposIds != null){
 
-            // Buscamos las relaciones existentes usando el método limpio
+            // Buscamos las relaciones existentes en la base de datos
             List<TorneoEquipo> relacionesExistentes = buscarEquiposPorTorneoId(id);
 
+            // Usamos un Set dinámico para meter los IDs que ya existen + los nuevos que vayamos procesando
+            java.util.Set<Long> idsAsignados = new java.util.HashSet<>();
+
+            // Cargamos los que ya venían de la base de datos
+            for(TorneoEquipo relacion : relacionesExistentes){
+                if(relacion.getEquipo() != null){
+                    idsAsignados.add(relacion.getEquipo().getId());
+                }
+            }
+
+            // Iteramos los nuevos IDs
             for(Long equiposId : equiposIds){
                 if(equiposId != null){
-
-                    boolean yaEstaAsignado = false;
-                    for(TorneoEquipo relacion : relacionesExistentes){
-                        if(relacion.getEquipo().getId().equals(equiposId)){
-                            yaEstaAsignado = true;
-                            break;
-                        }
-                    }
-
-                    if(!yaEstaAsignado){
+                    // Si NO está en nuestro set acumulador, lo procesamos y lo agregamos al set
+                    if(!idsAsignados.contains(equiposId)){
                         Equipo equipo = repositorioEquipo.buscarPorId(equiposId);
                         if(equipo != null){
                             TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo, torneo.getDeporte());
                             repositorioTorneo.guardarRelacion(nuevaAsignacion);
+
+                            // Registramos en el set para que la siguiente vuelta del bucle sepa que ya se agregó
+                            idsAsignados.add(equiposId);
                         }
                     }
                 }
