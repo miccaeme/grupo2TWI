@@ -21,4 +21,5 @@ public interface ServicioTorneo {
     List<TorneoEquipo> buscarEquiposPorTorneoId(Long id);
 
     List<Torneo> buscarTorneosDelOrganizador(Long idUsuario);
+    List<Torneo> obtenerTodosLosTorneos();
 }

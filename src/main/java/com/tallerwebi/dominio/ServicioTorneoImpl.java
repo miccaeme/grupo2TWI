@@ -71,6 +71,12 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
         return repositorioTorneoEquipo.buscarEquiposPorTorneoId(id);
     }
+
+    @Override
+    public List<Torneo> obtenerTodosLosTorneos() {
+        // Usamos el repositorio de torneos para traer la lista completa
+        return repositorioTorneo.obtenerTodos();
+    }
     @Override
     public List<Torneo> buscarTorneosDelOrganizador(Long idUsuario) {
         // 1. Validamos que el ID no sea nulo por seguridad

@@ -38,6 +38,14 @@ public class RepositorioTorneoImpl implements RepositorioTorneo {
     }
 
     @Override
+    @SuppressWarnings({"deprecation", "unchecked"})
+    public List<Torneo> obtenerTodos() {
+        return (List<Torneo>) sessionFactory.getCurrentSession()
+                .createCriteria(Torneo.class)
+                .list();
+    }
+
+    @Override
     public List<Torneo> buscarTodos() {
         return sessionFactory.getCurrentSession().createQuery("from Torneo", Torneo.class).list();
     }
