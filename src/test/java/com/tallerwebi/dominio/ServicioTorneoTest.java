@@ -2,15 +2,11 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.contratos.RepositorioEquipo;
 import com.tallerwebi.dominio.contratos.RepositorioTorneo;
-import com.tallerwebi.dominio.servicios.ServicioTorneo;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.tallerwebi.dominio.contratos.RepositorioTorneoEquipo;
+import com.tallerwebi.dominio.contratos.RepositorioUsuario;
+import com.tallerwebi.dominio.Enums.Deporte;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,16 +15,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-// ServicioTorneo servicioTorneo = new ServicioTorneoImpl();
-
 public class ServicioTorneoTest {
 
     private ServicioTorneoImpl servicioTorneo;
+
     private RepositorioTorneo repositorioTorneoMock;
     private RepositorioEquipo repositorioEquipoMock;
-    private SessionFactory sessionFactoryMock;
-    private Session sessionMock;
-
+    private RepositorioTorneoEquipo repositorioTorneoEquipoMock;
+    private RepositorioUsuario repositorioUsuarioMock;
 
     private Torneo torneoValido;
     private Torneo torneoInvalido;
@@ -37,44 +31,56 @@ public class ServicioTorneoTest {
     public void init() {
         this.repositorioTorneoMock = mock(RepositorioTorneo.class);
         this.repositorioEquipoMock = mock(RepositorioEquipo.class);
-        this.sessionFactoryMock = mock(SessionFactory.class);
-        this.sessionMock = mock(Session.class);
+        this.repositorioTorneoEquipoMock = mock(RepositorioTorneoEquipo.class);
+        this.repositorioUsuarioMock = mock(RepositorioUsuario.class);
 
+        // Instanciamos el servicio usando su constructor
+        this.servicioTorneo = new ServicioTorneoImpl(
+                this.repositorioTorneoMock,
+                this.repositorioEquipoMock,
+                this.repositorioTorneoEquipoMock
+        );
 
-        //this.servicioTorneo = new ServicioTorneoImpl(this.repositorioTorneoMock, this.repositorioEquipoMock, this.sessionFactoryMock);
+        // Inyectamos por reflexión el repositorio de usuarios que se usa en guardar()
+        org.springframework.test.util.ReflectionTestUtils.setField(servicioTorneo, "repositorioUsuario", repositorioUsuarioMock);
 
+        // Configuración de torneos base para las pruebas de fechas
         torneoValido = new Torneo();
-        torneoValido.setFechaDeInicio(LocalDate.now().plusDays(2)); //posterior a Hoy
+        torneoValido.setFechaDeInicio(LocalDate.now().plusDays(2));
+        torneoValido.setDeporte(Deporte.FUTBOL);
 
         torneoInvalido = new Torneo();
-        torneoInvalido.setFechaDeInicio(LocalDate.now().minusDays(1)); //pasada o igual a hoy.
-}
+        torneoInvalido.setFechaDeInicio(LocalDate.now().minusDays(1));
+    }
 
-/*
     @Test
-    public void siLaFechaEsIgualOAnteriorAlDiaActualDebeLanzarexcepcionYnoGuardar(){
-        // given: Torneo Invalido - fecha pasada
-        // WHEN: Cuando intento guardar el torneo inválido en el servicio...
-        IllegalArgumentException excepcion = assertThrows(IllegalArgumentException.class,() -> {
-        servicioTorneo.guardar(torneoInvalido); });
-        //then: se valida excepcion y que el repositorio no haya sido guardado
+    public void siLaFechaEsIgualOAnteriorAlDiaActualDebeLanzarExcepcionYnoGuardar(){
+        // GIVEN
+        Long idUsuarioMock = 1L;
+        when(repositorioUsuarioMock.buscarUsuarioPorId(idUsuarioMock)).thenReturn(new Usuario());
+
+        // WHEN & THEN
+        IllegalArgumentException excepcion = assertThrows(IllegalArgumentException.class, () -> {
+            servicioTorneo.guardar(torneoInvalido, idUsuarioMock);
+        });
+
         assertEquals("La fecha del torneo debe ser posterior al dia actual", excepcion.getMessage());
         verify(repositorioTorneoMock, never()).guardar(any(Torneo.class));
     }
 
     @Test
-    public void sielTorneoSecreaExitosamenteSePuedenAsignarEquipos(){
-        //Given
+    public void siElTorneoSeCreaExitosamenteSePuedenAsignarEquipos(){
+        // GIVEN
         Long torneoId = 1L;
         Torneo torneoTest = new Torneo();
         torneoTest.setId(torneoId);
-
-        List<TorneoEquipo> listaDeTE = new ArrayList();
-        torneoTest.setEquipos(listaDeTE);
+        torneoTest.setDeporte(Deporte.FUTBOL);
 
         when(this.repositorioTorneoMock.buscarPorId(torneoId)).thenReturn(torneoTest);
+        when(this.repositorioTorneoEquipoMock.buscarEquiposPorTorneoId(torneoId)).thenReturn(new ArrayList<>());
 
-        List<Long> equiposIds= List.of(10L, 20L);
+        List<Long> equiposIds = List.of(10L, 20L);
+
         Equipo equipo1 = new Equipo();
         equipo1.setId(10L);
         when(this.repositorioEquipoMock.buscarPorId(10L)).thenReturn(equipo1);
@@ -83,40 +89,35 @@ public class ServicioTorneoTest {
         equipo2.setId(20L);
         when(this.repositorioEquipoMock.buscarPorId(20L)).thenReturn(equipo2);
 
-        Session sessionMock = mock(Session.class);
-        when(this.sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
+        // WHEN
+        servicioTorneo.asignarEquipos(torneoId, equiposIds);
 
-        //When:
-        servicioTorneo.asignarEquipos(torneoId,equiposIds);
-
-        //Then:
-        assertEquals(2, torneoTest.getEquipos().size());
-        assertEquals(equipo1, torneoTest.getEquipos().get(0).getEquipo());
-        assertEquals(equipo2, torneoTest.getEquipos().get(1).getEquipo());
-
+        // THEN
+        verify(repositorioTorneoMock, times(2)).guardarRelacion(any(TorneoEquipo.class));
     }
+
     @Test
     public void siSeAsignanEquiposDuplicadosAlTorneoSoloSeDeberiaAgregarUnaVezAlTorneo(){
+        // GIVEN
         Long torneoId = 3L;
         Torneo torneoTestAgregacion = new Torneo();
         torneoTestAgregacion.setId(torneoId);
-        torneoTestAgregacion.setEquipos(new ArrayList<>());
+        torneoTestAgregacion.setDeporte(Deporte.FUTBOL);
 
         when(this.repositorioTorneoMock.buscarPorId(torneoId)).thenReturn(torneoTestAgregacion);
-
-        List<Long> equiposIdsDuplicados = List.of(30L, 30L);
+        when(this.repositorioTorneoEquipoMock.buscarEquiposPorTorneoId(torneoId)).thenReturn(new ArrayList<>());
 
         Equipo equipo1 = new Equipo();
         equipo1.setId(30L);
+        when(this.repositorioEquipoMock.buscarPorId(30L)).thenReturn(equipo1);
 
-        when(this.repositorioEquipoMock.buscarPorId(30L)).thenReturn(equipo1 );
+        // Enviamos intencionalmente el mismo ID duplicado en la lista
+        List<Long> equiposIdsDuplicados = List.of(30L, 30L);
 
-        //When
-        servicioTorneo.asignarEquipos(torneoId,equiposIdsDuplicados);
+        // WHEN
+        servicioTorneo.asignarEquipos(torneoId, equiposIdsDuplicados);
 
-        assertEquals(1, torneoTestAgregacion.getEquipos().size(), "La lista no debe contener duplicados");
-        assertTrue(torneoTestAgregacion.getEquipos().contains(equipo1));
-
-
-    }*/
+        // THEN
+        verify(repositorioTorneoMock, times(1)).guardarRelacion(any(TorneoEquipo.class));
+    }
 }

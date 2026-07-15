@@ -22,4 +22,9 @@ public class RepositorioTorneoEquipoImpl implements RepositorioTorneoEquipo {
                 .add(Restrictions.eq("torneo.id", torneoId))
                 .list();
     }
+
+    @Override
+    public void guardar(TorneoEquipo torneoEquipo) {
+        sessionFactory.getCurrentSession().save(torneoEquipo);
+    }
 }
