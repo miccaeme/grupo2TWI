@@ -38,11 +38,15 @@ public class ControladorTorneo {
   private ServicioSolicitudTorneo servicioSolicitudTorneo;
 
   @RequestMapping(value = "/crear-torneo", method = RequestMethod.GET)
-  public ModelAndView mostrarFormularioCrearTorneo() {
+  public ModelAndView mostrarFormularioCrearTorneo(HttpServletRequest request) {
 
     ModelMap model = new ModelMap();
 
     model.put("torneo", new Torneo());
+    //carga notis en el header
+    Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    model.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
+
     return new ModelAndView("crear-torneo", model);
   }
 
@@ -71,7 +75,7 @@ public class ControladorTorneo {
     Long idUsuario = (Long) request.getSession().getAttribute("usuarioId");
     if (idUsuario != null) {
       try {
-        // 1. Obtenemos los equipos del capitán (lo que ya tenías)
+
         List<Equipo> deCapitan = servicioEquipo.buscarEquiposDelCapitan(idUsuario);
         List<Equipo> misEquipos = new ArrayList<>();
         if (deCapitan != null) {
@@ -79,16 +83,15 @@ public class ControladorTorneo {
         }
         modelAndView.addObject("misEquipos", misEquipos);
 
-        // 2. NUEVO: Buscamos todas las solicitudes pendientes de los equipos del usuario
+
         List<SolicitudTorneo> solicitudesUsuario = new ArrayList<>();
         for (Equipo eq : misEquipos) {
-          // Buscamos las solicitudes de este equipo
+
           List<SolicitudTorneo> sols = servicioSolicitudTorneo.obtenerSolicitudesPendientesPorEquipo(eq.getId());
           if (sols != null) {
             solicitudesUsuario.addAll(sols);
           }
         }
-        // Pasamos la lista de solicitudes del usuario al modelo
         modelAndView.addObject("solicitudesUsuario", solicitudesUsuario);
 
       } catch (Exception e) {
@@ -96,15 +99,16 @@ public class ControladorTorneo {
       }
     }
 
-    // Obtenemos los torneos (lo que ya tenías)
     List<Torneo> torneos = servicioTorneo.obtenerTodosLosTorneos();
     modelAndView.addObject("torneos", torneos);
-
+    //carga notis en el header
+    Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    modelAndView.addObject("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
     return modelAndView;
   }
 
   @RequestMapping(value= "/asignarEquipos", method = RequestMethod.GET)
-  public ModelAndView mostrarFormularioAsignarEquipos(@RequestParam("id") Long id) {
+  public ModelAndView mostrarFormularioAsignarEquipos(@RequestParam("id") Long id, HttpServletRequest request) {
     ModelMap model = new ModelMap();
     Torneo torneo = servicioTorneo.buscarPorId(id);
     model.put("torneo", torneo);
@@ -118,6 +122,9 @@ public class ControladorTorneo {
 
     List<Equipo> equiposDisponibles = servicioEquipo.listarPorDeporte(torneo.getDeporte());
     model.put("todosLosEquipos", equiposDisponibles);
+    //carga notis en el header
+    Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    model.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
 
     return new ModelAndView("asignarEquipos", model);
   }
@@ -144,13 +151,16 @@ public class ControladorTorneo {
 
 
   @RequestMapping(value="/verDetalleTorneo", method = RequestMethod.GET)
-  public ModelAndView mostrarDetalleTorneo(@RequestParam("id") Long id) {
+  public ModelAndView mostrarDetalleTorneo(@RequestParam("id") Long id, HttpServletRequest request) {
     ModelMap model = new ModelMap();
     Torneo torneo = servicioTorneo.buscarPorId(id);
     List<TorneoEquipo>asignaciones = servicioTorneo.buscarEquiposPorTorneoId(id);
 
     model.addAttribute("torneo", torneo);
     model.addAttribute("asignaciones", asignaciones);
+    //carga notis en el header
+    Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    model.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
     return new ModelAndView("verDetalleTorneo",model);
 
   }
@@ -158,7 +168,7 @@ public class ControladorTorneo {
   @RequestMapping(value = "/generarFixtureManual", method = RequestMethod.GET)
   public ModelAndView generarFixtureManual(@RequestParam("idTorneo") Long idTorneo) {
 
-    // 1. Buscamos el torneo original de la BD
+
     Torneo torneo = servicioTorneo.buscarPorId(idTorneo);
 
     // 2. Traemos las asignaciones para el algoritmo
@@ -192,7 +202,6 @@ public class ControladorTorneo {
       return new ModelAndView("redirect:/login");
     }
 
-    // 2. Buscamos los torneos organizados por el usuario logueado
     List<Torneo> misTorneos = servicioTorneo.buscarTorneosDelOrganizador(idUsuario);
     model.put("listaTorneos", misTorneos);
 
@@ -211,10 +220,12 @@ public class ControladorTorneo {
         model.put("cantNotificacionesNoLeidas", (int) noLeidasNoti);
       }
     } catch (Exception e) {
-      // Silencioso por si las dudas
-    }
-    // ==========================================
 
+    }
+
+    //carga notis en el header
+    Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    model.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
     return new ModelAndView("mis-torneos", model);
   }
 
@@ -234,7 +245,7 @@ public class ControladorTorneo {
   }
 
   @RequestMapping(path = "/torneo/gestionar-solicitudes", method = RequestMethod.GET)
-  public ModelAndView verSolicitudes(@RequestParam("torneoId") Long torneoId) {
+  public ModelAndView verSolicitudes(@RequestParam("torneoId") Long torneoId, HttpServletRequest request) {
     ModelMap modelo = new ModelMap();
 
     Torneo torneo = servicioTorneo.buscarPorId(torneoId);
@@ -242,6 +253,9 @@ public class ControladorTorneo {
 
     modelo.put("torneo", torneo);
     modelo.put("solicitudes", solicitudes);
+    //carga notis en el header
+    Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
 
     return new ModelAndView("gestionar-solicitudes-torneo", modelo);
   }

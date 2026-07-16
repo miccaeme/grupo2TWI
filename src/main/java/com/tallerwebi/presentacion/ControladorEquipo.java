@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.Equipo;
 import com.tallerwebi.dominio.EquipoJugador;
 import com.tallerwebi.dominio.SolicitudUnion;
 import com.tallerwebi.dominio.servicios.ServicioEquipo;
+import com.tallerwebi.dominio.servicios.ServicioNotificacion;
 import com.tallerwebi.dominio.servicios.ServicioSolicitudUnion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,23 +28,28 @@ public class ControladorEquipo {
 
     private ServicioEquipo servicioEquipo;
     private ServicioSolicitudUnion servicioSolicitudUnion;
+    private ServicioNotificacion servicioNotificacion;
 
 
     @Autowired
-    public ControladorEquipo(ServicioEquipo servicioEquipo, ServicioSolicitudUnion servicioSolicitudUnion) {
+    public ControladorEquipo(ServicioEquipo servicioEquipo, ServicioSolicitudUnion servicioSolicitudUnion, ServicioNotificacion servicioNotificacion) {
 
         this.servicioEquipo = servicioEquipo;
         this.servicioSolicitudUnion = servicioSolicitudUnion;
+        this.servicioNotificacion = servicioNotificacion;
     }
 
 
     @RequestMapping(path = "/equipo/crear", method = RequestMethod.GET)
-    public ModelAndView irACrearEquipo() {
+    public ModelAndView irACrearEquipo( HttpServletRequest request) {
         ModelMap modelo = new ModelMap();
 
         modelo.put("equipo", new Equipo());
         modelo.put("posiciones", Posicion.values());
         modelo.put("deportes", Deporte.values());
+        //carga notis en el header
+        Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
 
         return new ModelAndView("crear-equipo", modelo);
     }
@@ -93,6 +99,10 @@ public class ControladorEquipo {
 
             modelo.put("listaEquipos", misEquipos);
 
+            //carga notis en el header
+            Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+            modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
+
             return new ModelAndView("mis-equipos", modelo);
         }
 
@@ -122,6 +132,9 @@ public class ControladorEquipo {
         modelo.put("posiciones", posicionesDisponibles);
         List<SolicitudUnion> pendientes = servicioSolicitudUnion.obtenerSolicitudesPendientesPorEquipo(idEquipo);
         modelo.put("solicitudesPendientes", pendientes);
+        //carga notis en el header
+        Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
         return new ModelAndView("gestionar-equipo", modelo);
     }
 
@@ -153,6 +166,9 @@ public class ControladorEquipo {
         List<Equipo> todosLosEquipos = servicioEquipo.listarTodos();
 
         modelo.put("equipos", todosLosEquipos);
+        //carga notis en el header
+        Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
 
         return new ModelAndView("verEquiposCreados", modelo);
     }

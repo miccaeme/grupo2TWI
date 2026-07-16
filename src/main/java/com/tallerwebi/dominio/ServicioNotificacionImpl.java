@@ -2,7 +2,9 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Enums.Posicion;
 import com.tallerwebi.dominio.contratos.RepositorioNotificacion;
+import com.tallerwebi.dominio.servicios.ServicioLogin;
 import com.tallerwebi.dominio.servicios.ServicioNotificacion;
+import com.tallerwebi.presentacion.NotificacionesHeaderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +14,12 @@ import java.util.List;
 @Transactional
 public class ServicioNotificacionImpl implements ServicioNotificacion {
     private RepositorioNotificacion repositorioNotificacion;
+    private ServicioLogin servicioLogin;
 
     @Autowired
-    public ServicioNotificacionImpl (RepositorioNotificacion repositorioNotificacion){
+    public ServicioNotificacionImpl (RepositorioNotificacion repositorioNotificacion, ServicioLogin servicioLogin) {
         this.repositorioNotificacion = repositorioNotificacion;
+        this.servicioLogin = servicioLogin;
     }
 
     @Override
@@ -63,5 +67,29 @@ public class ServicioNotificacionImpl implements ServicioNotificacion {
             noti.setLeida(true);
             repositorioNotificacion.guardar(noti);
         }
+    }
+
+
+    public NotificacionesHeaderDTO obtenerDatosHeader(Long idUsuario) {
+        if (idUsuario == null) {
+            return new NotificacionesHeaderDTO();
+        }
+
+        try {
+            Usuario usuario = servicioLogin.buscarUsuarioPorId(idUsuario);
+            if (usuario != null && usuario.getJugador() != null) {
+                String nick = usuario.getJugador().getNickname();
+                List<Notificacion> novedades = obtenerNotificacionesPorJugador(nick);
+
+                long noLeidas = novedades.stream()
+                        .filter(n -> n.getLeida() == null || !n.getLeida())
+                        .count();
+
+                return new NotificacionesHeaderDTO(novedades, (int) noLeidas, nick);
+            }
+        } catch (Exception e) {
+            // Manejo silencioso en caso de error de BD
+        }
+        return new NotificacionesHeaderDTO();
     }
 }
