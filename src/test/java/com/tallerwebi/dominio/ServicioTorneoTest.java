@@ -127,5 +127,4 @@ public class ServicioTorneoTest {
         // THEN
         verify(repositorioTorneoMock, times(1)).guardarRelacion(any(TorneoEquipo.class));
     }*/
->>>>>>> main
 }
