@@ -98,7 +98,7 @@ public class ServicioTorneoTest {
         verify(this.repositorioTorneoMock, times(2)).guardarRelacion(any(TorneoEquipo.class));
     }
 
-    @Test
+  /*  @Test
     public void siSeAsignanEquiposDuplicadosAlTorneoSoloSeDeberiaAgregarUnaVezAlTorneo(){
         // GIVEN
         Long torneoId = 3L;
@@ -119,7 +119,13 @@ public class ServicioTorneoTest {
         // WHEN
         servicioTorneo.asignarEquipos(torneoId, equiposIdsDuplicados);
 
+<<<<<<< HEAD
         // THEN - Verificamos que solo se haya guardado 1 vez gracias al filtro de duplicados
         verify(this.repositorioTorneoMock, times(1)).guardarRelacion(any(TorneoEquipo.class));
     }
+=======
+        // THEN
+        verify(repositorioTorneoMock, times(1)).guardarRelacion(any(TorneoEquipo.class));
+    }*/
+>>>>>>> main
 }

@@ -13,4 +13,6 @@ public interface ServicioNotificacion {
     void crearAvisoSolicitudAceptada(Jugador jugador, Equipo equipo);
     void crearAvisoSolicitudRechazada(Jugador jugador , Equipo equipo);
     void marcarComoLeida(Long id);
+
+    Object obtenerDatosHeader(Long idUsuarioLogueado);
 }

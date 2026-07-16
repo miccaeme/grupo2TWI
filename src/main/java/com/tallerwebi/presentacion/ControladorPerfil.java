@@ -57,7 +57,9 @@ public class ControladorPerfil {
         model.put("statsFutbol", statsFutbol);
         model.put("statsBasquet", statsBasquet);
         model.put("statsVoley", statsVoley);
-
+        //carga notis en el header
+        Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+        model.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
         return new ModelAndView("perfil", model);
 
     }

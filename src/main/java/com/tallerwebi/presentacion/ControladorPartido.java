@@ -7,6 +7,7 @@
     import com.tallerwebi.dominio.excepcion.PartidoInvalidoException;
     import com.tallerwebi.dominio.servicios.ServicioEstadistica;
     import com.tallerwebi.dominio.servicios.ServicioLogin;
+    import com.tallerwebi.dominio.servicios.ServicioNotificacion;
     import com.tallerwebi.dominio.servicios.ServicioPartido;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@
     import org.springframework.web.bind.annotation.*;
     import org.springframework.web.servlet.ModelAndView;
 
+    import javax.servlet.http.HttpServletRequest;
     import java.util.ArrayList;
     import java.util.List;
 
@@ -24,6 +26,7 @@
         private ServicioPartido servicioPartido;
         private ServicioEstadistica servicioEstadistica;
         private ServicioLogin servicioLogin;
+        private ServicioNotificacion servicioNotificacion;
 
         @Autowired
         public ControladorPartido(ServicioPartido servicioPartido, ServicioEstadistica servicioEstadistica, ServicioLogin servicioLogin) {
@@ -57,14 +60,14 @@
              //modelo.put("listaEquipos", servicioEquipo.buscarEquiposDelJugador(nickname));
              //modelo.put("notificaciones", servicioNotificacion.obtenerNotificacionesPorJugador(nickname));
 
-            return new ModelAndView("perfil", modelo); // "perfil" es el nombre de tu archivo HTML actual
+            return new ModelAndView("perfil", modelo);
         }
 
 
 
         // ver Fixture agrupado por torneo
         @RequestMapping(path = "/fixture", method = RequestMethod.GET)
-        public ModelAndView verFixture(@RequestParam(value = "idTorneo", required = false) Long idTorneo) {
+        public ModelAndView verFixture(@RequestParam(value = "idTorneo", required = false) Long idTorneo, HttpServletRequest request) {
             ModelMap modelo = new ModelMap();
             List<Partido> partidos;
 
@@ -79,11 +82,16 @@
                 partidos.sort((p1, p2) -> Integer.compare(p1.getNroFecha(), p2.getNroFecha()));
             }
             modelo.put("partidos", partidos);
+
+            //carga notis en el header
+            Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+            modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
+
             return new ModelAndView("fixture", modelo);
         }
 
         @RequestMapping(path = "/partido/detalle", method = RequestMethod.GET)
-        public ModelAndView verDetallePartido(@RequestParam("id") Long idPartido) {
+        public ModelAndView verDetallePartido(@RequestParam("id") Long idPartido, HttpServletRequest request) {
             ModelMap modelo = new ModelMap();
             Partido partido = servicioPartido.buscarPorId(idPartido);
 
@@ -91,15 +99,21 @@
 
             modelo.put("partido", partido);
             modelo.put("estadisticas", estadisticas);
-
+            //carga notis en el header
+            Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+            modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
             return new ModelAndView("detalle-partido", modelo);
         }
 
 
         @RequestMapping(path = "/partido/nuevo", method = RequestMethod.GET)
-        public ModelAndView irACrearPartido() {
+        public ModelAndView irACrearPartido(HttpServletRequest request) {
             ModelMap modelo = new ModelMap();
             modelo.put("partido", new Partido());
+
+            //carga notis en el header
+            Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+            modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
             return new ModelAndView("crear-partido", modelo);
         }
 
@@ -120,7 +134,8 @@
         // ver rendimiento de un jugador individual
         @RequestMapping(path = "/partido/ver-estadisticas", method = RequestMethod.GET)
         public ModelAndView verEstadisticasJugador(@RequestParam("idJugador") Long idJugador,
-                                                   @RequestParam("idPartido") Long idPartido) {
+                                                   @RequestParam("idPartido") Long idPartido,
+                                                   HttpServletRequest request) {
             ModelMap modelo = new ModelMap();
 
             int goles = servicioEstadistica.calcularGolesDelJugadorEnPartido(idJugador, idPartido);
@@ -132,6 +147,9 @@
             modelo.put("faltas", faltas);
 
             modelo.put("partido", servicioPartido.buscarPorId(idPartido));
+            //carga notis en el header
+            Long idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+            modelo.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
 
             return new ModelAndView("detalle-estadisticas", modelo);
         }

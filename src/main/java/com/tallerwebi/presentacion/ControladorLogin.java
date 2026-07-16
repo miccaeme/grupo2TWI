@@ -27,8 +27,10 @@ public class ControladorLogin {
   private RepositorioUsuario repositorioUsuario;
 
 
-    public ControladorLogin(ServicioLogin servicioLogin) {
+    public ControladorLogin(ServicioLogin servicioLogin, ServicioNotificacion servicioNotificacion, RepositorioUsuario repositorioUsuario) {
     this.servicioLogin = servicioLogin;
+    this.servicioNotificacion = servicioNotificacion;
+    this.repositorioUsuario = repositorioUsuario;
   }
 
   @RequestMapping("/login")
@@ -115,27 +117,16 @@ public class ControladorLogin {
   public ModelAndView irAHome(HttpServletRequest request) {
     ModelMap model = new ModelMap();
 
-    Long idUsuarioLogueadoNoti = (Long) request.getSession().getAttribute("usuarioId");
-    if (idUsuarioLogueadoNoti != null) {
-      try {
+    Long idUsuarioLogueado = null;
+    if (request.getSession() != null) {
+      idUsuarioLogueado = (Long) request.getSession().getAttribute("usuarioId");
+    }
 
-        Usuario userNoti = servicioLogin.buscarUsuarioPorId(idUsuarioLogueadoNoti);
-
-        if (userNoti != null && userNoti.getJugador() != null) {
-          String nickNoti = userNoti.getJugador().getNickname();
-
-          List<Notificacion> novedadesNoti = servicioNotificacion.obtenerNotificacionesPorJugador(nickNoti);
-
-          long noLeidasNoti = novedadesNoti.stream()
-                  .filter(n -> n.getLeida() == null || !n.getLeida())
-                  .count();
-
-          model.put("notificaciones", novedadesNoti);
-          model.put("cantNotificacionesNoLeidas", (int) noLeidasNoti);
-        }
-      } catch (Exception e) {
-
-      }
+    try {
+      model.put("headerData", servicioNotificacion.obtenerDatosHeader(idUsuarioLogueado));
+    } catch (Exception e) {
+      System.out.println("Error al cargar el HeaderDTO en el Home: " + e.getMessage());
+      model.put("headerData", new NotificacionesHeaderDTO());
     }
 
     return new ModelAndView("home", model);
