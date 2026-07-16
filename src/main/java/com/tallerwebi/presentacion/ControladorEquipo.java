@@ -170,7 +170,7 @@ public class ControladorEquipo {
         }
 
         try {
-            // Llamamos al nuevo método del servicio pasándole el ID del logueado (que es el capitán)
+
             servicioEquipo.asignarPosicionAlCapitan(equipoId, idLogueado, posicion);
             redirectAttributes.addFlashAttribute("mensaje", "¡Puesto asignado correctamente, Capitán!");
         } catch (Exception e) {

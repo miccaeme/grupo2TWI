@@ -71,12 +71,6 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     public List<TorneoEquipo> buscarEquiposPorTorneoId(Long id) {
         return repositorioTorneoEquipo.buscarEquiposPorTorneoId(id);
     }
-
-    @Override
-    public List<Torneo> obtenerTodosLosTorneos() {
-        // Usamos el repositorio de torneos para traer la lista completa
-        return repositorioTorneo.obtenerTodos();
-    }
     @Override
     public List<Torneo> buscarTorneosDelOrganizador(Long idUsuario) {
         // 1. Validamos que el ID no sea nulo por seguridad
@@ -90,35 +84,34 @@ public class ServicioTorneoImpl implements ServicioTorneo {
     }
 
     @Override
+    public List<Torneo> obtenerTodosLosTorneos() {
+        return repositorioTorneo.obtenerTodos();
+    }
+
+    @Override
     public void asignarEquipos(Long id, List<Long> equiposIds){
         Torneo torneo = repositorioTorneo.buscarPorId(id);
-        if(torneo != null && equiposIds != null){
+        if(torneo != null){
 
-            // Buscamos las relaciones existentes en la base de datos
+            // Buscamos las relaciones existentes usando el método limpio
             List<TorneoEquipo> relacionesExistentes = buscarEquiposPorTorneoId(id);
 
-            // Usamos un Set dinámico para meter los IDs que ya existen + los nuevos que vayamos procesando
-            java.util.Set<Long> idsAsignados = new java.util.HashSet<>();
-
-            // Cargamos los que ya venían de la base de datos
-            for(TorneoEquipo relacion : relacionesExistentes){
-                if(relacion.getEquipo() != null){
-                    idsAsignados.add(relacion.getEquipo().getId());
-                }
-            }
-
-            // Iteramos los nuevos IDs
             for(Long equiposId : equiposIds){
                 if(equiposId != null){
-                    // Si NO está en nuestro set acumulador, lo procesamos y lo agregamos al set
-                    if(!idsAsignados.contains(equiposId)){
+
+                    boolean yaEstaAsignado = false;
+                    for(TorneoEquipo relacion : relacionesExistentes){
+                        if(relacion.getEquipo().getId().equals(equiposId)){
+                            yaEstaAsignado = true;
+                            break;
+                        }
+                    }
+
+                    if(!yaEstaAsignado){
                         Equipo equipo = repositorioEquipo.buscarPorId(equiposId);
                         if(equipo != null){
                             TorneoEquipo nuevaAsignacion = new TorneoEquipo(torneo, equipo, torneo.getDeporte());
                             repositorioTorneo.guardarRelacion(nuevaAsignacion);
-
-                            // Registramos en el set para que la siguiente vuelta del bucle sepa que ya se agregó
-                            idsAsignados.add(equiposId);
                         }
                     }
                 }
