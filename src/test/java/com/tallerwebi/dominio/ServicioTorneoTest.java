@@ -77,6 +77,8 @@ public class ServicioTorneoTest {
         torneoTest.setDeporte(Deporte.FUTBOL);
 
         when(this.repositorioTorneoMock.buscarPorId(torneoId)).thenReturn(torneoTest);
+
+        // En tu servicio: buscarEquiposPorTorneoId(id) llama internamente a repositorioTorneoEquipo
         when(this.repositorioTorneoEquipoMock.buscarEquiposPorTorneoId(torneoId)).thenReturn(new ArrayList<>());
 
         List<Long> equiposIds = List.of(10L, 20L);
@@ -92,8 +94,8 @@ public class ServicioTorneoTest {
         // WHEN
         servicioTorneo.asignarEquipos(torneoId, equiposIds);
 
-        // THEN
-        verify(repositorioTorneoMock, times(2)).guardarRelacion(any(TorneoEquipo.class));
+        // THEN - Verificamos sobre el repo que realmente llama el servicio
+        verify(this.repositorioTorneoMock, times(2)).guardarRelacion(any(TorneoEquipo.class));
     }
 
   /*  @Test
@@ -117,6 +119,11 @@ public class ServicioTorneoTest {
         // WHEN
         servicioTorneo.asignarEquipos(torneoId, equiposIdsDuplicados);
 
+<<<<<<< HEAD
+        // THEN - Verificamos que solo se haya guardado 1 vez gracias al filtro de duplicados
+        verify(this.repositorioTorneoMock, times(1)).guardarRelacion(any(TorneoEquipo.class));
+    }
+=======
         // THEN
         verify(repositorioTorneoMock, times(1)).guardarRelacion(any(TorneoEquipo.class));
     }*/
